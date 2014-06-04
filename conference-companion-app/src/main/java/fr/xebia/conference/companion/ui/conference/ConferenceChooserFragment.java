@@ -74,7 +74,7 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
             mProgressContainer.setVisibility(View.VISIBLE);
             mContentContainer.setVisibility(View.GONE);
             mErrorContainer.setVisibility(View.GONE);
-            Query.many(Conference.class, "SELECT * FROM Conferences ORDER BY fromTime DESC").getAsync(getLoaderManager(), this);
+            Query.many(Conference.class, "SELECT * FROM Conferences ORDER BY fromDate DESC").getAsync(getLoaderManager(), this);
             getActivity().startService(new Intent(getActivity(), ConferencesFetcherIntentService.class));
         } else {
             mConferenceAdapter = new ConferenceAdapter(getActivity(), R.layout.conference_item_view, mConferences);
