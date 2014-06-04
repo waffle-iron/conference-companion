@@ -19,5 +19,7 @@
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
             android:overScrollMode="never"
-            android:drawSelectorOnTop="true"/>
+            android:drawSelectorOnTop="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 </FrameLayout>

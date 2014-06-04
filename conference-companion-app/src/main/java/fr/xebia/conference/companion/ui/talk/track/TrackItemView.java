@@ -7,14 +7,14 @@ import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Track;
 
-public class TrackItemView extends LinearLayout {
+public class TrackItemView extends RelativeLayout {
 
     @InjectView(R.id.track_category_text) TextView mText;
     @InjectView(R.id.track_category_color) View mColor;

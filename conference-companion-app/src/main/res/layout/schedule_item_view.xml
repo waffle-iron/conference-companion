@@ -3,20 +3,21 @@
 <fr.xebia.conference.companion.ui.schedule.ScheduleItemView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <View
             android:id="@+id/schedule_color"
-            android:layout_width="5dp"
-            android:layout_height="match_parent"/>
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="40dp"
+            android:layout_height="4dp"/>
 
     <TextView
             android:id="@+id/schedule_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:drawablePadding="6dp"
             android:lineSpacingExtra="4dp"
             android:paddingLeft="10dp"
