@@ -10,6 +10,7 @@ public class Track extends Model {
 
     @Column("track") @Key String title;
     @Column("count") int count;
+    @Column("color") int color;
 
     public String getTitle() {
         return title;
@@ -17,5 +18,9 @@ public class Track extends Model {
 
     public int getCount() {
         return count;
+    }
+
+    public int getColor() {
+        return color;
     }
 }

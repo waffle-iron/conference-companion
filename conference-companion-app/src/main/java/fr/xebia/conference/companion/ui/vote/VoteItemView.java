@@ -13,7 +13,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.TalkVote;
-import fr.xebia.conference.companion.model.TrackResource;
 
 public class VoteItemView extends RelativeLayout {
 
@@ -42,8 +41,8 @@ public class VoteItemView extends RelativeLayout {
     public void bind(TalkVote talkVote) {
         Resources resources = getResources();
         String track = talkVote.getTrack();
-        Drawable trackDrawable = resources.getDrawable(TrackResource.getIconForTrack(track)).mutate();
-        trackDrawable.setColorFilter(resources.getColor(TrackResource.getColorResForTrack(track)), PorterDuff.Mode.SRC_IN);
+        Drawable trackDrawable = resources.getDrawable(R.drawable.ic_talk).mutate();
+        trackDrawable.setColorFilter(talkVote.getTalkColor(), PorterDuff.Mode.SRC_IN);
         mTrackImage.setImageDrawable(trackDrawable);
         mTalkTitle.setText(talkVote.getTitle());
         mTalkNote.setRating(talkVote.getNote());

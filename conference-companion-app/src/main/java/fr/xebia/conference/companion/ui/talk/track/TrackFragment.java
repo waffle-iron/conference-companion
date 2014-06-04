@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import fr.xebia.conference.companion.R;
@@ -26,8 +25,7 @@ public class TrackFragment extends ListFragment implements ManyQuery.ResultHandl
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int defaultPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()));
-        getListView().setPadding(defaultPadding, 0, defaultPadding, defaultPadding);
+
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -38,7 +36,6 @@ public class TrackFragment extends ListFragment implements ManyQuery.ResultHandl
         });
 
         restoreActionBar();
-
 
         setListShown(true);
         if (mTracks != null) {

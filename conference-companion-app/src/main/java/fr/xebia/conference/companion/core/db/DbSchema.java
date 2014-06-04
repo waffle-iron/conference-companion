@@ -28,6 +28,7 @@ public class DbSchema {
             "  title          TEXT,\n" +
             "  devoxxian_note INTEGER,\n" +
             "  favorite       INTEGER,\n" +
+            "  color          INTEGER,\n" +
             "  conferenceId   INTEGER,\n" +
             "  PRIMARY KEY (_id, conferenceId)\n" +
             ");";

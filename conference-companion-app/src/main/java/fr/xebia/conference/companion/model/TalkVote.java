@@ -12,6 +12,7 @@ public class TalkVote extends Model {
 
     @Column("note") private int note;
     @Column("_id") @Key private String talkId;
+    @Column("color") @Key private int talkColor;
     @Column("track") private String track;
     @Column("title") private String title;
     @Column("fromTime") private Date fromTime;
@@ -39,5 +40,9 @@ public class TalkVote extends Model {
 
     public Date getToTime() {
         return toTime;
+    }
+
+    public int getTalkColor() {
+        return talkColor;
     }
 }

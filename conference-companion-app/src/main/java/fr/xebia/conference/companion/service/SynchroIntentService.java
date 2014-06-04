@@ -7,9 +7,11 @@ import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.SpeakerTalk;
 import fr.xebia.conference.companion.model.Talk;
+import fr.xebia.conference.companion.model.TrackColors;
 import retrofit.RetrofitError;
 import se.emilsjolander.sprinkles.ModelList;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
@@ -42,6 +44,9 @@ public class SynchroIntentService extends IntentService {
 
     private void loadTalks(int conferenceId) {
         List<Talk> talks = KouignAmanApplication.getConferenceApi().getTalks(conferenceId);
+
+        generateColorByTrack(talks);
+
         ModelList<Talk> talksToStore = new ModelList<>();
         talksToStore.addAll(talks);
         talksToStore.saveAll();
@@ -56,6 +61,21 @@ public class SynchroIntentService extends IntentService {
             }
         }
         speakerTalks.saveAll();
+    }
+
+    private void generateColorByTrack(List<Talk> talks) {
+        HashMap<String, Integer> colorByTrack = new HashMap<>();
+        int position = 0;
+        for (Talk talk : talks) {
+            Integer color = colorByTrack.get(talk.getTrack());
+            if (color == null) {
+                color = TrackColors.LIST.get(position);
+                colorByTrack.put(talk.getTrack(), color);
+                position++;
+                position = position % TrackColors.LIST.size();
+            }
+            talk.setColor(color);
+        }
     }
 
     private void loadSpeakers(int conferenceId) {

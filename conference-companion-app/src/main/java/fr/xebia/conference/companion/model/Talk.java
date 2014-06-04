@@ -38,6 +38,8 @@ public class Talk extends Model {
     @JsonProperty @Column("devoxxian_note") private int note;
     @JsonProperty @Column("favorite") private boolean favorite;
 
+    @Column("color") private int color;
+
     private String mPeriod;
     private String mDay;
 
@@ -110,5 +112,13 @@ public class Talk extends Model {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

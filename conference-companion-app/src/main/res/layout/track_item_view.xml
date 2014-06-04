@@ -2,13 +2,27 @@
 
 <fr.xebia.conference.companion.ui.talk.track.TrackItemView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:drawablePadding="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:lineSpacingExtra="4dp"
-        android:gravity="center_vertical"/>
+        android:layout_height="match_parent">
+
+    <View
+            android:id="@+id/track_category_color"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"/>
+
+    <TextView
+            android:id="@+id/track_category_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:drawablePadding="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:lineSpacingExtra="4dp"
+            android:gravity="center_vertical"
+            tools:text="Karma and Protractor, test your AngularJS application"/>
+</fr.xebia.conference.companion.ui.talk.track.TrackItemView>

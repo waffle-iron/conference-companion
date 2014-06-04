@@ -21,7 +21,6 @@ import fr.xebia.conference.companion.model.Vote;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.Talk;
-import fr.xebia.conference.companion.model.TrackResource;
 import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
 import fr.xebia.conference.companion.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerItemView;
@@ -186,8 +185,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         String track = talk.getTrack();
         Resources resources = getResources();
-        Drawable trackDrawable = resources.getDrawable(TrackResource.getIconForTrack(track)).mutate();
-        trackDrawable.setColorFilter(resources.getColor(TrackResource.getColorResForTrack(track)), PorterDuff.Mode.SRC_IN);
+        Drawable trackDrawable = resources.getDrawable(R.drawable.ic_talk).mutate();
+        trackDrawable.setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
         mTrackContent.setText(track);
         mTrackContent.setCompoundDrawablesWithIntrinsicBounds(trackDrawable, null, null, null);
 

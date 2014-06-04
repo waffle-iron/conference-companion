@@ -6,12 +6,18 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Talk;
-import fr.xebia.conference.companion.model.TrackResource;
 
-public class ScheduleItemView extends TextView {
+public class ScheduleItemView extends LinearLayout {
+
+    @InjectView(R.id.schedule_text) TextView mText;
+    @InjectView(R.id.schedule_color) View mColor;
 
     public ScheduleItemView(Context context) {
         super(context);
@@ -21,34 +27,33 @@ public class ScheduleItemView extends TextView {
         super(context, attrs);
     }
 
-    // TODO refactor
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.inject(this);
+    }
+
     public void bind(Talk talk) {
         Resources resources = getResources();
-        String track = talk.getTrack();
-        Drawable trackDrawable = resources.getDrawable(TrackResource.getIconForTrack(track)).mutate();
-        trackDrawable.setColorFilter(resources.getColor(TrackResource.getColorResForTrack(track)), PorterDuff.Mode.SRC_IN);
-
-        Drawable favoriteDrawable = talk.isFavorite() ? resources.getDrawable(R.drawable.ic_menu_action_important).mutate() : null;
-        if(favoriteDrawable != null){
-            favoriteDrawable.setColorFilter(resources.getColor(R.color.xebia_menu_color), PorterDuff.Mode.SRC_IN);
-        }
-        trackDrawable.setColorFilter(resources.getColor(TrackResource.getColorResForTrack(track)), PorterDuff.Mode.SRC_IN);
-        setCompoundDrawablesWithIntrinsicBounds(trackDrawable, null, favoriteDrawable, null);
-        setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
+        bindIcons(resources, talk);
+        mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
                 String.format("%s | %s", talk.getPeriod(), talk.getRoom()))));
     }
 
     public void bindWithDay(Talk talk) {
         Resources resources = getResources();
-        String track = talk.getTrack();
-        Drawable trackDrawable = resources.getDrawable(TrackResource.getIconForTrack(track)).mutate();
-        trackDrawable.setColorFilter(resources.getColor(TrackResource.getColorResForTrack(track)), PorterDuff.Mode.SRC_IN);
+        bindIcons(resources, talk);
+        mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
+                String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()))));
+    }
+
+    private void bindIcons(Resources resources, Talk talk) {
         Drawable favoriteDrawable = talk.isFavorite() ? resources.getDrawable(R.drawable.ic_menu_action_important).mutate() : null;
-        if(favoriteDrawable != null){
+        if (favoriteDrawable != null) {
             favoriteDrawable.setColorFilter(resources.getColor(R.color.xebia_menu_color), PorterDuff.Mode.SRC_IN);
         }
-        setCompoundDrawablesWithIntrinsicBounds(trackDrawable, null, favoriteDrawable, null);
-        setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()))));
+        mText.setCompoundDrawablesWithIntrinsicBounds(null, null, favoriteDrawable, null);
+
+        mColor.setBackgroundColor(talk.getColor());
     }
 }
