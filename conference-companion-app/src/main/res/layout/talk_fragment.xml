@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="10dp">
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+        <TextView
+                android:id="@+id/informations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#ff696969"
+                android:textStyle="bold"
+                android:gravity="end"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+            <RatingBar
+                    android:id="@+id/talk_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                    style="@style/talkRatingBar"
+                    android:max="5"
+                    android:isIndicator="true"/>
+        </LinearLayout>
+
+        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/track"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/xebia_color"
+                android:layout_marginTop="10dp"
+                android:text="@string/track"/>
+
+        <TextView
+                android:id="@+id/track_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:drawablePadding="10dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:gravity="center_vertical"/>
+
+
+        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/xebia_color"
+                android:layout_marginTop="10dp"
+                android:text="@string/summary"/>
+
+        <TextView
+                android:id="@+id/summary_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+
+        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/speakers"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:paddingLeft="5dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/xebia_color"
+                android:text="@string/speakers"/>
+
+        <LinearLayout
+                android:id="@+id/speakers_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"/>
+    </LinearLayout>
+
+</ScrollView>

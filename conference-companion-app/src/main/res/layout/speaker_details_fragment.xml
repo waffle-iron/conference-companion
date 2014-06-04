@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_horizontal"
+                  android:padding="10dp">
+
+        <ImageView
+                android:id="@+id/speaker_image"
+                android:layout_marginTop="5dp"
+                android:layout_width="92dp"
+                android:layout_height="92dp"/>
+
+        <TextView
+                android:id="@+id/speaker_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+
+        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/speaker_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/xebia_color"
+                android:layout_marginTop="10dp"
+                android:text="@string/speaker_bio"/>
+
+        <TextView
+                android:id="@+id/speaker_bio_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"/>
+
+        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/speaker_presentations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/xebia_color"
+                android:layout_marginTop="10dp"
+                android:text="@string/talks"/>
+
+        <LinearLayout
+                android:id="@+id/speaker_presentations_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="5dp"/>
+
+    </LinearLayout>
+</ScrollView>

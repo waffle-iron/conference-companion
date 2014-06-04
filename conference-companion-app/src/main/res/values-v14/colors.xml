@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="xebia_color">#ff6a205f</color>
+    <color name="xebia_menu_color">#ff551150</color>
+
+    <color name="track_agile">#ffafb6bb</color>
+    <color name="track_data">#ffde6b00</color>
+    <color name="track_future">#ffc27fda</color>
+    <color name="track_java">#ffde1928</color>
+    <color name="track_language">#ff1c9170</color>
+    <color name="track_mobile">#ff2a83d9</color>
+    <color name="track_startup">#ffedbb00</color>
+    <color name="track_web">#ff27384d</color>
+    <color name="schedule_header_bg">#fff3f3f3</color>
+    <color name="text_view_selector">#ffe9e9e9</color>
+</resources>

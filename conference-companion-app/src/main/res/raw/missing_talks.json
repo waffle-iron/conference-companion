@@ -1,0 +1,44 @@
+[
+  {
+    "conferenceId": 11,
+    "fromTime": "2014-04-17 13:25:00",
+    "id": "YRM-782",
+    "toTime": "2014-04-17 14:15:00",
+    "tags": [ ],
+    "speakers": [
+      {
+        "id": "2bc6688597d9bd7122ae76c804cfffa6b4ffb9c0",
+        "name": "Jean-Laurent de Morlhon",
+        "uri": ""
+      }
+    ],
+    "room": "Seine B",
+    "type": "Conference",
+    "language": "fr",
+    "experience": "N/D",
+    "track": "Startups & innovation",
+    "title": "La culture du programmeur",
+    "summary": "Vous avez l'idée qui va vous rendre riche et le budget, maintenant il vous faut les programmeurs. Pas juste les 2 gugus qui parlent de spring à la cafet et qui livrent jour après jour une application de plus en plus buggé, mais des PROGRAMMEURS, des vrais. Ceux qui murmurent à l'oreilles des programmes pour faire des applications extraordinaires. Mais je les trouves où ces types là ? Cette session présente des réponses concretes en explorant la culture de ces programmeurs. Comprendre cette culture est un facteur determinant pour bâtir une équipe produit extraordinaire."
+  },
+  {
+    "conferenceId": 11,
+    "fromTime": "2014-04-18 18:05:00",
+    "id": "GJY-821",
+    "toTime": "2014-04-18 18:55:00",
+    "tags": [ ],
+    "speakers": [
+      {
+        "id": "70cd7d11368e12156748bebc1600c8b50eeac233",
+        "name": "Guillaume LOURS",
+        "uri": ""
+      }
+    ],
+    "room": "Auditorium",
+    "type": "Conference",
+    "language": "fr",
+    "experience": "N/D",
+    "track": "Agility, DevOps",
+    "title": "Personal Kanban - Retrouvez votre efficacité !",
+    "summary": "Vous n'arrivez pas à être productif dans votre travail quotidien ? Vous savez faire, mais ce n'est pas fait? Le travail s'empile jusqu'à devenir déprimant ? Découvrez comment avec un peu de management visuel et en limitant le travail en cours vous allez arriver à bout de votre liste de taches à faire. Durant cette session, vous découvriez les aspects techniques de la méthode, mais nous aborderons surtout les concepts sous-jacents qui font de celle-ci un outil efficace. Cette pratique vous permettra, dès demain, d’améliorer significativement votre efficacité"
+  }
+]

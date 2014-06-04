@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/container">
+
+    <TextView
+            android:id="@+id/empty_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"/>
+
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+            android:id="@+id/sticky_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:overScrollMode="never"
+            android:drawSelectorOnTop="true"/>
+</FrameLayout>

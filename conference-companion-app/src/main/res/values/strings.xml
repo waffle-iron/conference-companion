@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="retry">Réessayer</string>
+    <string name="conferences">Conférences</string>
+    <string name="conferences_fetched">Liste des conférences à jour</string>
+    <string name="synchro_failed">La synchonisation des données a échoué</string>
+</resources>
