@@ -16,17 +16,20 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.commonsware.cwac.anddown.AndDown;
-import fr.xebia.conference.companion.core.misc.Preferences;
-import fr.xebia.conference.companion.model.Vote;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.Talk;
-import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
+import fr.xebia.conference.companion.model.Vote;
+import fr.xebia.conference.companion.ui.note.NoteActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerItemView;
+import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
 import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.*;
+
+import static fr.xebia.conference.companion.ui.talk.TalkActivity.EXTRA_TALK_TITLE;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker> {
 
@@ -85,6 +88,14 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                                     .removed_from_favorites, Toast.LENGTH_SHORT).show();
                         }
                     });
+                }
+                return true;
+            case R.id.action_note:
+                if (mTalk != null) {
+                    Intent intent = new Intent(getActivity(), NoteActivity.class);
+                    intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
+                    intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
+                    startActivity(intent);
                 }
                 return true;
             default:

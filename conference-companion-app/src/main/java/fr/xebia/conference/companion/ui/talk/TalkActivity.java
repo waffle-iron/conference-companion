@@ -9,15 +9,16 @@ import fr.xebia.conference.companion.R;
 public class TalkActivity extends Activity {
 
     public static final String EXTRA_TALK_ID = "fr.xebia.devoxx.EXTRA_TALK_ID";
+    public static final String EXTRA_TALK_TITLE = "EXTRA_TALK_TITLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_activity);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container,TalkFragment.newInstance(getIntent().getStringExtra(EXTRA_TALK_ID)))
+                    .replace(R.id.container, TalkFragment.newInstance(getIntent().getStringExtra(EXTRA_TALK_ID)))
                     .commit();
         }
     }

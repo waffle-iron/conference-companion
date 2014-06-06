@@ -60,6 +60,13 @@
                     android:value=".ui.HomeActivity"/>
         </activity>
 
+        <activity android:name=".ui.note.NoteActivity"
+                  android:parentActivityName=".ui.talk.TalkActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ui.TalkActivity"/>
+        </activity>
+
         <activity
                 android:name=".ui.conference.ConferenceChooserActivity"/>
 
