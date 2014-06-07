@@ -60,7 +60,7 @@
                     android:value=".ui.HomeActivity"/>
         </activity>
 
-        <activity android:name=".ui.note.NoteActivity"
+        <activity android:name=".ui.note.MemoActivity"
                   android:parentActivityName=".ui.talk.TalkActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"

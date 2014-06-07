@@ -51,6 +51,26 @@
         </LinearLayout>
 
         <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/track_memo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/xebia_color"
+                android:layout_marginTop="10dp"
+                android:text="@string/memo"/>
+
+        <TextView
+                android:id="@+id/track_memo_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+
+        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/track"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +92,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:gravity="center_vertical"/>
-
 
         <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/summary"

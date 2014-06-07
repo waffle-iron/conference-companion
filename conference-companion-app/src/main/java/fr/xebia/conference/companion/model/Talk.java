@@ -39,6 +39,7 @@ public class Talk extends Model {
     @JsonProperty @Column("favorite") private boolean favorite;
 
     @Column("color") private int color;
+    @Column("memo") private String memo = "";
 
     private String mPeriod;
     private String mDay;
@@ -120,5 +121,13 @@ public class Talk extends Model {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

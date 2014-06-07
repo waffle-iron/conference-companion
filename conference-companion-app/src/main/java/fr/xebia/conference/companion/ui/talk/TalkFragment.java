@@ -17,11 +17,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.commonsware.cwac.anddown.AndDown;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.bus.MemoSavedEvent;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.model.Vote;
-import fr.xebia.conference.companion.ui.note.NoteActivity;
+import fr.xebia.conference.companion.ui.note.MemoActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerItemView;
 import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
@@ -29,6 +30,9 @@ import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.*;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 import static fr.xebia.conference.companion.ui.talk.TalkActivity.EXTRA_TALK_TITLE;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker> {
@@ -39,6 +43,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.informations) TextView mInformations;
     @InjectView(R.id.summary) UnderlinedTextView mSummary;
     @InjectView(R.id.summary_content) TextView mSummaryContent;
+    @InjectView(R.id.track_memo_title) UnderlinedTextView mMemo;
+    @InjectView(R.id.track_memo_value) TextView mMemoContent;
     @InjectView(R.id.speakers) UnderlinedTextView mSpeakers;
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
     @InjectView(R.id.talk_note) RatingBar mTalkNote;
@@ -59,8 +65,20 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        BUS.register(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.talk_fragment, container, false);
+    }
+
+    @Override
+    public void onStop() {
+        BUS.unregister(this);
+        super.onStop();
     }
 
     @Override
@@ -92,7 +110,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 return true;
             case R.id.action_note:
                 if (mTalk != null) {
-                    Intent intent = new Intent(getActivity(), NoteActivity.class);
+                    Intent intent = new Intent(getActivity(), MemoActivity.class);
                     intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
                     intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
                     startActivity(intent);
@@ -111,7 +129,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         if (mEtraTalkId == null) {
             mEtraTalkId = getArguments().getString(EXTRA_TALK_ID);
         }
-        Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager(), this, null);
+        getTalk();
         Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager(), new OneQuery
                 .ResultHandler<Vote>() {
             @Override
@@ -121,14 +139,18 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 }
 
                 if (vote == null) {
-                    mTalkNote.setVisibility(View.GONE);
+                    mTalkNote.setVisibility(GONE);
                 } else {
-                    mTalkNote.setVisibility(View.VISIBLE);
+                    mTalkNote.setVisibility(VISIBLE);
                     mTalkNote.setRating(vote.getNote());
                 }
                 return false;
             }
         }, null);
+    }
+
+    private void getTalk() {
+        Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager(), this, null);
     }
 
     private void configureHeaders() {
@@ -142,6 +164,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         mTrack.setUnderlineColor(color);
         mTrack.setUnderlineHeight(underlineHeight);
+
+        mMemo.setUnderlineColor(color);
+        mMemo.setUnderlineHeight(underlineHeight);
     }
 
     @Override
@@ -201,6 +226,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mTrackContent.setText(track);
         mTrackContent.setCompoundDrawablesWithIntrinsicBounds(trackDrawable, null, null, null);
 
+        bindMemo();
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S.conferenceId=?",
                 talk.getId(), mConferenceId).getAsync(getLoaderManager(), this);
@@ -242,5 +268,24 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 refreshItem.setIcon(favorite ? R.drawable.ic_action_important : R.drawable.ic_action_not_important);
             }
         }
+    }
+
+    private void bindMemo() {
+        if (mTalk.getMemo() != null && mTalk.getMemo().trim().length() > 0) {
+            try {
+                mMemoContent.setText(Html.fromHtml(new AndDown().markdownToHtml(mTalk.getMemo())));
+            } catch (Exception e) {
+                mMemoContent.setText(mTalk.getMemo());
+            }
+            mMemo.setVisibility(VISIBLE);
+            mMemoContent.setVisibility(VISIBLE);
+        } else {
+            mMemo.setVisibility(GONE);
+            mMemoContent.setVisibility(GONE);
+        }
+    }
+
+    public void onEventMainThread(MemoSavedEvent event) {
+        getTalk();
     }
 }
