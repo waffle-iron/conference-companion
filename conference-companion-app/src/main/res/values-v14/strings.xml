@@ -1,7 +1,7 @@
 <resources>
     <string name="navigation_drawer_open">Ouvrir le navigation drawer</string>
     <string name="navigation_drawer_close">Fermer le navigation drawer</string>
-    <string name="app_name">Xebia</string>
+    <string name="app_name">Companion</string>
     <string name="scan_nfc_hint">Posez votre tag NFC à l\'arrière de votre appareil</string>
     <string name="confirm">Associer votre tag</string>
     <string name="mail">Mail</string>
@@ -14,11 +14,15 @@
     <string name="speakers">Speakers</string>
     <string name="schedule_format"><![CDATA[%1$s<br><font color="#696969"><small>%2$s</small></font>]]></string>
     <string name="speaker_format"><![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>
-    <string name="track_format"><![CDATA[%1$s<br><font color="#696969"><small>%2$d présentations</small></font>]]></string>
+    <string name="track_format">
+        <![CDATA[%1$s<br><font color="#696969"><small>%2$d présentations</small></font>]]></string>
     <string name="speaker_format_without_company"><![CDATA[%1$s %2$s]]></string>
-    <string name="speaker_details_format_with_twitter_without_company"><![CDATA[%1$s %2$s<br><font color="#4099FF"><small/>%3$s</small></font>]]></string>
-    <string name="speaker_details_format_with_twitter"><![CDATA[%1$s %2$s<br><small><font color="#696969">%3$s | </font><font color="#4099FF">%4$s</font></small>]]></string>
-    <string name="speaker_details_format"><![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>
+    <string name="speaker_details_format_with_twitter_without_company">
+        <![CDATA[%1$s %2$s<br><font color="#4099FF"><small/>%3$s</small></font>]]></string>
+    <string name="speaker_details_format_with_twitter">
+        <![CDATA[%1$s %2$s<br><small><font color="#696969">%3$s | </font><font color="#4099FF">%4$s</font></small>]]></string>
+    <string name="speaker_details_format">
+        <![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>
     <string name="informations">Informations</string>
     <string name="summary">Description</string>
     <string name="talks">Présentations</string>

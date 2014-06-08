@@ -7,16 +7,17 @@ import java.util.List;
 
 public class TrackColors {
     public final static List<Integer> LIST = Arrays.asList(
-            Color.parseColor("#F2B701"),
-            Color.parseColor("#E57D04"),
-            Color.parseColor("#CE002D"),
-            Color.parseColor("#B50F61"),
-            Color.parseColor("#7C378A"),
-            Color.parseColor("#3465AA"),
-            Color.parseColor("#09A275"),
-            Color.parseColor("#7CB854"),
-            Color.parseColor("#227FB0"),
-            Color.parseColor("#B32E37"),
-            Color.parseColor("#EA8F3B")
+            Color.parseColor("#00A3C1"),
+            Color.parseColor("#0061B5"),
+            Color.parseColor("#0012A5"),
+            Color.parseColor("#6300A5"),
+            Color.parseColor("#C5007C"),
+            Color.parseColor("#FF0000"),
+            Color.parseColor("#FF6600"),
+            Color.parseColor("#FF9400"),
+            Color.parseColor("#FFC600"),
+            Color.parseColor("#FFFF00"),
+            Color.parseColor("#8CC700"),
+            Color.parseColor("#0FAD00")
     );
 }
