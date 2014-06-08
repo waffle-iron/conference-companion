@@ -116,6 +116,18 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                     startActivity(intent);
                 }
                 return true;
+            case R.id.action_send:
+                if (mTalk != null) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("message/rfc822");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, mTalk.getUncotedTitle());
+                    intent.putExtra(Intent.EXTRA_TEXT, mTalk.getBody(getActivity()));
+                    try {
+                        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_memo_via)));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
+                    }
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -257,6 +269,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 });
                 mSpeakersContainer.addView(speakerView);
             }
+            mTalk.setSpeakers(speakers.asList());
         }
         return false;
     }

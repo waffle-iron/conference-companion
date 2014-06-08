@@ -5,10 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.commonsware.cwac.richedit.RichEditText;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.MemoSavedEvent;
 import fr.xebia.conference.companion.model.Talk;
@@ -17,11 +17,12 @@ import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.OneQuery;
 import se.emilsjolander.sprinkles.Query;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 public class MemoActivity extends Activity implements OneQuery.ResultHandler<Talk> {
 
-    @InjectView(R.id.container) RichEditText mText;
+    @InjectView(R.id.container) EditText mText;
 
     private Talk mTalk;
 
@@ -42,7 +43,7 @@ public class MemoActivity extends Activity implements OneQuery.ResultHandler<Tal
             actionBar.setTitle(R.string.action_bar_note);
         }
 
-        mText.enableActionModes(true);
+        Toast.makeText(this, R.string.markdown_allowed, LENGTH_SHORT).show();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class MemoActivity extends Activity implements OneQuery.ResultHandler<Tal
                 mTalk.saveAsync(new Model.OnSavedCallback() {
                     @Override
                     public void onSaved() {
-                        Toast.makeText(getApplicationContext(), R.string.memo_saved, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.memo_saved, LENGTH_SHORT).show();
                         BUS.post(MemoSavedEvent.INSTANCE);
                         finish();
                     }

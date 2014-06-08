@@ -89,5 +89,4 @@ dependencies {
     provided 'com.github.frankiesardo:icepick-processor:2.3.5'
     compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'com.commonsware.cwac:anddown:0.2.0'
-    compile 'com.commonsware.cwac:richedit:0.3.+'
 }

@@ -8,4 +8,9 @@
     <string name="action_note">Edit note</string>
     <string name="memo_saved">Memo sauvegardé</string>
     <string name="memo">Memo</string>
+    <string name="markdown_allowed">Markdown autorisé</string>
+    <string name="action_send">Envoyé</string>
+    <string name="cannot_send_email">Aucun client mail trouvé</string>
+    <string name="send_memo_via">Send memo by</string>
+    <string name="authors">Authors</string>
 </resources>

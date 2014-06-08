@@ -1,8 +1,10 @@
 package fr.xebia.conference.companion.model;
 
+import android.content.Context;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.xebia.conference.companion.R;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
@@ -88,6 +90,14 @@ public class Talk extends Model {
         return title;
     }
 
+    public String getUncotedTitle() {
+        if (title != null) {
+            return title.replaceAll("\"", "");
+        } else {
+            return "";
+        }
+    }
+
     public String getSummary() {
         return summary;
     }
@@ -129,5 +139,45 @@ public class Talk extends Model {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public String getBody(Context context) {
+        StringBuilder buffer = new StringBuilder(getUncotedTitle());
+        buffer.append("( ");
+        buffer.append(getPeriod());
+        buffer.append(" - ");
+        buffer.append(room);
+        buffer.append(")");
+        buffer.append("\n");
+        buffer.append("\n");
+        buffer.append(context.getResources().getString(R.string.memo).toUpperCase());
+        buffer.append("\n");
+        buffer.append("\n");
+        buffer.append(memo);
+        buffer.append("\n");
+        buffer.append("\n");
+        buffer.append(context.getResources().getString(R.string.summary).toUpperCase());
+        buffer.append("\n");
+        buffer.append("\n");
+        buffer.append(summary);
+        if (speakers != null) {
+            buffer.append("\n");
+            buffer.append("\n");
+            buffer.append(context.getResources().getString(R.string.authors).toUpperCase());
+            buffer.append("\n");
+            for (Speaker speaker : speakers) {
+                buffer.append("\n");
+                buffer.append(speaker.getFirstName());
+                buffer.append(" ");
+                buffer.append(speaker.getLastName());
+                buffer.append(" ");
+                buffer.append(speaker.getBlog());
+            }
+        }
+        return buffer.toString();
+    }
+
+    public void setSpeakers(List<Speaker> speakers) {
+        this.speakers = speakers;
     }
 }
