@@ -43,7 +43,7 @@ public class DrawerAdapter extends BaseAdapter {
         if (NfcAdapter.getDefaultAdapter(context.getApplicationContext()) != null) {
             mItems.add(new DrawerItem(R.drawable.ic_nfc_waves, R.string.my_votes));
         }
-        mItems.add(new DrawerItem(R.drawable.ic_speaker, R.string.conferences));
+        mItems.add(new DrawerItem(R.drawable.ic_conference, R.string.conferences));
     }
 
     @Override
