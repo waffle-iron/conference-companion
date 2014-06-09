@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
+import android.view.MenuItem;
 import com.crashlytics.android.Crashlytics;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.TagRegisteredEvent;
@@ -20,6 +21,7 @@ import fr.xebia.conference.companion.ui.conference.ConferenceChooserActivity;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
 import fr.xebia.conference.companion.ui.navigation.NavigationDrawerFragment;
 import fr.xebia.conference.companion.ui.schedule.ScheduleFragment;
+import fr.xebia.conference.companion.ui.settings.SettingsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerFragment;
 import fr.xebia.conference.companion.ui.talk.track.TrackFragment;
 import fr.xebia.conference.companion.ui.vote.ScanNfcFragment;
@@ -77,6 +79,16 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     public void restoreActionBar() {
@@ -181,7 +193,7 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
                                 .commit();
                     }
                 }, 300);
-
+                break;
             case DrawerAdapter.MENU_CONFERENCES:
                 handler.postDelayed(new Runnable() {
                     @Override

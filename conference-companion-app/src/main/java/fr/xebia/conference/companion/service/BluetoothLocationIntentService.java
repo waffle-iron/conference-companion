@@ -14,12 +14,14 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.utils.Compatibility;
 import fr.xebia.conference.companion.model.Conference;
 import fr.xebia.conference.companion.model.location.IBeacon;
+import fr.xebia.conference.companion.ui.settings.SettingsFragment;
 import retrofit.RetrofitError;
 import se.emilsjolander.sprinkles.Query;
 import timber.log.Timber;
@@ -71,7 +73,9 @@ public class BluetoothLocationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Uri intentData = intent.getData();
         try {
-            if (!Compatibility.isBleAvailable(this) || !Preferences.hasSelectedConference(this)) {
+            if (!Compatibility.isBleAvailable(this) || !Preferences.hasSelectedConference(this)
+                    || !PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsFragment.KEY_PREF_BLE_LOCATION, true)) {
+                disableAlarm(intent);
                 return;
             }
 
@@ -104,11 +108,15 @@ public class BluetoothLocationIntentService extends IntentService {
 
     private boolean disableAlarmIfConferenceOver(Intent bleLocateIntent, Conference conference) {
         if (conference.getTo().getTime() < System.currentTimeMillis()) {
-            mAlarmManager.cancel(PendingIntent.getService(this, 0, bleLocateIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            disableAlarm(bleLocateIntent);
             return true;
         } else {
             return false;
         }
+    }
+
+    private void disableAlarm(Intent bleLocateIntent) {
+        mAlarmManager.cancel(PendingIntent.getService(this, 0, bleLocateIntent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)

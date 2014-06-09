@@ -56,4 +56,9 @@
     <string name="no_talk_details">Pas de description</string>
     <string name="error_loading_conferences">Impossible de charger les conférences</string>
     <string name="conferences_not_fetched">Impossible de mettre à jour les conférences</string>
+    <string name="general">General</string>
+    <string name="bluetooth_le_location">Geofencing</string>
+    <string name="settings">Paramètres</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
 </resources>

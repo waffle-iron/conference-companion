@@ -70,12 +70,14 @@ public class SynchroIntentService extends IntentService {
             String talkDetailsId = talkToSave.getDetails().getId();
             talkToSave.setTalkDetailsId(talkDetailsId);
 
-            Talk talkDetails = talksFromWsById.remove(talkToSave.getTalkDetailsId());
+            Talk talkDetails = talksFromWsById.remove(talkDetailsId == null ? talkToSave.getId() : talkDetailsId);
             if (talkDetails != null) {
-                talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
                 talkToSave.setSummary(talkDetails.getSummary());
                 talkToSave.setTrack(talkDetails.getTrack());
             }
+
+            talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
+
             if (talkDetails != null || talkToSave.isBreak()) {
                 talksToSave.add(talkToSave);
             } else {
@@ -167,6 +169,8 @@ public class SynchroIntentService extends IntentService {
         ModelList<Speaker> speakersToSave = new ModelList<>();
 
         for (Speaker speaker : speakers) {
+            String firstName = speaker.getFirstName();
+            speaker.setFirstName(firstName.substring(0,1).toUpperCase() + firstName.substring(1));
             speakersToSave.add(speaker);
             speakersToDelete.remove(speaker);
         }

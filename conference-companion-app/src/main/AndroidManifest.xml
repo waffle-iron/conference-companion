@@ -75,6 +75,14 @@
         </activity>
 
         <activity
+                android:name=".ui.settings.SettingsActivity"
+                android:parentActivityName=".ui.HomeActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ui.HomeActivity"/>
+        </activity>
+
+        <activity
                 android:name=".ui.conference.ConferenceChooserActivity"/>
 
         <service android:name=".service.SynchroIntentService"/>

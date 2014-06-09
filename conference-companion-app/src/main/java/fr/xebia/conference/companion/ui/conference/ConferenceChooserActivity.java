@@ -50,7 +50,9 @@ public class ConferenceChooserActivity extends Activity {
         if (synchroFinishedEvent.success) {
             Preferences.setSelectedConference(this, synchroFinishedEvent.conferenceId);
             startService(new Intent(this, BluetoothLocationIntentService.class));
-            startActivity(new Intent(this, HomeActivity.class));
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(homeIntent);
             finish();
         } else {
             Toast.makeText(this, R.string.synchro_failed, Toast.LENGTH_LONG).show();
@@ -63,5 +65,10 @@ public class ConferenceChooserActivity extends Activity {
     protected void onStop() {
         BUS.unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

@@ -125,7 +125,7 @@ public class Talk extends Model {
 
     public String getPeriod() {
         if (mPeriod == null) {
-            mPeriod = String.format("%s - %s", getDay(), sTimeFormatter.format(fromTime));
+            mPeriod = String.format("%s - %s", sTimeFormatter.format(fromTime), sTimeFormatter.format(toTime));
         }
         return mPeriod;
     }
@@ -247,7 +247,7 @@ public class Talk extends Model {
     }
 
     private void appendSpeaker(StringBuilder prettySpeakers, Speaker speaker, boolean separator) {
-        if (!TextUtils.isEmpty(speaker.getLastName())) {
+        if (speaker!= null && !TextUtils.isEmpty(speaker.getLastName())) {
             if (separator) {
                 prettySpeakers.append(", ");
             }

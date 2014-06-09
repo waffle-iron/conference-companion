@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="@string/general"/>
+
+    <SwitchPreference
+            android:key="bluetooth_le_location_key"
+            android:title="@string/bluetooth_le_location"
+            android:defaultValue="true"/>
+
+    <Preference
+            android:key="about_key"
+            android:title="@string/about">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.xebia.fr"/>
+    </Preference>
+
+    <Preference
+            android:key="version_key"
+            android:defaultValue="Not Set"
+            android:enabled="false"
+            android:title="@string/version"/>
+
+</PreferenceScreen>

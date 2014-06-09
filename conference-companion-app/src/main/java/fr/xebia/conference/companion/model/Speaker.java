@@ -68,6 +68,10 @@ public class Speaker extends Model {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public List<Talk> getTalks() {
         return talks;
     }

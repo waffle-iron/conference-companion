@@ -6,7 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:text="@string/devoxx_menu_title"
         android:paddingTop="10dp"
         android:paddingBottom="15dp"
         android:textStyle="bold"

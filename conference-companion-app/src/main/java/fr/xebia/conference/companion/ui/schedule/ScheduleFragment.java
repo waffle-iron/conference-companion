@@ -236,7 +236,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         super.onDestroyView();
     }
 
-    public static final Fragment newInstanceForTrack(String track) {
+    public static Fragment newInstanceForTrack(String track) {
         Fragment fragment = new ScheduleFragment();
         Bundle arguments = new Bundle();
         arguments.putString(EXTRA_TRACK_NAME, track);
@@ -244,7 +244,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         return fragment;
     }
 
-    public static final Fragment newInstanceForFavorites() {
+    public static Fragment newInstanceForFavorites() {
         Fragment fragment = new ScheduleFragment();
         Bundle arguments = new Bundle();
         arguments.putBoolean(EXTRA_FAVORITE_ONLY, true);

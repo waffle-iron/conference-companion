@@ -12,10 +12,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Log;
+import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.model.Conference;
 import icepick.Icepick;
 import icepick.Icicle;
+import se.emilsjolander.sprinkles.OneQuery;
+import se.emilsjolander.sprinkles.Query;
 
 import static android.view.LayoutInflater.from;
 
@@ -24,7 +29,7 @@ import static android.view.LayoutInflater.from;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements OneQuery.ResultHandler<Conference> {
 
     private static final String TAG = "NavigationDrawerFragment";
 
@@ -46,6 +51,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Icicle int mLastSelection = 1;
     private boolean mDrawerOpen;
+    private TextView mHeader;
 
     public NavigationDrawerFragment() {
     }
@@ -82,11 +88,14 @@ public class NavigationDrawerFragment extends Fragment {
         mAdapter = new DrawerAdapter(getActivity());
         mDrawerListView.setAdapter(mAdapter);
         mDrawerListView.setItemChecked(mLastSelection, true);
+        Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", Preferences.getSelectedConference(getActivity()))
+                .getAsync(getLoaderManager(), this);
         return mDrawerListView;
     }
 
     private void addHeader(Context context) {
-        mDrawerListView.addHeaderView(from(context).inflate(R.layout.navigation_header, mDrawerListView, false));
+        mHeader = (TextView) from(context).inflate(R.layout.navigation_header, mDrawerListView, false);
+        mDrawerListView.addHeaderView(mHeader);
     }
 
     public boolean isDrawerOpen() {
@@ -147,14 +156,20 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
+            if (position - 1 == DrawerAdapter.MENU_CONFERENCES) {
+                mDrawerListView.setItemChecked(mLastSelection, true);
+            } else {
+                mDrawerListView.setItemChecked(position, true);
+            }
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null && position != mLastSelection) {
             mCallbacks.onNavigationDrawerItemSelected(position);
-            mLastSelection = position;
+            if (position - 1 != DrawerAdapter.MENU_CONFERENCES) {
+                mLastSelection = position;
+            }
         }
     }
 
@@ -230,6 +245,14 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return getActivity().getActionBar();
+    }
+
+    @Override
+    public boolean handleResult(Conference conference) {
+        if (conference != null && mHeader != null) {
+            mHeader.setText(conference.getName());
+        }
+        return false;
     }
 
     /**
