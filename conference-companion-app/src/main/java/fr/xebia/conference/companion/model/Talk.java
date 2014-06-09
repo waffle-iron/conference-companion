@@ -1,6 +1,7 @@
 package fr.xebia.conference.companion.model;
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,8 +13,10 @@ import se.emilsjolander.sprinkles.annotations.Table;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 
 @Table("Talks")
@@ -32,7 +35,7 @@ public class Talk extends Model {
     @JsonProperty @Column("conferenceId") private int conferenceId;
     @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Column("fromTime") private Date fromTime;
     @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Column("toTime") private Date toTime;
-    @JsonProperty private List<Speaker> speakers;
+    @JsonProperty private LinkedHashSet<Speaker> speakers;
     @JsonProperty @Column("room") private String room;
     @JsonProperty @Column("type") private String type;
     @JsonProperty @Column("language") private String language;
@@ -47,6 +50,7 @@ public class Talk extends Model {
     @Column("talkDetailsId") private String talkDetailsId;
     @Column("color") private int color;
     @Column("memo") private String memo = "";
+    @Column("prettySpeakers") private String prettySpeakers;
 
     private String mPeriod;
     private String mDay;
@@ -67,7 +71,7 @@ public class Talk extends Model {
         return toTime;
     }
 
-    public List<Speaker> getSpeakers() {
+    public Collection<Speaker> getSpeakers() {
         return speakers;
     }
 
@@ -202,7 +206,7 @@ public class Talk extends Model {
         this.talkDetailsId = talkDetailsId;
     }
 
-    public void setSpeakers(List<Speaker> speakers) {
+    public void setSpeakers(LinkedHashSet<Speaker> speakers) {
         this.speakers = speakers;
     }
 
@@ -229,5 +233,35 @@ public class Talk extends Model {
 
     public Talk getDetails() {
         return details;
+    }
+
+    public void setPrettySpeakers(Collection<Speaker> speakers, HashMap<String, Speaker> speakersMap) {
+        StringBuilder prettySpeakers = new StringBuilder();
+        int position = 0;
+        for (Speaker speaker : speakers) {
+            Speaker speakerDetails = speakersMap.get(speaker.getId());
+            appendSpeaker(prettySpeakers, speakerDetails, position != 0);
+            position++;
+        }
+        this.prettySpeakers = prettySpeakers.toString();
+    }
+
+    private void appendSpeaker(StringBuilder prettySpeakers, Speaker speaker, boolean separator) {
+        if (!TextUtils.isEmpty(speaker.getLastName())) {
+            if (separator) {
+                prettySpeakers.append(", ");
+            }
+            if (!TextUtils.isEmpty(speaker.getFirstName())) {
+                prettySpeakers.append(speaker.getFirstName().substring(0, 1).toUpperCase());
+                prettySpeakers.append(".");
+                prettySpeakers.append(" ");
+            }
+            prettySpeakers.append(speaker.getLastName().substring(0, 1).toUpperCase());
+            prettySpeakers.append(speaker.getLastName().substring(1, speaker.getLastName().length()));
+        }
+    }
+
+    public String getPrettySpeakers() {
+        return prettySpeakers;
     }
 }

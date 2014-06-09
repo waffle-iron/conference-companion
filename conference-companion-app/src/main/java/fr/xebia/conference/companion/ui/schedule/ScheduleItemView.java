@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -36,15 +37,25 @@ public class ScheduleItemView extends RelativeLayout {
     public void bind(Talk talk) {
         Resources resources = getResources();
         bindIcons(resources, talk);
-        mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                String.format("%s | %s", talk.getPeriod(), talk.getRoom()))));
+        if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
+            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
+                    String.format("%s | %s | %s", talk.getPeriod(), talk.getRoom(), talk.getPrettySpeakers()))));
+        } else {
+            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
+                    String.format("%s | %s", talk.getPeriod(), talk.getRoom()))));
+        }
     }
 
     public void bindWithDay(Talk talk) {
         Resources resources = getResources();
         bindIcons(resources, talk);
-        mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()))));
+        if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
+            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
+                    String.format("%s | %s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getPrettySpeakers()))));
+        } else {
+            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
+                    String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()))));
+        }
     }
 
     private void bindIcons(Resources resources, Talk talk) {

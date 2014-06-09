@@ -31,6 +31,8 @@ import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.*;
 
+import java.util.LinkedHashSet;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
@@ -229,7 +231,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mTitle.setText(talk.getTitle());
         mInformations.setText(String.format("%s | %s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
 
-        if(!TextUtils.isEmpty(talk.getSummary())){
+        if (!TextUtils.isEmpty(talk.getSummary())) {
             try {
                 mSummaryContent.setText(Html.fromHtml(new AndDown().markdownToHtml(talk.getSummary())));
             } catch (Exception e) {
@@ -279,7 +281,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 });
                 mSpeakersContainer.addView(speakerView);
             }
-            mTalk.setSpeakers(speakers.asList());
+            mTalk.setSpeakers(new LinkedHashSet<>(speakers.asList()));
         }
         return false;
     }

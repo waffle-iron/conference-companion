@@ -57,7 +57,7 @@ public class SynchroIntentService extends IntentService {
         Map<String, Talk> talksFromWsById = loadTalks(conferenceId);
         Map<String, Talk> talksInDbById = loadTalksFromDb(conferenceId);
         List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getSchedule(conferenceId);
-
+        HashMap<String, Speaker> everySpeakers = loadEverySpeakers();
 
         // Save talks keeping favorite info and retrieving date/time from
         ModelList<Talk> talksToSave = new ModelList<>();
@@ -72,15 +72,16 @@ public class SynchroIntentService extends IntentService {
 
             Talk talkDetails = talksFromWsById.remove(talkToSave.getTalkDetailsId());
             if (talkDetails != null) {
+                talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
                 talkToSave.setSummary(talkDetails.getSummary());
                 talkToSave.setTrack(talkDetails.getTrack());
             }
             if (talkDetails != null || talkToSave.isBreak()) {
                 talksToSave.add(talkToSave);
-            }else {
+            } else {
                 // Avoid adding weird presentation (i.e no intialized)
                 // So put back to the map for later deletion
-                talksInDbById.put(talkToSave.getId(),talkToSave);
+                talksInDbById.put(talkToSave.getId(), talkToSave);
             }
         }
 
@@ -97,7 +98,7 @@ public class SynchroIntentService extends IntentService {
         List<SpeakerTalk> speakerTalksToDelete = Query.many(SpeakerTalk.class, "SELECT * FROM Speaker_Talk").get().asList();
         ModelList<SpeakerTalk> speakerTalks = new ModelList<>();
         for (Talk talk : scheduledTalks) {
-            List<Speaker> speakers = talk.getSpeakers();
+            Collection<Speaker> speakers = talk.getSpeakers();
             if (speakers != null) {
                 for (Speaker speaker : speakers) {
                     SpeakerTalk speakerTalk = new SpeakerTalk(speaker.getId(), talk.getId(), conferenceId);
@@ -111,6 +112,15 @@ public class SynchroIntentService extends IntentService {
             new ModelList<>(speakerTalks).deleteAll(transaction);
         }
         speakerTalks.saveAll(transaction);
+    }
+
+    private HashMap<String, Speaker> loadEverySpeakers() {
+        List<Speaker> everySpeakers = Query.many(Speaker.class, "SELECT * FROM Speakers").get().asList();
+        HashMap<String, Speaker> speakersMap = new HashMap<>();
+        for (Speaker speaker : everySpeakers) {
+            speakersMap.put(speaker.getId(), speaker);
+        }
+        return speakersMap;
     }
 
     private Map<String, Talk> loadTalks(int conferenceId) {
