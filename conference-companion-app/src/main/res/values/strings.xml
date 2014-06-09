@@ -15,7 +15,7 @@
     <string name="authors">Authors</string>
     <string name="navigation_drawer_open">Ouvrir le navigation drawer</string>
     <string name="navigation_drawer_close">Fermer le navigation drawer</string>
-    <string name="app_name">Xebia</string>
+    <string name="app_name">Conf Companion</string>
     <string name="scan_nfc_hint">Posez votre tag NFC à l\'arrière de votre appareil</string>
     <string name="confirm">Associer votre tag</string>
     <string name="mail">Mail</string>
