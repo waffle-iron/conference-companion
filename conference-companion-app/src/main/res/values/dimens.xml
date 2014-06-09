@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
-     https://developer.android.com/design/patterns/navigation-drawer.html -->
+    https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="speaker_img">42dp</dimen>
+    <dimen name="conference_icon">40dp</dimen>
 </resources>

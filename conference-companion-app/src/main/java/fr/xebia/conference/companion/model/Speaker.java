@@ -71,4 +71,24 @@ public class Speaker extends Model {
     public List<Talk> getTalks() {
         return talks;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Speaker speaker = (Speaker) o;
+
+        if (conferenceId != speaker.conferenceId) return false;
+        if (id != null ? !id.equals(speaker.id) : speaker.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + conferenceId;
+        return result;
+    }
 }

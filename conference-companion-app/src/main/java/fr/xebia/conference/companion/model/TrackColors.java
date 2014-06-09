@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TrackColors {
+
+    public static final int NO_TRACK = Color.parseColor("#00000000");
+
     public final static List<Integer> LIST = Arrays.asList(
             Color.parseColor("#00A3C1"),
             Color.parseColor("#0061B5"),

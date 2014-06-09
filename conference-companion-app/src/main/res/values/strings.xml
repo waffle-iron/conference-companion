@@ -13,4 +13,47 @@
     <string name="cannot_send_email">Aucun client mail trouvé</string>
     <string name="send_memo_via">Send memo by</string>
     <string name="authors">Authors</string>
+    <string name="navigation_drawer_open">Ouvrir le navigation drawer</string>
+    <string name="navigation_drawer_close">Fermer le navigation drawer</string>
+    <string name="app_name">Xebia</string>
+    <string name="scan_nfc_hint">Posez votre tag NFC à l\'arrière de votre appareil</string>
+    <string name="confirm">Associer votre tag</string>
+    <string name="mail">Mail</string>
+    <string name="name">Prénom Nom</string>
+    <string name="twitter_account">Twitter</string>
+    <string name="initial_synchro">Synchro en cours</string>
+    <string name="initial_synchro_conferences">Récupération des conférences</string>
+    <string name="no_data">Pas de données</string>
+    <string name="schedule">Agenda</string>
+    <string name="speakers">Speakers</string>
+    <string name="schedule_format"><![CDATA[%1$s<br><font color="#696969"><small>%2$s</small></font>]]></string>
+    <string name="speaker_format"><![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>
+    <string name="track_format"><![CDATA[%1$s<br><font color="#696969"><small>%2$d présentations</small></font>]]></string>
+    <string name="speaker_format_without_company"><![CDATA[%1$s %2$s]]></string>
+    <string name="speaker_details_format_with_twitter_without_company"><![CDATA[%1$s %2$s<br><font color="#4099FF"><small/>%3$s</small></font>]]></string>
+    <string name="speaker_details_format_with_twitter"><![CDATA[%1$s %2$s<br><small><font color="#696969">%3$s | </font><font color="#4099FF">%4$s</font></small>]]></string>
+    <string name="speaker_details_format"><![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>
+    <string name="informations">Informations</string>
+    <string name="summary">Description</string>
+    <string name="talks">Présentations</string>
+    <string name="devoxx_menu_title">Devoxx France 2014</string>
+    <string name="my_votes">Mes votes</string>
+    <string name="xebia">Xebia</string>
+    <string name="talk">Présentation</string>
+    <string name="talk_details">Détails présentation</string>
+    <string name="track">Track</string>
+    <string name="speaker_details">Détails speaker</string>
+    <string name="speaker_bio">Bio</string>
+    <string name="error_loading_votes">La mise à jour des votes a échoué</string>
+    <string name="action_refresh_votes">Mettre à jour les votes</string>
+    <string name="data_updated">Informations mises à jour</string>
+    <string name="no_vote">Vous n\'avez pas encore voté</string>
+    <string name="no_favorite_talk">Pas de favoris</string>
+    <string name="my_favorites">Favoris</string>
+    <string name="action_favorite">Gestion favoris</string>
+    <string name="added_to_favorites">Presentation ajoutée aux favoris</string>
+    <string name="removed_from_favorites">Presentation retirée des favoris</string>
+    <string name="no_talk_details">Pas de description</string>
+    <string name="error_loading_conferences">Impossible de charger les conférences</string>
+    <string name="conferences_not_fetched">Impossible de mettre à jour les conférences</string>
 </resources>

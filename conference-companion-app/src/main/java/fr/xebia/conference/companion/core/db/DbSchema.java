@@ -18,6 +18,7 @@ public class DbSchema {
 
     public static final String TALKS = "CREATE TABLE Talks (\n" +
             "  type           TEXT,\n" +
+            "  talkDetailsId  TEXT,\n" +
             "  experience     TEXT,\n" +
             "  track          TEXT,\n" +
             "  fromTime       INTEGER, _id TEXT,\n" +
@@ -26,8 +27,8 @@ public class DbSchema {
             "  room           TEXT,\n" +
             "  summary        TEXT,\n" +
             "  title          TEXT,\n" +
-            "  devoxxian_note INTEGER,\n" +
             "  favorite       INTEGER,\n" +
+            "  kind           TEXT,\n" +
             "  color          INTEGER,\n" +
             "  memo           TEXT,\n" +
             "  conferenceId   INTEGER,\n" +

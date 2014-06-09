@@ -14,32 +14,37 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 @Table("Talks")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Talk extends Model {
 
-    // TODO Use default locale when app will support i18n
-    private static DateFormat sTimeFormatter = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-    private static DateFormat sDayFormatter = new SimpleDateFormat("EEEE", Locale.FRANCE);
+    public static final String REGISTRATION = "registration";
+    public static final String BREAK = "break";
+    public static final String LUNCH = "lunch";
+    public static final String PRESENTATION = "talk";
+
+    private static DateFormat sTimeFormatter = new SimpleDateFormat("HH:mm");
+    private static DateFormat sDayFormatter = new SimpleDateFormat("EEEE");
 
     @JsonProperty @Column("_id") @Key private String id;
     @JsonProperty @Column("conferenceId") private int conferenceId;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris") @Column("fromTime") private Date fromTime;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris") @Column("toTime") private Date toTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Column("fromTime") private Date fromTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Column("toTime") private Date toTime;
     @JsonProperty private List<Speaker> speakers;
     @JsonProperty @Column("room") private String room;
     @JsonProperty @Column("type") private String type;
     @JsonProperty @Column("language") private String language;
     @JsonProperty @Column("experience") private String experience;
     @JsonProperty @Column("track") private String track;
+    @JsonProperty @Column("kind") private String kind;
     @JsonProperty @Column("title") private String title;
     @JsonProperty @Column("summary") private String summary;
-    @JsonProperty @Column("devoxxian_note") private int note;
     @JsonProperty @Column("favorite") private boolean favorite;
+    @JsonProperty("presentation") private Talk details;
 
+    @Column("talkDetailsId") private String talkDetailsId;
     @Column("color") private int color;
     @Column("memo") private String memo = "";
 
@@ -82,8 +87,16 @@ public class Talk extends Model {
         return experience;
     }
 
+    public boolean isBreak() {
+        return REGISTRATION.equalsIgnoreCase(kind) || BREAK.equalsIgnoreCase(kind) || LUNCH.equalsIgnoreCase(kind);
+    }
+
     public String getTrack() {
         return track;
+    }
+
+    public void setTrack(String track) {
+        this.track = track;
     }
 
     public String getTitle() {
@@ -102,9 +115,13 @@ public class Talk extends Model {
         return summary;
     }
 
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public String getPeriod() {
         if (mPeriod == null) {
-            mPeriod = String.format("%s - %s", getDay(), sTimeFormatter.format(toTime));
+            mPeriod = String.format("%s - %s", getDay(), sTimeFormatter.format(fromTime));
         }
         return mPeriod;
     }
@@ -177,7 +194,40 @@ public class Talk extends Model {
         return buffer.toString();
     }
 
+    public String getTalkDetailsId() {
+        return talkDetailsId;
+    }
+
+    public void setTalkDetailsId(String talkDetailsId) {
+        this.talkDetailsId = talkDetailsId;
+    }
+
     public void setSpeakers(List<Speaker> speakers) {
         this.speakers = speakers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Talk talk = (Talk) o;
+
+        if (conferenceId != talk.conferenceId) return false;
+        if (id != null ? !id.equals(talk.id) : talk.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + conferenceId;
+        return result;
+    }
+
+
+    public Talk getDetails() {
+        return details;
     }
 }

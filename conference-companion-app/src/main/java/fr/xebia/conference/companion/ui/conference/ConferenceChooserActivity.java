@@ -20,7 +20,7 @@ public class ConferenceChooserActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.conference_chooser_activity);
-
+        getWindow().setBackgroundDrawableResource(android.R.color.white);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.conferences);

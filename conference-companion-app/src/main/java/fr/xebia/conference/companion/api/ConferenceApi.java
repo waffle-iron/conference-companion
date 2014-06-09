@@ -12,6 +12,9 @@ public interface ConferenceApi {
     @GET("/conferences")
     public List<Conference> getAvailableConferences();
 
+    @GET("/conferences/{conferenceId}/schedule")
+    public List<Talk> getSchedule(@Path("conferenceId") int conferenceId);
+
     @GET("/conferences/{conferenceId}/presentations")
     public List<Talk> getTalks(@Path("conferenceId") int conferenceId);
 

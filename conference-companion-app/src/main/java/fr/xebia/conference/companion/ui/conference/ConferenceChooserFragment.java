@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.ConferenceFetchedEvent;
 import fr.xebia.conference.companion.bus.ConferenceSelectedEvent;
@@ -74,11 +75,13 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
             mProgressContainer.setVisibility(View.VISIBLE);
             mContentContainer.setVisibility(View.GONE);
             mErrorContainer.setVisibility(View.GONE);
-            Query.many(Conference.class, "SELECT * FROM Conferences ORDER BY fromDate DESC").getAsync(getLoaderManager(), this);
             getActivity().startService(new Intent(getActivity(), ConferencesFetcherIntentService.class));
         } else {
             mConferenceAdapter = new ConferenceAdapter(getActivity(), R.layout.conference_item_view, mConferences);
             mConferencesListView.setAdapter(mConferenceAdapter);
+            mContentContainer.setVisibility(View.VISIBLE);
+            mProgressContainer.setVisibility(View.GONE);
+            mErrorContainer.setVisibility(View.GONE);
         }
     }
 
@@ -89,13 +92,17 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
     }
 
     public void onEventMainThread(ConferenceFetchedEvent event) {
-        if (event.success) {
-            Toast.makeText(getActivity(), R.string.conferences_fetched, Toast.LENGTH_SHORT).show();
-        } else {
-            mErrorContainer.setVisibility(View.VISIBLE);
-            mContentContainer.setVisibility(View.GONE);
-            mProgressContainer.setVisibility(View.GONE);
-        }
+        Toast.makeText(getActivity(), event.success ? R.string.conferences_fetched : R.string.conferences_not_fetched,
+                Toast.LENGTH_SHORT).show();
+        Query.many(Conference.class, "SELECT * FROM Conferences ORDER BY fromDate DESC").getAsync(getLoaderManager(), this);
+    }
+
+    @OnClick(R.id.retry_btn)
+    public void onRetryButtonClicked() {
+        mProgressContainer.setVisibility(View.VISIBLE);
+        mContentContainer.setVisibility(View.GONE);
+        mErrorContainer.setVisibility(View.GONE);
+        getActivity().startService(new Intent(getActivity(), ConferencesFetcherIntentService.class));
     }
 
     @Override
@@ -108,7 +115,14 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
     @Override
     public boolean handleResult(CursorList<Conference> conferencesCursor) {
         mConferences = conferencesCursor.asList();
-        if (getView() != null && !mConferences.isEmpty()) {
+        if (getView() == null) {
+            return true;
+        }
+        if (mConferences.isEmpty()) {
+            mErrorContainer.setVisibility(View.VISIBLE);
+            mContentContainer.setVisibility(View.GONE);
+            mProgressContainer.setVisibility(View.GONE);
+        } else {
             if (mConferenceAdapter == null) {
                 mConferenceAdapter = new ConferenceAdapter(getActivity(), R.layout.conference_item_view, mConferences);
                 mConferencesListView.setAdapter(mConferenceAdapter);

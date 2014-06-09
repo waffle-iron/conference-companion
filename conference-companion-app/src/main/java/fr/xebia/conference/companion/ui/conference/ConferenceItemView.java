@@ -1,17 +1,18 @@
 package fr.xebia.conference.companion.ui.conference;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Conference;
 
-public class ConferenceItemView extends LinearLayout {
-
-    @InjectView(R.id.conference_name) TextView mConferenceName;
+public class ConferenceItemView extends TextView implements Target {
 
     public ConferenceItemView(Context context) {
         super(context);
@@ -32,6 +33,23 @@ public class ConferenceItemView extends LinearLayout {
     }
 
     public void bind(Conference conference) {
-        mConferenceName.setText(conference.getName());
+        setText(conference.getName());
+        Picasso.with(getContext()).load(conference.getLogoUrl())
+                .resizeDimen(R.dimen.conference_icon, R.dimen.conference_icon).into(this);
+    }
+
+    @Override
+    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+        setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), bitmap), null, null, null);
+    }
+
+    @Override
+    public void onBitmapFailed(Drawable drawable) {
+
+    }
+
+    @Override
+    public void onPrepareLoad(Drawable drawable) {
+
     }
 }

@@ -24,6 +24,7 @@ public class DrawerAdapter extends BaseAdapter {
     public static final int MENU_TALKS = 2;
     public static final int MENU_SPEAKERS = 3;
     public static final int MENU_MY_VOTES = 4;
+    public static final int MENU_CONFERENCES = 5;
     private final int mSelectedPosition;
 
     private LayoutInflater mInflater;
@@ -42,6 +43,7 @@ public class DrawerAdapter extends BaseAdapter {
         if (NfcAdapter.getDefaultAdapter(context.getApplicationContext()) != null) {
             mItems.add(new DrawerItem(R.drawable.ic_nfc_waves, R.string.my_votes));
         }
+        mItems.add(new DrawerItem(R.drawable.ic_speaker, R.string.conferences));
     }
 
     @Override

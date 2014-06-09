@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.*;
 import android.widget.RatingBar;
@@ -142,7 +143,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             mEtraTalkId = getArguments().getString(EXTRA_TALK_ID);
         }
         getTalk();
-        Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager(), new OneQuery
+        Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager
+                (), new OneQuery
                 .ResultHandler<Vote>() {
             @Override
             public boolean handleResult(Vote vote) {
@@ -162,7 +164,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private void getTalk() {
-        Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager(), this, null);
+        Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mEtraTalkId, mConferenceId).getAsync(getLoaderManager
+                (), this, null);
     }
 
     private void configureHeaders() {
@@ -225,11 +228,17 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         actionBar.setTitle(R.string.talk_details);
         mTitle.setText(talk.getTitle());
         mInformations.setText(String.format("%s | %s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
-        try {
-            mSummaryContent.setText(Html.fromHtml(new AndDown().markdownToHtml(talk.getSummary())));
-        } catch (Exception e) {
-            mSummaryContent.setText(talk.getSummary());
+
+        if(!TextUtils.isEmpty(talk.getSummary())){
+            try {
+                mSummaryContent.setText(Html.fromHtml(new AndDown().markdownToHtml(talk.getSummary())));
+            } catch (Exception e) {
+                mSummaryContent.setText(talk.getSummary());
+            }
+        } else {
+            mSummaryContent.setText(R.string.no_talk_details);
         }
+
 
         String track = talk.getTrack();
         Resources resources = getResources();
@@ -240,7 +249,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         bindMemo();
 
-        Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S.conferenceId=?",
+        Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
+                        ".conferenceId=?",
                 talk.getId(), mConferenceId).getAsync(getLoaderManager(), this);
 
         return false;

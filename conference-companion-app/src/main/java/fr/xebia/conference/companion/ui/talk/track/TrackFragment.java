@@ -43,7 +43,7 @@ public class TrackFragment extends ListFragment implements ManyQuery.ResultHandl
         if (mTracks != null) {
             setListAdapter(new TrackAdapter(getActivity(), R.layout.track_item_view, mTracks));
         } else {
-            Query.many(Track.class, "SELECT track, color, COUNT(*) as count FROM Talks GROUP BY track ORDER BY track ASC",
+            Query.many(Track.class, "SELECT track, color, COUNT(*) as count FROM Talks WHERE track NOT LIKE '' GROUP BY track ORDER BY track ASC",
                     null).getAsync(getLoaderManager(), this);
 
         }

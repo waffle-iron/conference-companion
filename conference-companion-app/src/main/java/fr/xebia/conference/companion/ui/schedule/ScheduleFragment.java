@@ -76,9 +76,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TalkActivity.class);
-                intent.putExtra(TalkActivity.EXTRA_TALK_ID, ((Talk) parent.getAdapter().getItem(position)).getId());
-                startActivity(intent);
+                Talk talk = (Talk) parent.getAdapter().getItem(position);
+                if (!talk.isBreak()) {
+                    Intent intent = new Intent(getActivity(), TalkActivity.class);
+                    intent.putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -90,9 +93,11 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             Query.many(Talk.class, "SELECT * FROM Talks WHERE favorite=? AND conferenceId=? ORDER BY fromTime ASC", true, conferenceId)
                     .getAsync(getLoaderManager(), this);
         } else if (mTrack == null) {
-            Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC", conferenceId).getAsync(getLoaderManager(), this);
+            Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC",
+                    conferenceId).getAsync(getLoaderManager(), this);
         } else {
-            Query.many(Talk.class, "SELECT * FROM Talks WHERE track=? AND conferenceId=? ORDER BY fromTime ASC", mTrack, conferenceId).getAsync(getLoaderManager(), this);
+            Query.many(Talk.class, "SELECT * FROM Talks WHERE track=? AND conferenceId=? ORDER BY fromTime ASC", mTrack,
+                    conferenceId).getAsync(getLoaderManager(), this);
         }
     }
 

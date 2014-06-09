@@ -184,6 +184,14 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
                                 .commit();
                     }
                 }, 300);
+
+            case DrawerAdapter.MENU_CONFERENCES:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(HomeActivity.this, ConferenceChooserActivity.class));
+                    }
+                }, 300);
                 break;
         }
     }
