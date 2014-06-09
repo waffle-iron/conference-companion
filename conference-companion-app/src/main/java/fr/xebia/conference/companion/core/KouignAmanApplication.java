@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.crashlytics.android.Crashlytics;
 import de.greenrobot.event.EventBus;
 import fr.xebia.conference.companion.BuildConfig;
+import fr.xebia.conference.companion.api.BleLocationApi;
 import fr.xebia.conference.companion.api.ConferenceApi;
 import fr.xebia.conference.companion.api.VoteApi;
 import fr.xebia.conference.companion.core.db.DbSchema;
@@ -27,6 +28,7 @@ public class KouignAmanApplication extends Application {
 
     private static VoteApi sVoteApi;
     private static ConferenceApi sConferenceApi;
+    private static BleLocationApi sBleLocationApi;
 
     public static final EventBus BUS = EventBus.getDefault();
 
@@ -43,6 +45,7 @@ public class KouignAmanApplication extends Application {
         RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setConverter(new JacksonConverter());
 
         sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.ROOT_URL).build().create(VoteApi.class);
+        sBleLocationApi = restAdapterBuilder.setEndpoint(BuildConfig.LOCATION_URL).build().create(BleLocationApi.class);
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
 
         Sprinkles sprinkles = Sprinkles.init(getApplicationContext(), "conferences.db", 0);
@@ -60,13 +63,17 @@ public class KouignAmanApplication extends Application {
 
     }
 
-    /** A tree which logs important information for crash reporting. */
+    /**
+     * A tree which logs important information for crash reporting.
+     */
     private static class CrashReportingTree extends Timber.HollowTree {
-        @Override public void e(String message, Object... args) {
+        @Override
+        public void e(String message, Object... args) {
             e("ERROR: " + message, args); // Just add to the log.
         }
 
-        @Override public void e(Throwable t, String message, Object... args) {
+        @Override
+        public void e(Throwable t, String message, Object... args) {
             e(message, args);
             Crashlytics.logException(t);
         }
@@ -78,5 +85,9 @@ public class KouignAmanApplication extends Application {
 
     public static ConferenceApi getConferenceApi() {
         return sConferenceApi;
+    }
+
+    public static BleLocationApi getBleLocationApi() {
+        return sBleLocationApi;
     }
 }

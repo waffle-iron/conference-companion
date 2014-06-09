@@ -10,10 +10,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
 import com.crashlytics.android.Crashlytics;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.TagRegisteredEvent;
@@ -193,14 +190,6 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
                     }
                 }, 300);
                 break;
-        }
-    }
-
-    public static class PlaceHolderFragment extends Fragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.schedule_fragment, container, false);
         }
     }
 

@@ -9,6 +9,7 @@ import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.ConferenceSelectedEvent;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
 import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.service.BluetoothLocationIntentService;
 import fr.xebia.conference.companion.ui.HomeActivity;
 import fr.xebia.conference.companion.ui.synchro.SynchroFragment;
 
@@ -48,6 +49,7 @@ public class ConferenceChooserActivity extends Activity {
     public void onEventMainThread(SynchroFinishedEvent synchroFinishedEvent) {
         if (synchroFinishedEvent.success) {
             Preferences.setSelectedConference(this, synchroFinishedEvent.conferenceId);
+            startService(new Intent(this, BluetoothLocationIntentService.class));
             startActivity(new Intent(this, HomeActivity.class));
             finish();
         } else {

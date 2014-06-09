@@ -59,4 +59,8 @@ public class Conference extends Model {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public boolean isStarted() {
+        return System.currentTimeMillis() > from.getTime();
+    }
 }
