@@ -107,7 +107,7 @@ public class BluetoothLocationIntentService extends IntentService {
     }
 
     private boolean disableAlarmIfConferenceOver(Intent bleLocateIntent, Conference conference) {
-        if (conference.getTo().getTime() < System.currentTimeMillis()) {
+        if (conference.getTo().getTime() + 24 * 60 * 60 * 1000 < System.currentTimeMillis()) {
             disableAlarm(bleLocateIntent);
             return true;
         } else {
