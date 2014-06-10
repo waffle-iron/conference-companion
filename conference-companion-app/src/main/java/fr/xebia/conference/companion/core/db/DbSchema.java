@@ -57,6 +57,7 @@ public class DbSchema {
             "  location      TEXT,\n" +
             "  backgroundUrl TEXT,\n" +
             "  logoUrl       TEXT,\n" +
+            "  nfcTag        TEXT,\n" +
             "  fromDate      INTEGER,\n" +
             "  toDate        INTEGER,\n" +
             "  enabled       INTEGER,\n" +

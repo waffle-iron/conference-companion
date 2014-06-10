@@ -13,13 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import fr.xebia.conference.companion.core.utils.NfcFormatter;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.TagRegisteredEvent;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
+import fr.xebia.conference.companion.core.utils.NfcFormatter;
+import fr.xebia.conference.companion.model.Conference;
 import icepick.Icepick;
 import icepick.Icicle;
+import se.emilsjolander.sprinkles.OneQuery;
+import se.emilsjolander.sprinkles.Query;
 
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
@@ -140,6 +143,17 @@ public class ScanNfcFragment extends Fragment implements RestoreActionBarFragmen
         mCurrentNfcId = NfcFormatter.formatNfcId(tag);
 
         Preferences.saveDevoxxianTag(getActivity(), mCurrentNfcId);
+        Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", Preferences.getSelectedConference(getActivity()))
+                .getAsync(getLoaderManager(), new OneQuery.ResultHandler<Conference>() {
+                    @Override
+                    public boolean handleResult(Conference conference) {
+                        if (conference != null) {
+                            conference.setNfcTag(mCurrentNfcId);
+                            conference.saveAsync();
+                        }
+                        return false;
+                    }
+                });
 
         mBounceObjectAnimator.cancel();
         mHandler.removeCallbacks(mRestartAnimRunnable);

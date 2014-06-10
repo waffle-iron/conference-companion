@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
 import fr.xebia.conference.companion.model.Track;
 import fr.xebia.conference.companion.ui.schedule.ScheduleActivity;
@@ -43,8 +44,9 @@ public class TrackFragment extends ListFragment implements ManyQuery.ResultHandl
         if (mTracks != null) {
             setListAdapter(new TrackAdapter(getActivity(), R.layout.track_item_view, mTracks));
         } else {
-            Query.many(Track.class, "SELECT track, color, COUNT(*) as count FROM Talks WHERE track NOT LIKE '' GROUP BY track ORDER BY track ASC",
-                    null).getAsync(getLoaderManager(), this);
+            Query.many(Track.class, "SELECT track, conferenceId, color, COUNT(*) as count FROM Talks WHERE track NOT LIKE '' AND " +
+                            "conferenceId=? GROUP BY track ORDER BY track ASC",
+                    Preferences.getSelectedConference(getActivity())).getAsync(getLoaderManager(), this);
 
         }
     }

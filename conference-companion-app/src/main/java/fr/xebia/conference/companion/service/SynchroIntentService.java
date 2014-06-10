@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
 import fr.xebia.conference.companion.core.KouignAmanApplication;
-import fr.xebia.conference.companion.model.Speaker;
-import fr.xebia.conference.companion.model.SpeakerTalk;
-import fr.xebia.conference.companion.model.Talk;
-import fr.xebia.conference.companion.model.TrackColors;
+import fr.xebia.conference.companion.model.*;
 import se.emilsjolander.sprinkles.ModelList;
 import se.emilsjolander.sprinkles.Query;
 import se.emilsjolander.sprinkles.Transaction;
@@ -34,20 +31,21 @@ public class SynchroIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
+        Conference conference = Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", conferenceId).get();
         Transaction transaction = new Transaction();
         try {
             if (conferenceId == -1) {
-                BUS.post(new SynchroFinishedEvent(false, conferenceId));
+                BUS.post(new SynchroFinishedEvent(false, null));
             } else {
                 synchroniseSpeakers(conferenceId, transaction);
                 synchroniseTalks(conferenceId, transaction);
                 transaction.setSuccessful(true);
-                BUS.post(new SynchroFinishedEvent(true, conferenceId));
+                BUS.post(new SynchroFinishedEvent(true, conference));
             }
         } catch (Exception e) {
             Timber.e(e, "Error synchronizing data");
             transaction.setSuccessful(false);
-            BUS.post(new SynchroFinishedEvent(false, conferenceId));
+            BUS.post(new SynchroFinishedEvent(false, null));
         } finally {
             transaction.finish();
         }

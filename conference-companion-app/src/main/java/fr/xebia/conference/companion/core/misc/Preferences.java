@@ -8,7 +8,7 @@ public class Preferences {
     private static final String APP_PREFS = "ApplicationPreferences";
     public static final String CURRENT_CONFERENCE = "SynchroOver";
     public static final String NFC_TAG = "NfcTag";
-    public static final String BLE_HINT_DISPLAYED = "NfcTag";
+    public static final String BLE_HINT_DISPLAYED = "bleHintDisplayed";
 
     private Preferences() {
 

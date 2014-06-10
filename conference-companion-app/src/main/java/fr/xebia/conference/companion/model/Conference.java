@@ -23,6 +23,7 @@ public class Conference extends Model {
     @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd") @Column("fromDate") private Date from;
     @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd") @Column("toDate") private Date to;
     @JsonProperty @Column("enabled") private boolean enabled;
+    @Column("nfcTag") private String nfcTag;
 
     public int getId() {
         return id;
@@ -62,5 +63,13 @@ public class Conference extends Model {
 
     public boolean isStarted() {
         return System.currentTimeMillis() > from.getTime();
+    }
+
+    public String getNfcTag() {
+        return nfcTag;
+    }
+
+    public void setNfcTag(String nfcTag) {
+        this.nfcTag = nfcTag;
     }
 }
