@@ -44,7 +44,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @InjectView(R.id.sticky_list) StickyListHeadersListView mListView;
 
     private Map<String, List<Talk>> mTalksPerDay = new LinkedHashMap<>();
-    private DateFormat mDateFormatter = new SimpleDateFormat("EEEE", Locale.FRANCE);
+    private DateFormat mDateFormatter = new SimpleDateFormat("EEEE");
     private ArrayAdapter<String> mSpinnerAdapter;
 
     @Icicle int mSelectedSpinnerPosition;
