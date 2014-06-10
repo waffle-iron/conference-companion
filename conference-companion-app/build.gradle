@@ -53,7 +53,7 @@ android {
         debug {
             debuggable true
             buildConfigField 'String', 'ROOT_URL', '"http://kouign-amann-cloud.devoxxfr-kouign-amann.cloudbees.net"'
-            buildConfigField 'String', 'LOCATION_URL', '"http://www.xebia.fr"'
+            buildConfigField 'String', 'LOCATION_URL', '"http://ec2-54-186-148-236.us-west-2.compute.amazonaws.com"'
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'int', 'LOG_LEVEL', '4'
             buildConfigField 'boolean', 'RELEASE_BUILD', 'LOG_LEVEL == -1'
@@ -62,7 +62,7 @@ android {
 
         release {
             buildConfigField 'String', 'ROOT_URL', '"http://kouign-amann-cloud.devoxxfr-kouign-amann.cloudbees.net"'
-            buildConfigField 'String', 'LOCATION_URL', '"http://www.xebia.fr"'
+            buildConfigField 'String', 'LOCATION_URL', '"http://ec2-54-186-148-236.us-west-2.compute.amazonaws.com"'
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'int', 'LOG_LEVEL', '-1'
             buildConfigField 'boolean', 'RELEASE_BUILD', 'LOG_LEVEL == -1'

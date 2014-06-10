@@ -8,6 +8,7 @@ public class Preferences {
     private static final String APP_PREFS = "ApplicationPreferences";
     public static final String CURRENT_CONFERENCE = "SynchroOver";
     public static final String NFC_TAG = "NfcTag";
+    public static final String BLE_HINT_DISPLAYED = "NfcTag";
 
     private Preferences() {
 
@@ -45,4 +46,11 @@ public class Preferences {
         return getAppPreferences(context).getString(NFC_TAG, "");
     }
 
+    public static boolean isBleHintDisplayed(Context context) {
+        return getAppPreferences(context).getBoolean(BLE_HINT_DISPLAYED, false);
+    }
+
+    public static boolean setBleHintDisplayed(Context context, boolean displayed) {
+        return getAppPreferences(context).edit().putBoolean(BLE_HINT_DISPLAYED, displayed).commit();
+    }
 }

@@ -1,9 +1,7 @@
 package fr.xebia.conference.companion.ui;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.PendingIntent;
+import android.app.*;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -63,6 +61,21 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, new ScheduleFragment(), HOME_FRAG_TAG)
                     .commit();
+
+            if(!Preferences.isBleHintDisplayed(this)){
+                Preferences.setBleHintDisplayed(this, true);
+                final AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle(R.string.informations)
+                        .setMessage(R.string.informations_ble)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setCancelable(false).create();
+                dialog.show();
+            }
         }
 
 
