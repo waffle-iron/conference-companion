@@ -76,6 +76,12 @@ public class SynchroIntentService extends IntentService {
 
             talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
 
+            if (talkToSave.getConferenceId() == 12) {
+                // Devoxx UK 2014 is a specific case
+                talkToSave.getFromTime().setTime(talkToSave.getFromTime().getTime() - 60 * 60 * 1000);
+                talkToSave.getToTime().setTime(talkToSave.getToTime().getTime() - 60 * 60 * 1000);
+            }
+
             if (talkDetails != null || talkToSave.isBreak()) {
                 talksToSave.add(talkToSave);
             } else {
@@ -168,7 +174,7 @@ public class SynchroIntentService extends IntentService {
 
         for (Speaker speaker : speakers) {
             String firstName = speaker.getFirstName();
-            speaker.setFirstName(firstName.substring(0,1).toUpperCase() + firstName.substring(1));
+            speaker.setFirstName(firstName.substring(0, 1).toUpperCase() + firstName.substring(1));
             speakersToSave.add(speaker);
             speakersToDelete.remove(speaker);
         }
