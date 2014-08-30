@@ -68,11 +68,6 @@ public class KouignAmanApplication extends Application {
      */
     private static class CrashReportingTree extends Timber.HollowTree {
         @Override
-        public void e(String message, Object... args) {
-            e("ERROR: " + message, args); // Just add to the log.
-        }
-
-        @Override
         public void e(Throwable t, String message, Object... args) {
             e(message, args);
             Crashlytics.logException(t);

@@ -116,7 +116,9 @@ public class BluetoothLocationIntentService extends IntentService {
     }
 
     private void disableAlarm(Intent bleLocateIntent) {
-        mAlarmManager.cancel(PendingIntent.getService(this, 0, bleLocateIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        if (mAlarmManager != null) {
+            mAlarmManager.cancel(PendingIntent.getService(this, 0, bleLocateIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)

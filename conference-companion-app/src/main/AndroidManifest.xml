@@ -92,7 +92,7 @@
         <receiver android:name=".core.receiver.TriggerLocationReceiver" android:exported="false" />
         <meta-data
                 android:name="com.crashlytics.ApiKey"
-                android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b"/>
+                android:value="fcabb38c426eb4d270413b164597dce840653258"/>
     </application>
 
 </manifest>
