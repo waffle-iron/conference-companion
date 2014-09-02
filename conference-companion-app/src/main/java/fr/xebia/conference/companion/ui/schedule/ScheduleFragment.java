@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,11 +26,13 @@ import icepick.Icicle;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, ActionBar.OnNavigationListener,
         RestoreActionBarFragment {
@@ -41,7 +44,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
     @InjectView(R.id.container) ViewGroup mContainer;
     @InjectView(R.id.empty_id) TextView mEmptyText;
-    @InjectView(R.id.sticky_list) StickyListHeadersListView mListView;
+    @InjectView(R.id.schedule_grid) GridView mGridView;
 
     private Map<String, List<Talk>> mTalksPerDay = new LinkedHashMap<>();
     private DateFormat mDateFormatter = new SimpleDateFormat("EEEE");
@@ -72,8 +75,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
         enableTransition();
-        mListView.setDrawingListUnderStickyHeader(false);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Talk talk = (Talk) parent.getAdapter().getItem(position);
@@ -112,7 +114,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @Override
     public void onPause() {
         super.onPause();
-        mListViewState = mListView.onSaveInstanceState();
+        mListViewState = mGridView.onSaveInstanceState();
     }
 
     @Override
@@ -138,18 +140,18 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         if (((mTrack == null && !mFavoriteOnly) && mTalksPerDay.isEmpty())
                 || ((mTrack != null || mFavoriteOnly) && mTalks.isEmpty())) {
             mEmptyText.setText(mFavoriteOnly ? getString(R.string.no_favorite_talk) : getString(R.string.no_data));
-            mListView.setVisibility(View.GONE);
+            mGridView.setVisibility(View.GONE);
             mEmptyText.setVisibility(View.VISIBLE);
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         } else {
             mEmptyText.setText("");
             mEmptyText.setVisibility(View.GONE);
-            mListView.setVisibility(View.VISIBLE);
+            mGridView.setVisibility(View.VISIBLE);
 
             if (mFavoriteOnly) {
                 actionBar.setDisplayShowTitleEnabled(true);
                 actionBar.setTitle(getString(R.string.my_favorites));
-                mListView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, mTalks, true));
+                mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, mTalks, true));
             } else if (mTrack == null) {
                 actionBar.setDisplayShowTitleEnabled(false);
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -157,16 +159,16 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                         formatDays());
                 actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
                 List<Talk> talksForDay = mTalksPerDay.get(mSpinnerAdapter.getItem(mSelectedSpinnerPosition).toLowerCase());
-                mListView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay));
+                mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay));
                 actionBar.setSelectedNavigationItem(mSelectedSpinnerPosition);
             } else {
                 actionBar.setDisplayShowTitleEnabled(true);
                 actionBar.setTitle(mTrack);
-                mListView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, mTalks, true));
+                mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, mTalks, true));
             }
 
             if (mListViewState != null) {
-                mListView.onRestoreInstanceState(mListViewState);
+                mGridView.onRestoreInstanceState(mListViewState);
             }
         }
         return true;
@@ -199,13 +201,13 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        if (mSelectedSpinnerPosition == itemPosition && mListView.getAdapter() != null) {
+        if (mSelectedSpinnerPosition == itemPosition && mGridView.getAdapter() != null) {
             return true;
         }
 
         mSelectedSpinnerPosition = itemPosition;
         List<Talk> talksForDay = mTalksPerDay.get(mSpinnerAdapter.getItem(itemPosition).toLowerCase());
-        mListView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay, mTrack != null || mFavoriteOnly));
+        mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay, mTrack != null || mFavoriteOnly));
         return true;
     }
 

@@ -2,23 +2,25 @@ package fr.xebia.conference.companion.ui.schedule;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Talk;
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 
-public class ScheduleItemView extends RelativeLayout {
+public class ScheduleItemView extends RelativeLayout implements Callback {
 
-    @InjectView(R.id.schedule_text) TextView mText;
-    @InjectView(R.id.schedule_color) View mColor;
+    @InjectView(R.id.schedule_bg_img) ImageView mScheduleBgImg;
+    @InjectView(R.id.schedule_title) TextView mScheduleTitle;
+    @InjectView(R.id.schedule_speakers) TextView mScheduleSpeakers;
+    @InjectView(R.id.schedule_room) TextView mScheduleRoom;
 
     public ScheduleItemView(Context context) {
         super(context);
@@ -34,37 +36,56 @@ public class ScheduleItemView extends RelativeLayout {
         ButterKnife.inject(this);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    }
+
     public void bind(Talk talk) {
         Resources resources = getResources();
         bindIcons(resources, talk);
+        mScheduleTitle.setText(talk.getTitle());
+        mScheduleRoom.setText(String.format("%s\n%s", talk.getPeriod(), talk.getRoom()));
+        mScheduleSpeakers.setText(talk.getPrettySpeakers());
         if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
-            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                    String.format("%s | %s | %s", talk.getPeriod(), talk.getRoom(), talk.getPrettySpeakers()))));
+            mScheduleSpeakers.setText(talk.getPrettySpeakers());
+            mScheduleSpeakers.setVisibility(VISIBLE);
         } else {
-            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                    String.format("%s | %s", talk.getPeriod(), talk.getRoom()))));
+            mScheduleSpeakers.setVisibility(INVISIBLE);
         }
     }
 
     public void bindWithDay(Talk talk) {
         Resources resources = getResources();
         bindIcons(resources, talk);
+        mScheduleTitle.setText(talk.getTitle());
+        mScheduleRoom.setText(String.format("%s - %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
+        mScheduleSpeakers.setText(talk.getPrettySpeakers());
         if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
-            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                    String.format("%s | %s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getPrettySpeakers()))));
+            mScheduleSpeakers.setText(talk.getPrettySpeakers());
+            mScheduleSpeakers.setVisibility(VISIBLE);
         } else {
-            mText.setText(Html.fromHtml(resources.getString(R.string.schedule_format, talk.getTitle(),
-                    String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()))));
+            mScheduleSpeakers.setVisibility(INVISIBLE);
         }
     }
 
     private void bindIcons(Resources resources, Talk talk) {
-        Drawable favoriteDrawable = talk.isFavorite() ? resources.getDrawable(R.drawable.ic_menu_action_important).mutate() : null;
-        if (favoriteDrawable != null) {
-            favoriteDrawable.setColorFilter(resources.getColor(R.color.xebia_menu_color), PorterDuff.Mode.SRC_IN);
-        }
-        mText.setCompoundDrawablesWithIntrinsicBounds(null, null, favoriteDrawable, null);
+        setBackgroundColor(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
+        mScheduleBgImg.setColorFilter(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
+        Picasso.with(getContext())
+                .load(R.drawable.devoxx_template)
+                .fit()
+                .centerInside()
+                .into(mScheduleBgImg);
+    }
 
-        mColor.setBackgroundColor(talk.getColor());
+    @Override
+    public void onSuccess() {
+        setBackgroundColor(getResources().getColor(android.R.color.transparent));
+    }
+
+    @Override
+    public void onError() {
+
     }
 }
