@@ -82,6 +82,8 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 if (!talk.isBreak()) {
                     Intent intent = new Intent(getActivity(), TalkActivity.class);
                     intent.putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId());
+                    intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, talk.getTitle());
+                    intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, talk.getColor());
                     startActivity(intent);
                 }
             }

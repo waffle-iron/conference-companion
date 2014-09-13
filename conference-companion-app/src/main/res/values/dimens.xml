@@ -5,4 +5,6 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="speaker_img">42dp</dimen>
     <dimen name="conference_icon">40dp</dimen>
+    <dimen name="add_to_schedule_button_height">56dp</dimen>
+    <dimen name="keyline_1_minus_8dp">8dp</dimen>
 </resources>

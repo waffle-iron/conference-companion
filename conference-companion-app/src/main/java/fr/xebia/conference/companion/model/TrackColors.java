@@ -10,17 +10,17 @@ public class TrackColors {
     public static final int NO_TRACK = Color.parseColor("#00000000");
 
     public final static List<Integer> LIST = Arrays.asList(
-            Color.parseColor("#00A3C1"),
-            Color.parseColor("#0061B5"),
-            Color.parseColor("#0FAD00"),
-            Color.parseColor("#E266B4"),
-            Color.parseColor("#C5007C"),
-            Color.parseColor("#FF0000"),
-            Color.parseColor("#FF6600"),
-            Color.parseColor("#888888"),
-            Color.parseColor("#FFC600"),
-            Color.parseColor("#FFFF00"),
-            Color.parseColor("#8CC700"),
-            Color.parseColor("#0012A5")
+            Color.parseColor("#E91E63"),
+            Color.parseColor("#3F51B5"),
+            Color.parseColor("#009688"),
+            Color.parseColor("#8BC34A"),
+            Color.parseColor("#FFC107"),
+            Color.parseColor("#795548"),
+            Color.parseColor("#607D8B"),
+            Color.parseColor("#FF5722"),
+            Color.parseColor("#CDDC39"),
+            Color.parseColor("#03A9F4"),
+            Color.parseColor("#673AB7"),
+            Color.parseColor("#E51C23")
     );
 }

@@ -58,4 +58,5 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="informations_ble">This application use geofencing through Bluetooth LE. You can disable this option in settings</string>
+    <string name="add_to_schedule">Add to schedule</string>
 </resources>

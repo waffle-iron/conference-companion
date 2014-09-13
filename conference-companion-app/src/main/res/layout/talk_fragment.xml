@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
+<fr.xebia.conference.companion.ui.widget.ObservableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    android:fillViewport="true">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
+        android:id="@+id/scroll_view_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
+
+        <!-- Background photo -->
+        <FrameLayout
+            android:id="@+id/talk_photo_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
+            android:layout_height="wrap_content">
 
-    <LinearLayout
+            <ImageView
+                android:id="@+id/talk_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </FrameLayout>
+
+        <!-- Talk details -->
+        <LinearLayout
+            android:id="@+id/talk_details_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="10dp">
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
 
-        <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:drawablePadding="10dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:gravity="center"/>
-
-        <TextView
-                android:id="@+id/informations"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="#ff696969"
-                android:textStyle="bold"
-                android:gravity="end"/>
-
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="end">
 
-            <RatingBar
+                <RatingBar
                     android:id="@+id/talk_note"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,90 +49,151 @@
                     android:visibility="gone"
                     style="@style/talkRatingBar"
                     android:max="5"
-                    android:isIndicator="true"/>
-        </LinearLayout>
+                    android:isIndicator="true" />
+            </LinearLayout>
 
-        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+            <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/track_memo_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:textSize="16sp"
-                android:paddingLeft="5dp"
+                android:layout_marginLeft="72dp"
                 android:textStyle="bold"
-                android:textColor="@color/xebia_color"
                 android:layout_marginTop="10dp"
-                android:text="@string/memo"/>
+                android:text="@string/memo" />
 
-        <TextView
+            <TextView
                 android:id="@+id/track_memo_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp" />
 
-        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+            <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/track"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:textSize="16sp"
                 android:paddingLeft="5dp"
+                android:layout_marginLeft="72dp"
                 android:textStyle="bold"
-                android:textColor="@color/xebia_color"
                 android:layout_marginTop="10dp"
-                android:text="@string/track"/>
+                android:text="@string/track" />
 
-        <TextView
+            <TextView
                 android:id="@+id/track_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:drawablePadding="10dp"
+                android:drawablePadding="8dp"
                 android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical" />
 
-        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+            <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:textSize="16sp"
                 android:paddingLeft="5dp"
+                android:layout_marginLeft="72dp"
                 android:textStyle="bold"
-                android:textColor="@color/xebia_color"
                 android:layout_marginTop="10dp"
-                android:text="@string/summary"/>
+                android:text="@string/summary" />
 
-        <TextView
+            <TextView
                 android:id="@+id/summary_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginLeft="72dp"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp" />
 
-        <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+            <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/speakers"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:paddingLeft="5dp"
+                android:layout_marginLeft="72dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/xebia_color"
-                android:text="@string/speakers"/>
+                android:text="@string/speakers" />
 
-        <LinearLayout
+            <LinearLayout
                 android:id="@+id/speakers_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:orientation="vertical"/>
-    </LinearLayout>
+                android:orientation="vertical" />
+        </LinearLayout>
 
-</ScrollView>
+        <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:id="@+id/talk_header">
+
+            <!-- height assigned dynamically -->
+            <View
+                android:id="@+id/talk_header_background"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+            <LinearLayout
+                android:id="@+id/talk_header_contents"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="10dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:gravity="start" />
+
+                <TextView
+                    android:id="@+id/informations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:minLines="2"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:alpha="0.7"
+                    android:gravity="end" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/header_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="-6dp" />
+
+        </FrameLayout>
+
+        <!-- FAB -->
+        <include layout="@layout/include_add_schedule_fab" />
+    </FrameLayout>
+
+</fr.xebia.conference.companion.ui.widget.ObservableScrollView>
