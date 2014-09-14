@@ -2,12 +2,13 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarStyle">@style/XebiaActionBar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
         <item name="android:listChoiceBackgroundIndicator">@drawable/default_list_selector_holo_light</item>
         <item name="android:activatedBackgroundIndicator">@drawable/default_activated_background_holo_light</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
     <!-- Talk Details -->
@@ -23,7 +24,7 @@
     </style>
 
     <style name="XebiaActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/ab_solid_xebia</item>
+        <item name="android:background">@drawable/actionbar_bg</item>
     </style>
 
     <style name="DropDownNav" parent="@android:style/Widget.Holo.Spinner">
@@ -59,6 +60,40 @@
         <item name="android:progressDrawable">@drawable/ratingsbar</item>
         <item name="android:minHeight">22dip</item>
         <item name="android:maxHeight">22dip</item>
+    </style>
+
+    <!-- Explore item text appearances -->
+    <style name="ExploreItem.Title" parent="">
+        <item name="android:textColor">#fff</item> <!-- a bit brighter than body_text_1_inverse to stand out more -->
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ExploreItem.Title.Hero">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+        <item name="android:maxLines">3</item>
+    </style>
+
+    <style name="ExploreItem.Subtitle" parent="">
+        <item name="android:textColor">@color/body_text_2_inverse</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ExploreItem.Subtitle.Hero" />
+
+    <style name="ExploreItem.Snippet" parent="">
+        <item name="android:textColor">@color/body_text_2_inverse</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ExploreItem.Category" parent="">
+        <item name="android:textColor">@color/body_text_2_inverse</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 </resources>
 

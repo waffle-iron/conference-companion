@@ -1,0 +1,87 @@
+package fr.xebia.conference.companion.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+import fr.xebia.conference.companion.core.utils.Compatibility;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ConferenceDay implements Parcelable {
+
+    private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("EEEE dd'.'");
+
+    public String title;
+    public List<MyScheduleItem> myScheduleItems = new ArrayList<>();
+
+    public ConferenceDay(List<Talk> talks) {
+        Map<Long, List<Talk>> mapTalksByStartTime = new LinkedHashMap<>();
+        for (Talk talk : talks) {
+            long talkStartTime = talk.getFromTime().getTime();
+            List<Talk> talksForSlot = mapTalksByStartTime.get(talkStartTime);
+            if (talksForSlot == null) {
+                talksForSlot = new ArrayList<>();
+                mapTalksByStartTime.put(talkStartTime, talksForSlot);
+            }
+            talksForSlot.add(talk);
+        }
+
+        long currentEndTime = -1;
+        for (Map.Entry<Long, List<Talk>> entry : mapTalksByStartTime.entrySet()) {
+            MyScheduleItem myScheduleItem = new MyScheduleItem(entry.getKey(), entry.getValue());
+            if (myScheduleItem.startTime >= currentEndTime) {
+                myScheduleItems.add(myScheduleItem);
+            } else {
+                // TODO add conflict flag
+            }
+            currentEndTime = myScheduleItem.endTime;
+        }
+
+        if (myScheduleItems.size() > 0) {
+            title = Compatibility.capitalize(DATE_FORMATTER.format(myScheduleItems.get(0).startTime));
+        }
+    }
+
+    protected ConferenceDay(Parcel in) {
+        title = in.readString();
+        if (in.readByte() == 0x01) {
+            myScheduleItems = new ArrayList<>();
+            in.readList(myScheduleItems, MyScheduleItem.class.getClassLoader());
+        } else {
+            myScheduleItems = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        if (myScheduleItems == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(myScheduleItems);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<ConferenceDay> CREATOR = new Parcelable.Creator<ConferenceDay>() {
+        @Override
+        public ConferenceDay createFromParcel(Parcel in) {
+            return new ConferenceDay(in);
+        }
+
+        @Override
+        public ConferenceDay[] newArray(int size) {
+            return new ConferenceDay[size];
+        }
+    };
+}

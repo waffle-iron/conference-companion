@@ -21,18 +21,15 @@ import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
+import fr.xebia.conference.companion.model.Schedule;
 import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, ActionBar.OnNavigationListener,
         RestoreActionBarFragment {
@@ -46,8 +43,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @InjectView(R.id.empty_id) TextView mEmptyText;
     @InjectView(R.id.schedule_grid) GridView mGridView;
 
-    private Map<String, List<Talk>> mTalksPerDay = new LinkedHashMap<>();
-    private DateFormat mDateFormatter = new SimpleDateFormat("EEEE");
+    private Schedule mSchedule;
     private ArrayAdapter<String> mSpinnerAdapter;
 
     @Icicle int mSelectedSpinnerPosition;
@@ -128,7 +124,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @Override
     public boolean handleResult(CursorList<Talk> cursorList) {
         if (mTrack == null && !mFavoriteOnly) {
-            buildSchedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList());
+            mSchedule = new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList());
         } else {
             mTalks.clear();
             mTalks.addAll(cursorList.asList());
@@ -139,7 +135,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         }
 
         ActionBar actionBar = getActivity().getActionBar();
-        if (((mTrack == null && !mFavoriteOnly) && mTalksPerDay.isEmpty())
+        if (((mTrack == null && !mFavoriteOnly) && (mSchedule == null || mSchedule.isEmpty()))
                 || ((mTrack != null || mFavoriteOnly) && mTalks.isEmpty())) {
             mEmptyText.setText(mFavoriteOnly ? getString(R.string.no_favorite_talk) : getString(R.string.no_data));
             mGridView.setVisibility(View.GONE);
@@ -158,9 +154,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 actionBar.setDisplayShowTitleEnabled(false);
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
                 mSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
-                        formatDays());
+                        mSchedule.getFormattedDays());
                 actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-                List<Talk> talksForDay = mTalksPerDay.get(mSpinnerAdapter.getItem(mSelectedSpinnerPosition).toLowerCase());
+                List<Talk> talksForDay = mSchedule.forDay(mSpinnerAdapter.getItem(mSelectedSpinnerPosition).toLowerCase());
                 mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay));
                 actionBar.setSelectedNavigationItem(mSelectedSpinnerPosition);
             } else {
@@ -176,31 +172,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         return true;
     }
 
-    private ArrayList<String> formatDays() {
-        ArrayList<String> daysFormatted = new ArrayList<>();
-        for (String day : mTalksPerDay.keySet()) {
-            daysFormatted.add(day.substring(0, 1).toUpperCase() + day.substring(1, day.length()));
-        }
-        return daysFormatted;
-    }
-
-    private void buildSchedule(List<Talk> talks) {
-        mTalksPerDay.clear();
-        for (Talk talk : talks) {
-            addTalkToSchedule(talk);
-        }
-    }
-
-    private void addTalkToSchedule(Talk talk) {
-        String day = mDateFormatter.format(talk.getFromTime()).toLowerCase();
-        List<Talk> talksForDay = mTalksPerDay.get(day);
-        if (talksForDay == null) {
-            talksForDay = new ArrayList<>();
-            mTalksPerDay.put(day, talksForDay);
-        }
-        talksForDay.add(talk);
-    }
-
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         if (mSelectedSpinnerPosition == itemPosition && mGridView.getAdapter() != null) {
@@ -208,7 +179,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         }
 
         mSelectedSpinnerPosition = itemPosition;
-        List<Talk> talksForDay = mTalksPerDay.get(mSpinnerAdapter.getItem(itemPosition).toLowerCase());
+        List<Talk> talksForDay = mSchedule.forDay(mSpinnerAdapter.getItem(itemPosition).toLowerCase());
         mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay, mTrack != null || mFavoriteOnly));
         return true;
     }

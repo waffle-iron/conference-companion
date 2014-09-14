@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources  xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="retry">Retry</string>
     <string name="conferences">Conferences</string>
     <string name="conferences_fetched">Conferences up to date</string>
@@ -59,4 +59,14 @@
     <string name="version">Version</string>
     <string name="informations_ble">This application use geofencing through Bluetooth LE. You can disable this option in settings</string>
     <string name="add_to_schedule">Add to schedule</string>
+    <string name="browse_sessions">Browse sessions</string>
+    <string name="session_finished">Finished</string>
+    <string name="session_now">Now</string>
+    <string name="my_schedule_end_time">to <xliff:g id="endTime">%1$s</xliff:g></string>
+
+    <plurals name="available_talks">
+        <item quantity="zero">%1$d talk available</item>
+        <item quantity="one">%1$d talk available</item>
+        <item quantity="other">%1$d talks available</item>
+    </plurals>
 </resources>

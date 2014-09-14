@@ -30,6 +30,7 @@
             android:id="@+id/talk_details_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             android:orientation="vertical"
             android:paddingTop="10dp"
             android:paddingRight="10dp"

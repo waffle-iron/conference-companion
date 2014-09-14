@@ -62,4 +62,5 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="informations_ble">Cette application utilise du geofencing via le Bluetooth LE. Vous pouvez désactiver cette option dans les paramètres.</string>
+    <string name="browse_sessions">Browse sessions</string>
 </resources>

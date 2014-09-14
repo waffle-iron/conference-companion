@@ -19,6 +19,8 @@ import fr.xebia.conference.companion.R;
 public class UIUtils {
 
     private static final Handler HANDLER = new Handler();
+    public static final float SESSION_BG_COLOR_SCALE_FACTOR = 0.65f;
+    public static final float SESSION_PHOTO_SCRIM_ALPHA = 0.75f;
     private static final int[] RES_IDS_ACTION_BAR_SIZE = { android.R.attr.actionBarSize };
 
     public static int setColorAlpha(int color, float alpha) {
@@ -98,5 +100,15 @@ public class UIUtils {
                 }
             });
         }
+    }
+
+    public static int scaleSessionColorToDefaultBG(int color) {
+        return scaleColor(color, SESSION_BG_COLOR_SCALE_FACTOR, false);
+    }
+
+    public static int scaleColor(int color, float factor, boolean scaleAlpha) {
+        return Color.argb(scaleAlpha ? (Math.round(Color.alpha(color) * factor)) : Color.alpha(color),
+                Math.round(Color.red(color) * factor), Math.round(Color.green(color) * factor),
+                Math.round(Color.blue(color) * factor));
     }
 }

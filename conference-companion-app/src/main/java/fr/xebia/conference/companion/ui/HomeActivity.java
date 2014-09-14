@@ -18,6 +18,7 @@ import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
 import fr.xebia.conference.companion.ui.conference.ConferenceChooserActivity;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
 import fr.xebia.conference.companion.ui.navigation.NavigationDrawerFragment;
+import fr.xebia.conference.companion.ui.schedule.MyScheduleActivity;
 import fr.xebia.conference.companion.ui.schedule.ScheduleFragment;
 import fr.xebia.conference.companion.ui.settings.SettingsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerFragment;
@@ -62,7 +63,7 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
                     .replace(R.id.container, new ScheduleFragment(), HOME_FRAG_TAG)
                     .commit();
 
-            if(!Preferences.isBleHintDisplayed(this)){
+            if (!Preferences.isBleHintDisplayed(this)) {
                 Preferences.setBleHintDisplayed(this, true);
                 final AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(R.string.informations)
@@ -96,7 +97,7 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.settings) {
+        if (item.getItemId() == R.id.settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else {
@@ -167,9 +168,7 @@ public class HomeActivity extends Activity implements NavigationDrawerFragment.N
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.container, ScheduleFragment.newInstanceForFavorites(), HOME_FRAG_TAG)
-                                .commit();
+                        startActivity(new Intent(HomeActivity.this, MyScheduleActivity.class));
                     }
                 }, 300);
                 break;

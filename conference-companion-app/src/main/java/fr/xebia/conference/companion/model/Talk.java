@@ -1,6 +1,8 @@
 package fr.xebia.conference.companion.model;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,7 +23,7 @@ import java.util.LinkedHashSet;
 
 @Table("Talks")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Talk extends Model {
+public class Talk extends Model implements Parcelable {
 
     public static final String REGISTRATION = "registration";
     public static final String BREAK = "break";
@@ -51,6 +53,10 @@ public class Talk extends Model {
     @Column("color") private int color;
     @Column("memo") private String memo = "";
     @Column("prettySpeakers") private String prettySpeakers;
+
+    public Talk(){
+
+    }
 
     private String mPeriod;
     private String mDay;
@@ -213,7 +219,7 @@ public class Talk extends Model {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || ((Object) this).getClass() != o.getClass()) return false;
 
         Talk talk = (Talk) o;
 
@@ -264,4 +270,69 @@ public class Talk extends Model {
     public String getPrettySpeakers() {
         return prettySpeakers;
     }
+
+    protected Talk(Parcel in) {
+        id = in.readString();
+        conferenceId = in.readInt();
+        long tmpFromTime = in.readLong();
+        fromTime = tmpFromTime != -1 ? new Date(tmpFromTime) : null;
+        long tmpToTime = in.readLong();
+        toTime = tmpToTime != -1 ? new Date(tmpToTime) : null;
+        speakers = (LinkedHashSet) in.readValue(LinkedHashSet.class.getClassLoader());
+        room = in.readString();
+        type = in.readString();
+        language = in.readString();
+        experience = in.readString();
+        track = in.readString();
+        kind = in.readString();
+        title = in.readString();
+        summary = in.readString();
+        favorite = in.readByte() != 0x00;
+        details = (Talk) in.readValue(Talk.class.getClassLoader());
+        talkDetailsId = in.readString();
+        color = in.readInt();
+        memo = in.readString();
+        prettySpeakers = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeInt(conferenceId);
+        dest.writeLong(fromTime != null ? fromTime.getTime() : -1L);
+        dest.writeLong(toTime != null ? toTime.getTime() : -1L);
+        dest.writeValue(speakers);
+        dest.writeString(room);
+        dest.writeString(type);
+        dest.writeString(language);
+        dest.writeString(experience);
+        dest.writeString(track);
+        dest.writeString(kind);
+        dest.writeString(title);
+        dest.writeString(summary);
+        dest.writeByte((byte) (favorite ? 0x01 : 0x00));
+        dest.writeValue(details);
+        dest.writeString(talkDetailsId);
+        dest.writeInt(color);
+        dest.writeString(memo);
+        dest.writeString(prettySpeakers);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Talk> CREATOR = new Parcelable.Creator<Talk>() {
+        @Override
+        public Talk createFromParcel(Parcel in) {
+            return new Talk(in);
+        }
+
+        @Override
+        public Talk[] newArray(int size) {
+            return new Talk[size];
+        }
+    };
 }

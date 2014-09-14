@@ -60,11 +60,22 @@
         </activity>
 
         <activity
+            android:name=".ui.schedule.MyScheduleActivity"/>
+
+        <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"
             android:parentActivityName=".ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.HomeActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.browse.BrowseTalksActivity"
+            android:parentActivityName=".ui.schedule.MyScheduleActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.schedule.MyScheduleActivity" />
         </activity>
 
         <activity

@@ -15,6 +15,7 @@ apply plugin: 'crashlytics'
 repositories {
     mavenCentral()
     maven { url 'http://download.crashlytics.com/maven' }
+    maven { url 'https://raw.githubusercontent.com/tguerin/maven-repository/master' }
     maven {
         url "https://repo.commonsware.com.s3.amazonaws.com"
     }
@@ -82,6 +83,7 @@ dependencies {
     compile 'com.android.support:support-v4:20.+'
     compile 'se.emilsjolander:stickylistheaders:2.3.0'
     compile 'de.greenrobot:eventbus:2.2.0'
+    compile 'com.fluent.android:fluent-android-bundle:+'
     compile('com.squareup.retrofit:retrofit:1.5.+') {
         exclude group: 'com.google.code.gson', module: 'gson'
     }

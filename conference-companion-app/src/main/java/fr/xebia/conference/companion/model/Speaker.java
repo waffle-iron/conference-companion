@@ -1,5 +1,7 @@
 package fr.xebia.conference.companion.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import se.emilsjolander.sprinkles.Model;
@@ -7,11 +9,12 @@ import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table("Speakers")
-public class Speaker extends Model {
+public class Speaker extends Model implements Parcelable {
 
     @JsonProperty @Column("_id") @Key private String id;
     @JsonProperty @Column("conferenceId") private int conferenceId;
@@ -24,6 +27,10 @@ public class Speaker extends Model {
     @JsonProperty @Column("lastName") private String lastName;
     @JsonProperty @Column("firstName") private String firstName;
     @JsonProperty private List<Talk> talks;
+
+    public Speaker() {
+
+    }
 
     public String getId() {
         return id;
@@ -79,7 +86,7 @@ public class Speaker extends Model {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || (((Object) this).getClass()) != o.getClass()) return false;
 
         Speaker speaker = (Speaker) o;
 
@@ -95,4 +102,61 @@ public class Speaker extends Model {
         result = 31 * result + conferenceId;
         return result;
     }
+
+    protected Speaker(Parcel in) {
+        id = in.readString();
+        conferenceId = in.readInt();
+        lang = in.readString();
+        blog = in.readString();
+        tweetHandle = in.readString();
+        imageURL = in.readString();
+        company = in.readString();
+        bio = in.readString();
+        lastName = in.readString();
+        firstName = in.readString();
+        if (in.readByte() == 0x01) {
+            talks = new ArrayList<Talk>();
+            in.readList(talks, Talk.class.getClassLoader());
+        } else {
+            talks = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeInt(conferenceId);
+        dest.writeString(lang);
+        dest.writeString(blog);
+        dest.writeString(tweetHandle);
+        dest.writeString(imageURL);
+        dest.writeString(company);
+        dest.writeString(bio);
+        dest.writeString(lastName);
+        dest.writeString(firstName);
+        if (talks == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(talks);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Speaker> CREATOR = new Parcelable.Creator<Speaker>() {
+        @Override
+        public Speaker createFromParcel(Parcel in) {
+            return new Speaker(in);
+        }
+
+        @Override
+        public Speaker[] newArray(int size) {
+            return new Speaker[size];
+        }
+    };
 }

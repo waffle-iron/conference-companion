@@ -237,6 +237,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         mPhotoHeightPixels = mHeaderTopClearance;
         mPhotoHeightPixels = (int) (mTalkPhoto.getWidth() / PHOTO_ASPECT_RATIO);
+        mPhotoHeightPixels = Math.min(mPhotoHeightPixels, getView().getHeight() * 2 / 3);
 
         ViewGroup.LayoutParams lp;
         lp = mTalkPhotoContainer.getLayoutParams();
@@ -292,7 +293,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mGapFillShown = showGapFill;
 
         // Move background photo (parallax effect)
-        mTalkPhotoContainer.setTranslationY(scrollY * 0.5f);
+        mTalkPhotoContainer.setTranslationY(scrollY * 0.6f);
     }
 
     @OnClick(R.id.add_schedule_button)
