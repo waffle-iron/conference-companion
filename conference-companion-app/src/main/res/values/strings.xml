@@ -70,6 +70,7 @@
     <string name="days">Days</string>
     <string name="topics">Topics</string>
     <string name="types">Types</string>
+    <string name="schedule_conflict_with_previous">(Conflict)</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>

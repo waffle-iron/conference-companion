@@ -20,21 +20,30 @@ public class MyScheduleItem implements Parcelable {
     public int backgroundColor;
     public String backgroundImageUrl;
     public boolean hasGivenFeedback;
-    public int favoritesCount;
     public ArrayList<Talk> availableTalks = new ArrayList<>();
+    public ArrayList<Talk> conflictingTalks = new ArrayList<>();
     public Talk selectedTalk;
+    public boolean conflicting;
+
+    public MyScheduleItem(Talk talk, boolean conflicting) {
+        this.startTime = talk.getFromTime().getTime();
+        this.selectedTalk = talk;
+        this.conflicting = conflicting;
+        this.type = SESSION;
+        buildAttributesFromSelectedTalk();
+    }
 
     public MyScheduleItem(long startTime, List<Talk> talks) {
         availableTalks.addAll(talks);
         this.startTime = startTime;
         for (Talk talk : availableTalks) {
             if (talk.isFavorite() || talk.isKeynote()) {
-                // Will help detect conflict
-                favoritesCount++;
                 if (selectedTalk == null) {
                     // Keep the first talk as the selected one
                     selectedTalk = talk;
                     buildAttributesFromSelectedTalk();
+                } else {
+                    conflictingTalks.add(talk);
                 }
             }
         }
@@ -46,7 +55,7 @@ public class MyScheduleItem implements Parcelable {
                 title = talk.getTitle();
             }
             endTime = talk.getToTime().getTime();
-        } else if (favoritesCount == 0) {
+        } else if (selectedTalk == null) {
             type = FREE;
             endTime = startTime;
         } else {
@@ -69,12 +78,18 @@ public class MyScheduleItem implements Parcelable {
         backgroundColor = in.readInt();
         backgroundImageUrl = in.readString();
         hasGivenFeedback = in.readByte() != 0x00;
-        favoritesCount = in.readInt();
+        conflicting = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
-            availableTalks = new ArrayList<Talk>();
+            availableTalks = new ArrayList<>();
             in.readList(availableTalks, Talk.class.getClassLoader());
         } else {
             availableTalks = null;
+        }
+        if (in.readByte() == 0x01) {
+            conflictingTalks = new ArrayList<>();
+            in.readList(conflictingTalks, Talk.class.getClassLoader());
+        } else {
+            conflictingTalks = null;
         }
         selectedTalk = (Talk) in.readValue(Talk.class.getClassLoader());
     }
@@ -94,12 +109,18 @@ public class MyScheduleItem implements Parcelable {
         dest.writeInt(backgroundColor);
         dest.writeString(backgroundImageUrl);
         dest.writeByte((byte) (hasGivenFeedback ? 0x01 : 0x00));
-        dest.writeInt(favoritesCount);
+        dest.writeByte((byte) (conflicting ? 0x01 : 0x00));
         if (availableTalks == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
             dest.writeList(availableTalks);
+        }
+        if (conflictingTalks == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(conflictingTalks);
         }
         dest.writeValue(selectedTalk);
     }
@@ -118,7 +139,7 @@ public class MyScheduleItem implements Parcelable {
     };
 
     public boolean hasTalkSelected() {
-        return favoritesCount > 0;
+        return selectedTalk != null;
     }
 
     public ArrayList<String> getAvailableTalksIds() {

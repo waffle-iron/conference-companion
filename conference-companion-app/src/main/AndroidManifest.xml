@@ -60,7 +60,8 @@
         </activity>
 
         <activity
-            android:name=".ui.schedule.MyScheduleActivity"/>
+            android:name=".ui.schedule.MyScheduleActivity"
+            android:theme="@style/Theme.Companion.MySchedule"/>
 
         <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"

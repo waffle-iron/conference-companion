@@ -54,9 +54,6 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
 
     private final Context mContext;
 
-    // additional top padding to add to first item of list
-    int mContentTopClearance = 0;
-
     // list of items served by this adapter
     ArrayList<MyScheduleItem> mItems = new ArrayList<>();
 
@@ -66,11 +63,6 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
     int mDefaultSessionColor;
     int mDefaultStartTimeColor;
     int mDefaultEndTimeColor;
-
-    // increased every time the data is updated; used when deciding whether to
-    // recycle views so we can tell that a view is from a previous generation of
-    // the data and thus shouldn't be used
-    int mDataGeneration = 0;
 
     public MyScheduleAdapter(Context context) {
         mContext = context;
@@ -102,10 +94,6 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
         if (mObservers.contains(observer)) {
             mObservers.remove(observer);
         }
-    }
-
-    public void setContentTopClearance(int padding) {
-        mContentTopClearance = padding;
     }
 
     @Override
@@ -234,6 +222,11 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
             }
         }
 
+        View conflictWarning = view.findViewById(R.id.conflict_warning);
+        if (conflictWarning != null) {
+            conflictWarning.setVisibility(View.GONE);
+        }
+
         // Set default colors to time indicators, in case they were overridden by conflict warning:
         if (!isNowPlaying) {
             if (startTimeView != null) {
@@ -327,6 +320,19 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
 
         } else {
             Timber.e("Invalid item type in MyScheduleAdapter: " + item.type);
+        }
+
+        // show or hide the "conflict" warning
+        if (!isPastDuringConference) {
+            final boolean showConflict = item.conflicting;
+            conflictWarning.setVisibility(showConflict ? View.VISIBLE : View.GONE);
+            if (showConflict && !isNowPlaying) {
+                int conflictColor = res.getColor(R.color.my_schedule_conflict);
+                startTimeView.setTextColor(conflictColor);
+                if (endTimeView != null) {
+                    endTimeView.setTextColor(conflictColor);
+                }
+            }
         }
 
         return view;

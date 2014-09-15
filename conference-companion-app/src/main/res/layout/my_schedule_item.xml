@@ -43,6 +43,15 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_small"
             android:textColor="@color/body_text_3" />
+
+        <TextView
+            android:id="@+id/conflict_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/my_schedule_conflict"
+            android:text="@string/schedule_conflict_with_previous"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <!-- Background photo, title, subtitle -->
@@ -91,11 +100,11 @@
                 android:id="@+id/slot_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_small"
-                />
+                android:textSize="@dimen/text_size_small" />
         </LinearLayout>
 
-        <ImageButton android:id="@+id/give_feedback_button"
+        <ImageButton
+            android:id="@+id/give_feedback_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="bottom|end"

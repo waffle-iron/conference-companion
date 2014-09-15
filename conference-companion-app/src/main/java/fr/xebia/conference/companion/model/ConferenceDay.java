@@ -36,7 +36,12 @@ public class ConferenceDay implements Parcelable {
             if (myScheduleItem.startTime >= currentEndTime) {
                 myScheduleItems.add(myScheduleItem);
             } else {
-                // TODO add conflict flag
+                myScheduleItem.conflicting = true;
+            }
+            if (myScheduleItem.conflictingTalks.size() > 0) {
+                for (Talk talk : myScheduleItem.conflictingTalks) {
+                    myScheduleItems.add(new MyScheduleItem(talk, true));
+                }
             }
             currentEndTime = myScheduleItem.endTime;
         }

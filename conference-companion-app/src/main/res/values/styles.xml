@@ -18,6 +18,10 @@
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
+    <style name="Theme.Companion.MySchedule" parent="AppTheme">
+        <item name="android:windowActionBarOverlay">false</item>
+    </style>
+
     <!-- Talk Details -->
     <style name="Theme.Companion.TalkDetails" parent="AppTheme">
         <item name="android:actionBarStyle">@style/TransparentActionBar</item>
