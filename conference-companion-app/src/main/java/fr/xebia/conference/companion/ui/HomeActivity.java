@@ -1,6 +1,9 @@
 package fr.xebia.conference.companion.ui;
 
-import android.app.*;
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -13,6 +16,7 @@ import android.view.MenuItem;
 import com.crashlytics.android.Crashlytics;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.TagRegisteredEvent;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
 import fr.xebia.conference.companion.ui.conference.ConferenceChooserActivity;
@@ -29,7 +33,7 @@ import fr.xebia.conference.companion.ui.vote.VoteFragment;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 
-public class HomeActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class HomeActivity extends BaseActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     public static final String HOME_FRAG_TAG = "HOME";
 

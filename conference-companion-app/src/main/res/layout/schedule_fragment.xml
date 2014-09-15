@@ -12,14 +12,54 @@
         android:textSize="18sp"
         android:gravity="center" />
 
-    <GridView
+    <fr.xebia.conference.companion.ui.widget.HeaderGridView
         android:id="@+id/schedule_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="true"
+        android:clipToPadding="false"
         android:numColumns="2"
         android:verticalSpacing="5dp"
         android:horizontalSpacing="5dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp" />
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp" />
+
+    <LinearLayout
+        style="@style/HeaderBar"
+        android:id="@+id/headerbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <!-- Spinners for additional filters -->
+        <LinearLayout
+            android:id="@+id/filters_box"
+            android:visibility="gone"
+            android:layout_marginTop="?actionBarOverlayTopOffset"
+            android:paddingLeft="?spinnerBarInsetStart"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filterbar_height"
+            android:background="@color/theme_primary"
+            android:orientation="horizontal">
+
+            <Spinner
+                style="@style/Widget.Companion.HeaderBar.Spinner"
+                android:id="@+id/secondary_filter_spinner_1"
+                android:layout_width="@dimen/filter_spinner_width"
+                android:layout_weight="@integer/filter_spinner_weight"
+                android:layout_height="match_parent" />
+
+            <Spinner
+                style="@style/Widget.Companion.HeaderBar.Spinner"
+                android:id="@+id/secondary_filter_spinner_2"
+                android:layout_width="@dimen/filter_spinner_width"
+                android:layout_weight="@integer/filter_spinner_weight"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
 </FrameLayout>

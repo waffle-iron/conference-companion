@@ -3,20 +3,36 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@null</item>
+        <item name="actionBarOverlayTopOffset">?android:actionBarSize</item>
+        <item name="actionBarInsetStart">?android:actionBarSize</item>
+        <item name="spinnerBarInsetStart">?android:actionBarSize</item>
+        <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
+        <item name="popupItemBackground">?android:selectableItemBackground</item>
+        <item name="photoItemForeground">?android:selectableItemBackground</item>
         <item name="android:actionBarStyle">@style/XebiaActionBar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
         <item name="android:listChoiceBackgroundIndicator">@drawable/default_list_selector_holo_light</item>
         <item name="android:activatedBackgroundIndicator">@drawable/default_activated_background_holo_light</item>
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <!-- Talk Details -->
     <style name="Theme.Companion.TalkDetails" parent="AppTheme">
         <item name="android:actionBarStyle">@style/TransparentActionBar</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowActionBarOverlay">true</item>
     </style>
+
+    <style name="HeaderBar" />
+
+    <style name="Widget.Companion.HeaderBar.Spinner.Base" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="Widget.Companion.HeaderBar.Spinner" parent="Widget.Companion.HeaderBar.Spinner.Base" />
 
     <!-- Transparent Action Bar -->
     <style name="TransparentActionBar" parent="@android:style/Widget.Holo.ActionBar">
@@ -64,7 +80,8 @@
 
     <!-- Explore item text appearances -->
     <style name="ExploreItem.Title" parent="">
-        <item name="android:textColor">#fff</item> <!-- a bit brighter than body_text_1_inverse to stand out more -->
+        <item name="android:textColor">#fff</item>
+        <!-- a bit brighter than body_text_1_inverse to stand out more -->
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>

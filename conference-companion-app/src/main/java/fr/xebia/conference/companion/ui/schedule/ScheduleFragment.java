@@ -2,31 +2,38 @@ package fr.xebia.conference.companion.ui.schedule;
 
 import android.animation.LayoutTransition;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
+import fr.xebia.conference.companion.model.Schedule;
+import fr.xebia.conference.companion.model.TagMetadata;
+import fr.xebia.conference.companion.model.Tags;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
-import fr.xebia.conference.companion.model.Schedule;
+import fr.xebia.conference.companion.ui.widget.HeaderGridView;
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,17 +48,34 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
     @InjectView(R.id.container) ViewGroup mContainer;
     @InjectView(R.id.empty_id) TextView mEmptyText;
-    @InjectView(R.id.schedule_grid) GridView mGridView;
+    @InjectView(R.id.schedule_grid) HeaderGridView mGridView;
+    @InjectView(R.id.filters_box) ViewGroup mFiltersBox;
+    @InjectView(R.id.secondary_filter_spinner_1) Spinner mSecondaryFilterSpinner1;
+    @InjectView(R.id.secondary_filter_spinner_2) Spinner mSecondaryFilterSpinner2;
 
     private Schedule mSchedule;
     private ArrayAdapter<String> mSpinnerAdapter;
 
     @Icicle int mSelectedSpinnerPosition;
-    @Icicle Parcelable mListViewState;
 
     @Icicle String mTrack;
     @Icicle boolean mFavoriteOnly;
-    private List<Talk> mTalks = new ArrayList<>();
+
+    // filter tags that are currently selected
+    @Icicle String[] mFilterTags = {"", "", ""};
+
+    // filter tags that we have to restore (as a result of Activity recreation)
+    @Icicle String[] mFilterTagsToRestore = {null, null, null};
+
+    private FilterScheduleSpinnerAdapter filterScheduleSpinnerAdapter;
+
+    private Spinner mSpinner;
+
+    private TagMetadata mTagMetadata;
+
+    private View mHeaderSpacer;
+
+    private ScheduleAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +95,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
         enableTransition();
+        ((BaseActivity) getActivity()).enableActionBarAutoHide(mGridView);
+        ((BaseActivity) getActivity()).registerHideableHeaderView(mFiltersBox);
+        mGridView.addHeaderView(buildSpacerView());
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -89,16 +116,192 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         mTrack = arguments == null ? null : arguments.getString(EXTRA_TRACK_NAME);
         mFavoriteOnly = arguments != null && arguments.getBoolean(EXTRA_FAVORITE_ONLY, false);
         int conferenceId = Preferences.getSelectedConference(getActivity());
-        if (mFavoriteOnly) {
-            Query.many(Talk.class, "SELECT * FROM Talks WHERE favorite=? AND conferenceId=? ORDER BY fromTime ASC", true, conferenceId)
-                    .getAsync(getLoaderManager(), this);
-        } else if (mTrack == null) {
-            Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC",
-                    conferenceId).getAsync(getLoaderManager(), this);
-        } else {
-            Query.many(Talk.class, "SELECT * FROM Talks WHERE track=? AND conferenceId=? ORDER BY fromTime ASC", mTrack,
-                    conferenceId).getAsync(getLoaderManager(), this);
+        Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC", conferenceId)
+                .getAsync(getLoaderManager(), this);
+        configureActionBarSpinner();
+    }
+
+    private void configureActionBarSpinner() {
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        View spinnerContainer = LayoutInflater.from(actionBar.getThemedContext()).inflate(R.layout.actionbar_spinner, null);
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        actionBar.setCustomView(spinnerContainer, lp);
+        filterScheduleSpinnerAdapter = new FilterScheduleSpinnerAdapter(getActivity(), true);
+        actionBar.setListNavigationCallbacks(filterScheduleSpinnerAdapter, this);
+
+        mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
+        mSpinner.setAdapter(filterScheduleSpinnerAdapter);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
+                onActionBarFilterSelected(filterScheduleSpinnerAdapter.getTag(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        computeActionBarSpinnerAdapter();
+    }
+
+    private void onActionBarFilterSelected(String tag) {
+        if (tag.equals(mFilterTags[0])) {
+            // nothing to do
+            return;
         }
+
+        mFilterTags[0] = tag;
+
+        // Reset secondary filters
+        for (int i = 1; i < mFilterTags.length; i++) {
+            mFilterTags[i] = "";
+        }
+        showSecondaryFilters();
+        filterData();
+    }
+
+    private void filterData() {
+        mAdapter.switchData(mSchedule.getFilteredTalks(mFilterTags[0], mFilterTags[1], mFilterTags[2]));
+    }
+
+    private void showSecondaryFilters() {
+        showFilterBox(false);
+
+        // repopulate secondary filter spinners
+        if (!TextUtils.isEmpty(mFilterTags[0])) {
+            TagMetadata.Tag topTag = mTagMetadata.getTag(mFilterTags[0]);
+            String topCategory = topTag.getCategory();
+            if (topCategory.equals(Tags.FILTER_CATEGORIES[0])) {
+                populateSecondLevelFilterSpinner(0, 1);
+                populateSecondLevelFilterSpinner(1, 2);
+            } else if (topCategory.equals(Tags.FILTER_CATEGORIES[1])) {
+                populateSecondLevelFilterSpinner(0, 0);
+                populateSecondLevelFilterSpinner(1, 2);
+            } else {
+                populateSecondLevelFilterSpinner(0, 0);
+                populateSecondLevelFilterSpinner(1, 1);
+            }
+            showFilterBox(true);
+        }
+    }
+
+    private void populateSecondLevelFilterSpinner(int spinnerIndex, int catIndex) {
+        String tagToRestore = mFilterTagsToRestore[spinnerIndex + 1];
+        Spinner spinner = spinnerIndex == 0 ? mSecondaryFilterSpinner1 : mSecondaryFilterSpinner2;
+        final int filterIndex = spinnerIndex + 1;
+        String tagCategory = Tags.FILTER_CATEGORIES[catIndex];
+        boolean isTopicCategory = Tags.CATEGORY_TOPIC.equals(tagCategory);
+
+        final FilterScheduleSpinnerAdapter adapter = new FilterScheduleSpinnerAdapter(getActivity(), false);
+        adapter.addItem("", getString(Tags.EXPLORE_CATEGORY_ALL_STRING[catIndex]), false, 0);
+
+        List<TagMetadata.Tag> tags = mTagMetadata.getTagsInCategory(tagCategory);
+        int itemToSelect = spinner.getSelectedItemPosition();
+        if (tags != null) {
+            for (TagMetadata.Tag tag : tags) {
+                adapter.addItem(tag.getId(), tag.getName(), false,
+                        isTopicCategory ? tag.getColor() : 0);
+                if (!TextUtils.isEmpty(tagToRestore) && tag.getId().equals(tagToRestore)) {
+                    itemToSelect = adapter.getCount() - 1;
+                    mFilterTagsToRestore[spinnerIndex + 1] = null;
+                }
+            }
+        } else {
+            Timber.e("Can't populate spinner. Category has no tags: " + tagCategory);
+        }
+        mFilterTagsToRestore[spinnerIndex + 1] = null;
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectTag(adapter.getTag(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectTag("");
+            }
+
+            private void selectTag(String tag) {
+                if (!mFilterTags[filterIndex].equals(tag)) {
+                    mFilterTags[filterIndex] = tag;
+                    filterData();
+                }
+            }
+        });
+
+        if (itemToSelect != spinner.getSelectedItemPosition()) {
+            spinner.setSelection(itemToSelect, false);
+        }
+    }
+
+    private void showFilterBox(boolean show) {
+        if (mFiltersBox != null) {
+            mFiltersBox.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+        updateSpacerHeight();
+    }
+
+    private void updateSpacerHeight() {
+        boolean filterBoxVisible = mFiltersBox != null && mFiltersBox.getVisibility() == View.VISIBLE;
+        int actionBarSize = UIUtils.calculateActionBarSize(getActivity());
+        int filterBoxSize = filterBoxVisible ? getResources().getDimensionPixelSize(R.dimen.filterbar_height) : 0;
+        ViewGroup.LayoutParams layoutParams = mHeaderSpacer.getLayoutParams();
+        layoutParams.height = actionBarSize + filterBoxSize;
+        mHeaderSpacer.setLayoutParams(layoutParams);
+        if (mAdapter != null) {
+            mGridView.setAdapter(mAdapter);
+        }
+    }
+
+    private void computeActionBarSpinnerAdapter() {
+        filterScheduleSpinnerAdapter.clear();
+
+        filterScheduleSpinnerAdapter.addItem("", getString(R.string.all_talks), false, 0);
+
+        if (mSchedule != null) {
+            int itemToSelect = -1;
+
+            mTagMetadata = TagMetadata.fromSchedule(mSchedule);
+            for (int i = 0; i < Tags.FILTER_CATEGORIES.length; i++) {
+                String category = Tags.FILTER_CATEGORIES[i];
+                String categoryTitle = getString(Tags.FILTER_CATEGORY_TITLE[i]);
+
+                List<TagMetadata.Tag> tags = mTagMetadata.getTagsInCategory(category);
+                if (tags != null) {
+                    filterScheduleSpinnerAdapter.addHeader(categoryTitle);
+                    for (TagMetadata.Tag tag : tags) {
+                        filterScheduleSpinnerAdapter.addItem(tag.getId(), tag.getName(), true, Tags.CATEGORY_TOPIC.equals(category) ? tag
+                                .getColor() : 0);
+                        if (!TextUtils.isEmpty(mFilterTagsToRestore[0]) && tag.getId().equals(mFilterTagsToRestore[0])) {
+                            mFilterTagsToRestore[0] = null;
+                            itemToSelect = filterScheduleSpinnerAdapter.getCount() - 1;
+                        }
+                    }
+                } else {
+                    Timber.w("Ignoring filter category with no tags: " + category);
+                }
+            }
+            mFilterTagsToRestore[0] = null;
+
+            if (itemToSelect >= 0) {
+                Timber.d("Restoring item selection to primary spinner: " + itemToSelect);
+                mSpinner.setSelection(itemToSelect);
+            }
+        }
+
+        filterScheduleSpinnerAdapter.notifyDataSetChanged();
+        showSecondaryFilters();
+    }
+
+    private View buildSpacerView() {
+        Activity context = getActivity();
+        mHeaderSpacer = new View(context);
+        mHeaderSpacer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                UIUtils.calculateActionBarSize(context)));
+        return mHeaderSpacer;
     }
 
     private void enableTransition() {
@@ -110,65 +313,33 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mListViewState = mGridView.onSaveInstanceState();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        mFilterTagsToRestore[0] = mFilterTags[0];
+        mFilterTagsToRestore[1] = mFilterTags[1];
+        mFilterTagsToRestore[2] = mFilterTags[2];
         Icepick.saveInstanceState(this, outState);
     }
 
     @Override
     public boolean handleResult(CursorList<Talk> cursorList) {
-        if (mTrack == null && !mFavoriteOnly) {
-            mSchedule = new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList());
-        } else {
-            mTalks.clear();
-            mTalks.addAll(cursorList.asList());
-        }
+        mSchedule = new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList(), true);
 
         if (getView() == null) {
             return true;
         }
 
-        ActionBar actionBar = getActivity().getActionBar();
-        if (((mTrack == null && !mFavoriteOnly) && (mSchedule == null || mSchedule.isEmpty()))
-                || ((mTrack != null || mFavoriteOnly) && mTalks.isEmpty())) {
-            mEmptyText.setText(mFavoriteOnly ? getString(R.string.no_favorite_talk) : getString(R.string.no_data));
-            mGridView.setVisibility(View.GONE);
-            mEmptyText.setVisibility(View.VISIBLE);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        } else {
-            mEmptyText.setText("");
-            mEmptyText.setVisibility(View.GONE);
-            mGridView.setVisibility(View.VISIBLE);
+        computeActionBarSpinnerAdapter();
 
-            if (mFavoriteOnly) {
-                actionBar.setDisplayShowTitleEnabled(true);
-                actionBar.setTitle(getString(R.string.my_favorites));
-                mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, mTalks, true));
-            } else if (mTrack == null) {
-                actionBar.setDisplayShowTitleEnabled(false);
-                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-                mSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
-                        mSchedule.getFormattedDays());
-                actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-                List<Talk> talksForDay = mSchedule.forDay(mSpinnerAdapter.getItem(mSelectedSpinnerPosition).toLowerCase());
-                mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay));
-                actionBar.setSelectedNavigationItem(mSelectedSpinnerPosition);
-            } else {
-                actionBar.setDisplayShowTitleEnabled(true);
-                actionBar.setTitle(mTrack);
-                mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, mTalks, true));
-            }
+        mEmptyText.setText("");
+        mEmptyText.setVisibility(View.GONE);
 
-            if (mListViewState != null) {
-                mGridView.onRestoreInstanceState(mListViewState);
-            }
-        }
+        mGridView.setVisibility(View.VISIBLE);
+        mAdapter = new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, new ArrayList<Talk>());
+        mGridView.setAdapter(mAdapter);
+
+        filterData();
+
         return true;
     }
 
@@ -180,13 +351,14 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
         mSelectedSpinnerPosition = itemPosition;
         List<Talk> talksForDay = mSchedule.forDay(mSpinnerAdapter.getItem(itemPosition).toLowerCase());
-        mGridView.setAdapter(new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay, mTrack != null || mFavoriteOnly));
+        mAdapter = new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay, mTrack != null || mFavoriteOnly);
+        mGridView.setAdapter(mAdapter);
         return true;
     }
 
     @Override
     public void restoreActionBar() {
-        ActionBar actionBar = getActivity().getActionBar();
+        /*ActionBar actionBar = getActivity().getActionBar();
         if (mFavoriteOnly) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -202,11 +374,13 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             actionBar.setTitle(mTrack);
-        }
+        }*/
     }
 
     @Override
     public void onDestroyView() {
+        mSpinner = null;
+        ((BaseActivity) getActivity()).deregisterHideableHeaderView(mFiltersBox);
         ButterKnife.reset(this);
         super.onDestroyView();
     }
