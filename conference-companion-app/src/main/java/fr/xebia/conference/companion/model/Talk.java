@@ -8,13 +8,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.utils.TimeUtils;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,15 +27,14 @@ public class Talk extends Model implements Parcelable {
     public static final String REGISTRATION = "registration";
     public static final String BREAK = "break";
     public static final String LUNCH = "lunch";
+    public static final String KEYNOTE = "keynote";
     public static final String PRESENTATION = "talk";
 
-    private static DateFormat sTimeFormatter = new SimpleDateFormat("HH:mm");
-    private static DateFormat sDayFormatter = new SimpleDateFormat("EEEE");
 
     @JsonProperty @Column("_id") @Key private String id;
     @JsonProperty @Column("conferenceId") private int conferenceId;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Column("fromTime") private Date fromTime;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Column("toTime") private Date toTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT") @Column("fromTime") private Date fromTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT") @Column("toTime") private Date toTime;
     @JsonProperty private LinkedHashSet<Speaker> speakers;
     @JsonProperty @Column("room") private String room;
     @JsonProperty @Column("type") private String type;
@@ -54,7 +52,7 @@ public class Talk extends Model implements Parcelable {
     @Column("memo") private String memo = "";
     @Column("prettySpeakers") private String prettySpeakers;
 
-    public Talk(){
+    public Talk() {
 
     }
 
@@ -131,15 +129,14 @@ public class Talk extends Model implements Parcelable {
 
     public String getPeriod() {
         if (mPeriod == null) {
-            mPeriod = String.format("%s - %s", sTimeFormatter.format(fromTime), sTimeFormatter.format(toTime));
+            mPeriod = TimeUtils.formatTimeRange(fromTime, toTime);
         }
         return mPeriod;
     }
 
     public String getDay() {
         if (mDay == null) {
-            mDay = sDayFormatter.format(fromTime);
-            mDay = mDay.substring(0, 1).toUpperCase() + mDay.substring(1, mDay.length()).toLowerCase();
+            mDay = TimeUtils.formatDay(fromTime);
         }
         return mDay;
     }
@@ -253,7 +250,7 @@ public class Talk extends Model implements Parcelable {
     }
 
     private void appendSpeaker(StringBuilder prettySpeakers, Speaker speaker, boolean separator) {
-        if (speaker!= null && !TextUtils.isEmpty(speaker.getLastName())) {
+        if (speaker != null && !TextUtils.isEmpty(speaker.getLastName())) {
             if (separator) {
                 prettySpeakers.append(", ");
             }
@@ -335,4 +332,8 @@ public class Talk extends Model implements Parcelable {
             return new Talk[size];
         }
     };
+
+    public boolean isKeynote() {
+        return kind.equalsIgnoreCase(KEYNOTE);
+    }
 }

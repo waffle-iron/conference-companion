@@ -1,22 +1,46 @@
 package fr.xebia.conference.companion.core.utils;
 
-import android.content.Context;
-import android.text.format.DateUtils;
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Formatter;
+import java.util.TimeZone;
 
 public class TimeUtils {
 
-    public static String formatShortDate(Context context, Date date) {
-        StringBuilder sb = new StringBuilder();
-        Formatter formatter = new Formatter(sb);
-        return DateUtils.formatDateRange(context, formatter, date.getTime(), date.getTime(),
-                DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR).toString();
+    private static DateFormat sTimeFormatter = buildTimeFormatter();
+    private static DateFormat sDayFormatter = buildDayFormatter();
+
+    public static String formatTimeRange(Date start, Date end) {
+        DateFormat timeFormatter = UIUtils.isOnMainThread() ? sTimeFormatter : buildTimeFormatter();
+        return String.format("%s - %s", timeFormatter.format(start), timeFormatter.format(end));
     }
 
-    public static String formatShortTime(Context context, Date time) {
-        return DateFormat.getTimeInstance(DateFormat.SHORT).format(time);
+    public static String formatDay(Date date) {
+        DateFormat dayFormatter = UIUtils.isOnMainThread() ? sDayFormatter : buildDayFormatter();
+        String day = dayFormatter.format(date);
+        return day.substring(0, 1).toUpperCase() + day.substring(1);
+    }
+
+    public static String formatShortTime(Date time) {
+        DateFormat timeFormatter = UIUtils.isOnMainThread() ? sTimeFormatter : buildTimeFormatter();
+        return timeFormatter.format(time);
+    }
+
+    public static DateFormat buildTimeFormatter() {
+        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+        timeFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return timeFormatter;
+    }
+
+    public static DateFormat buildDayFormatter() {
+        DateFormat timeFormatter = new SimpleDateFormat("EEEE");
+        timeFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return timeFormatter;
+    }
+
+    public static String formatDayTime(Date date) {
+        return String.format("%s %s", formatDay(date), formatShortTime(date));
     }
 }

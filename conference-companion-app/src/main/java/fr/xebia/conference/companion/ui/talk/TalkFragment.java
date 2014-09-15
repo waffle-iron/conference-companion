@@ -42,8 +42,7 @@ import se.emilsjolander.sprinkles.*;
 
 import java.util.LinkedHashSet;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
+import static android.view.View.*;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
@@ -368,6 +367,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         boolean favorite = mTalk.isFavorite();
         mAddScheduleBtn.setChecked(favorite, false);
+        mAddScheduleBtn.setVisibility(talk.isKeynote() ? INVISIBLE : VISIBLE);
         UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, false);
 
         if (!TextUtils.isEmpty(talk.getSummary())) {

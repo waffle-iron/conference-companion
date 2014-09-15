@@ -168,7 +168,8 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
                     switch (myScheduleItem.type) {
                         case MyScheduleItem.FREE:
                             intent = new Intent(mContext, BrowseTalksActivity.class);
-                            intent.putExtra(BrowseTalksActivity.EXTRA_AVAILABLE_TALKS, myScheduleItem.availableTalks);
+                            intent.putExtra(BrowseTalksActivity.EXTRA_TITLE, TimeUtils.formatDayTime(new Date(myScheduleItem.startTime)));
+                            intent.putExtra(BrowseTalksActivity.EXTRA_AVAILABLE_TALKS, myScheduleItem.getAvailableTalksIds());
                             break;
                         case MyScheduleItem.SESSION:
                             Talk selectedTalk = myScheduleItem.selectedTalk;
@@ -217,7 +218,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
             showEndTime = item.type == MyScheduleItem.BREAK || item.hasTalkSelected();
         } else {
             // session in the future
-            startTimeView.setText(TimeUtils.formatShortTime(mContext, new Date(item.startTime)));
+            startTimeView.setText(TimeUtils.formatShortTime(new Date(item.startTime)));
             // do we need and end time view?
             showEndTime = item.type == MyScheduleItem.BREAK || item.hasTalkSelected();
         }
@@ -226,7 +227,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
             if (showEndTime) {
                 endTimeView.setVisibility(View.VISIBLE);
                 endTimeView.setText(res.getString(R.string.my_schedule_end_time,
-                        TimeUtils.formatShortTime(mContext, new Date(item.endTime))));
+                        TimeUtils.formatShortTime(new Date(item.endTime))));
             } else {
                 // no need to show end time
                 endTimeView.setVisibility(View.GONE);
@@ -311,9 +312,9 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
            /* if (TextUtils.isEmpty(item.backgroundImageUrl)) {
                 sessionImageView.setVisibility(View.GONE);
             } else {*/
-                sessionImageView.setColorFilter(UIUtils.setColorAlpha(color, UIUtils.SESSION_PHOTO_SCRIM_ALPHA));
-                Picasso.with(mContext).load(R.drawable.devoxx_talk_template).into(sessionImageView);
-           // }
+            sessionImageView.setColorFilter(UIUtils.setColorAlpha(color, UIUtils.SESSION_PHOTO_SCRIM_ALPHA));
+            Picasso.with(mContext).load(R.drawable.devoxx_talk_template).into(sessionImageView);
+            // }
             slotTitleView.setText(item.title);
             slotTitleView.setTextColor(isBlockNow
                     ? Color.WHITE

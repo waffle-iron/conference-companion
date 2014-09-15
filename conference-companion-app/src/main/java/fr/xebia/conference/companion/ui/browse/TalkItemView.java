@@ -3,8 +3,8 @@ package fr.xebia.conference.companion.ui.browse;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Talk;
 
-public class TalkItemView extends LinearLayout {
+public class TalkItemView extends FrameLayout {
 
     @InjectView(R.id.talk_photo) ImageView mTalkPhoto;
     @InjectView(R.id.talk_category) TextView mTalkCategory;

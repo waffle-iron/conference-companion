@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import fr.xebia.conference.companion.R;
@@ -21,10 +22,10 @@ public class UIUtils {
     private static final Handler HANDLER = new Handler();
     public static final float SESSION_BG_COLOR_SCALE_FACTOR = 0.65f;
     public static final float SESSION_PHOTO_SCRIM_ALPHA = 0.75f;
-    private static final int[] RES_IDS_ACTION_BAR_SIZE = { android.R.attr.actionBarSize };
+    private static final int[] RES_IDS_ACTION_BAR_SIZE = {android.R.attr.actionBarSize};
 
     public static int setColorAlpha(int color, float alpha) {
-        int alphaInt = Math.min(Math.max((int)(alpha * 255.0f), 0), 255);
+        int alphaInt = Math.min(Math.max((int) (alpha * 255.0f), 0), 255);
         return Color.argb(alphaInt, Color.red(color), Color.green(color), Color.blue(color));
     }
 
@@ -110,5 +111,9 @@ public class UIUtils {
         return Color.argb(scaleAlpha ? (Math.round(Color.alpha(color) * factor)) : Color.alpha(color),
                 Math.round(Color.red(color) * factor), Math.round(Color.green(color) * factor),
                 Math.round(Color.blue(color) * factor));
+    }
+
+    public static boolean isOnMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }

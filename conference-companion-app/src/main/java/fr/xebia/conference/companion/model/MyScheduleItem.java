@@ -28,7 +28,7 @@ public class MyScheduleItem implements Parcelable {
         availableTalks.addAll(talks);
         this.startTime = startTime;
         for (Talk talk : availableTalks) {
-            if (talk.isFavorite()) {
+            if (talk.isFavorite() || talk.isKeynote()) {
                 // Will help detect conflict
                 favoritesCount++;
                 if (selectedTalk == null) {
@@ -39,7 +39,7 @@ public class MyScheduleItem implements Parcelable {
             }
         }
 
-        if (availableTalks.size() == 1) {
+        if (availableTalks.size() == 1 && selectedTalk == null) {
             Talk talk = talks.get(0);
             if (talk.isBreak()) {
                 type = BREAK;
@@ -119,5 +119,13 @@ public class MyScheduleItem implements Parcelable {
 
     public boolean hasTalkSelected() {
         return favoritesCount > 0;
+    }
+
+    public ArrayList<String> getAvailableTalksIds() {
+        ArrayList<String> availableTalksIds = new ArrayList<>();
+        for (Talk talk : availableTalks) {
+            availableTalksIds.add(talk.getId());
+        }
+        return availableTalksIds;
     }
 }

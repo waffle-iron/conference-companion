@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.core.utils.SqlUtils;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
+import se.emilsjolander.sprinkles.CursorList;
+import se.emilsjolander.sprinkles.ManyQuery;
+import se.emilsjolander.sprinkles.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +20,21 @@ import java.util.List;
 import static com.fluent.android.bundle.FluentBundle.newFluentBundle;
 import static com.fluent.android.bundle.FragmentArgsSetter.setFragmentArguments;
 
-public class BrowseTalksFragment extends ListFragment {
+public class BrowseTalksFragment extends ListFragment implements ManyQuery.ResultHandler<Talk> {
 
     public static final String TAG = "BrowseTalksFragment";
 
     public static String ARG_AVAILABLE_TALKS = "fr.xebia.conference.companion.ARG_AVAILABLE_TALKS";
 
+    private BrowseTalksAdapter mAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        List<Talk> availableTalks = getArguments().getParcelableArrayList(ARG_AVAILABLE_TALKS);
-        setListAdapter(new BrowseTalksAdapter(getActivity(), R.layout.talk_item_view, availableTalks));
+        int conferenceId = Preferences.getSelectedConference(getActivity());
+        List<String> availableTalksIds = getArguments().getStringArrayList(ARG_AVAILABLE_TALKS);
+        Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? AND _id IN (" +
+                SqlUtils.toSqlArray(availableTalksIds)+ ") ORDER BY fromTime ASC", conferenceId).getAsync(getLoaderManager(), this);
     }
 
     @Override
@@ -45,7 +54,32 @@ public class BrowseTalksFragment extends ListFragment {
         });
     }
 
-    public static BrowseTalksFragment newInstance(ArrayList<Talk> availableTalks) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mAdapter != null){
+            setListShownNoAnimation(true);
+        }
+    }
+
+    public static BrowseTalksFragment newInstance(ArrayList<String> availableTalks) {
         return setFragmentArguments(new BrowseTalksFragment(), newFluentBundle().put(ARG_AVAILABLE_TALKS, availableTalks));
+    }
+
+    @Override
+    public boolean handleResult(CursorList<Talk> cursorList) {
+
+        if (mAdapter == null) {
+            mAdapter = new BrowseTalksAdapter(getActivity(), R.layout.talk_item_view, cursorList.asList());
+            setListAdapter(mAdapter);
+        } else {
+            mAdapter.switchData(cursorList.asList());
+        }
+
+        if (getView() != null) {
+            setListShownNoAnimation(true);
+        }
+
+        return true;
     }
 }

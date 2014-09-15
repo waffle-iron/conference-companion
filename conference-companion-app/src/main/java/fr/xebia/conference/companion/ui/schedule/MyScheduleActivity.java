@@ -27,6 +27,8 @@ public class MyScheduleActivity extends Activity implements ManyQuery.ResultHand
     @InjectView(R.id.view_pager) ViewPager mViewPager;
 
     private MySchedulePagerAdapter mAdapter;
+    private MySchedule mMySchedule;
+    private boolean mStopped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +39,41 @@ public class MyScheduleActivity extends Activity implements ManyQuery.ResultHand
         String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC";
         Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
         mPagerStrip.setDrawFullUnderline(true);
+        getActionBar().setTitle(R.string.my_schedule);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mStopped = false;
+        if (mMySchedule != null) {
+            setAdapter();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mStopped = true;
     }
 
     @Override
     public boolean handleResult(CursorList<Talk> cursorList) {
-        MySchedule mySchedule = new MySchedule(new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList()));
+        mMySchedule = new MySchedule(new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList()));
+        if (mStopped) {
+            return true;
+        }
+        setAdapter();
+        return true;
+    }
+
+    private void setAdapter() {
         if (mAdapter == null) {
-            mAdapter = new MySchedulePagerAdapter(mySchedule, getFragmentManager());
+            mAdapter = new MySchedulePagerAdapter(mMySchedule, getFragmentManager());
             mViewPager.setAdapter(mAdapter);
         } else {
-            mAdapter.setSchedule(mySchedule);
+            mAdapter.setSchedule(mMySchedule);
         }
-        return true;
     }
 
     public static class MySchedulePagerAdapter extends FragmentPagerAdapter {
