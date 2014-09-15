@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -38,8 +37,7 @@ import timber.log.Timber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, ActionBar.OnNavigationListener,
-        RestoreActionBarFragment {
+public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, RestoreActionBarFragment {
 
     public static final String TAG = "ScheduleFragment";
 
@@ -54,9 +52,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @InjectView(R.id.secondary_filter_spinner_2) Spinner mSecondaryFilterSpinner2;
 
     private Schedule mSchedule;
-    private ArrayAdapter<String> mSpinnerAdapter;
-
-    @Icicle int mSelectedSpinnerPosition;
 
     @Icicle String mTrack;
     @Icicle boolean mFavoriteOnly;
@@ -67,15 +62,14 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     // filter tags that we have to restore (as a result of Activity recreation)
     @Icicle String[] mFilterTagsToRestore = {null, null, null};
 
-    private FilterScheduleSpinnerAdapter filterScheduleSpinnerAdapter;
-
     private Spinner mSpinner;
+    private FilterScheduleSpinnerAdapter mFilterScheduleSpinnerAdapter;
 
     private TagMetadata mTagMetadata;
 
     private View mHeaderSpacer;
-
-    private ScheduleAdapter mAdapter;
+    private boolean mLandscapeMode;
+    private ScheduleAdapter mGridAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,9 +88,17 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+        mLandscapeMode = getResources().getBoolean(R.bool.landscape);
         enableTransition();
         ((BaseActivity) getActivity()).enableActionBarAutoHide(mGridView);
         ((BaseActivity) getActivity()).registerHideableHeaderView(mFiltersBox);
+
+        // TODO export num columns to resources
+        if (mLandscapeMode) {
+            mGridView.setNumColumns("".equals(mFilterTags[0]) ? 3 : 2);
+        } else {
+            mGridView.setNumColumns("".equals(mFilterTags[0]) ? 2 : 1);
+        }
         mGridView.addHeaderView(buildSpacerView());
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,15 +129,14 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         View spinnerContainer = LayoutInflater.from(actionBar.getThemedContext()).inflate(R.layout.actionbar_spinner, null);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         actionBar.setCustomView(spinnerContainer, lp);
-        filterScheduleSpinnerAdapter = new FilterScheduleSpinnerAdapter(getActivity(), true);
-        actionBar.setListNavigationCallbacks(filterScheduleSpinnerAdapter, this);
+        mFilterScheduleSpinnerAdapter = new FilterScheduleSpinnerAdapter(getActivity(), true);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
-        mSpinner.setAdapter(filterScheduleSpinnerAdapter);
+        mSpinner.setAdapter(mFilterScheduleSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View view, int position, long itemId) {
-                onActionBarFilterSelected(filterScheduleSpinnerAdapter.getTag(position));
+                onActionBarFilterSelected(mFilterScheduleSpinnerAdapter.getTag(position));
             }
 
             @Override
@@ -158,11 +159,25 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             mFilterTags[i] = "";
         }
         showSecondaryFilters();
-        filterData();
+        filterData(true);
     }
 
-    private void filterData() {
-        mAdapter.switchData(mSchedule.getFilteredTalks(mFilterTags[0], mFilterTags[1], mFilterTags[2]));
+    private void filterData(boolean reset) {
+        boolean filtering = !"".equals(mFilterTags[0]);
+        int itemLayout = filtering ? R.layout.talk_item_view : R.layout.schedule_item_view;
+        if (mLandscapeMode) {
+            mGridView.setNumColumns(filtering ? 2 : 3);
+        } else {
+            mGridView.setNumColumns(filtering ? 1 : 2);
+        }
+        List<Talk> filteredTalks = mSchedule.getFilteredTalks(mFilterTags[0], mFilterTags[1], mFilterTags[2]);
+        if (reset || mGridAdapter == null) {
+            mGridAdapter = new ScheduleAdapter(getActivity(), itemLayout, filteredTalks);
+            mGridView.setAdapter(mGridAdapter);
+        } else {
+            mGridAdapter.switchData(filteredTalks);
+        }
+
     }
 
     private void showSecondaryFilters() {
@@ -227,7 +242,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             private void selectTag(String tag) {
                 if (!mFilterTags[filterIndex].equals(tag)) {
                     mFilterTags[filterIndex] = tag;
-                    filterData();
+                    filterData(true);
                 }
             }
         });
@@ -251,15 +266,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         ViewGroup.LayoutParams layoutParams = mHeaderSpacer.getLayoutParams();
         layoutParams.height = actionBarSize + filterBoxSize;
         mHeaderSpacer.setLayoutParams(layoutParams);
-        if (mAdapter != null) {
-            mGridView.setAdapter(mAdapter);
-        }
     }
 
     private void computeActionBarSpinnerAdapter() {
-        filterScheduleSpinnerAdapter.clear();
+        mFilterScheduleSpinnerAdapter.clear();
 
-        filterScheduleSpinnerAdapter.addItem("", getString(R.string.all_talks), false, 0);
+        mFilterScheduleSpinnerAdapter.addItem("", getString(R.string.all_talks), false, 0);
 
         if (mSchedule != null) {
             int itemToSelect = -1;
@@ -271,13 +283,13 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
                 List<TagMetadata.Tag> tags = mTagMetadata.getTagsInCategory(category);
                 if (tags != null) {
-                    filterScheduleSpinnerAdapter.addHeader(categoryTitle);
+                    mFilterScheduleSpinnerAdapter.addHeader(categoryTitle);
                     for (TagMetadata.Tag tag : tags) {
-                        filterScheduleSpinnerAdapter.addItem(tag.getId(), tag.getName(), true, Tags.CATEGORY_TOPIC.equals(category) ? tag
+                        mFilterScheduleSpinnerAdapter.addItem(tag.getId(), tag.getName(), true, Tags.CATEGORY_TOPIC.equals(category) ? tag
                                 .getColor() : 0);
                         if (!TextUtils.isEmpty(mFilterTagsToRestore[0]) && tag.getId().equals(mFilterTagsToRestore[0])) {
                             mFilterTagsToRestore[0] = null;
-                            itemToSelect = filterScheduleSpinnerAdapter.getCount() - 1;
+                            itemToSelect = mFilterScheduleSpinnerAdapter.getCount() - 1;
                         }
                     }
                 } else {
@@ -292,7 +304,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             }
         }
 
-        filterScheduleSpinnerAdapter.notifyDataSetChanged();
+        mFilterScheduleSpinnerAdapter.notifyDataSetChanged();
         showSecondaryFilters();
     }
 
@@ -335,24 +347,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         mEmptyText.setVisibility(View.GONE);
 
         mGridView.setVisibility(View.VISIBLE);
-        mAdapter = new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, new ArrayList<Talk>());
-        mGridView.setAdapter(mAdapter);
 
-        filterData();
+        filterData(false);
 
-        return true;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        if (mSelectedSpinnerPosition == itemPosition && mGridView.getAdapter() != null) {
-            return true;
-        }
-
-        mSelectedSpinnerPosition = itemPosition;
-        List<Talk> talksForDay = mSchedule.forDay(mSpinnerAdapter.getItem(itemPosition).toLowerCase());
-        mAdapter = new ScheduleAdapter(getActivity(), R.layout.schedule_item_view, talksForDay, mTrack != null || mFavoriteOnly);
-        mGridView.setAdapter(mAdapter);
         return true;
     }
 
@@ -389,14 +386,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         Fragment fragment = new ScheduleFragment();
         Bundle arguments = new Bundle();
         arguments.putString(EXTRA_TRACK_NAME, track);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
-
-    public static Fragment newInstanceForFavorites() {
-        Fragment fragment = new ScheduleFragment();
-        Bundle arguments = new Bundle();
-        arguments.putBoolean(EXTRA_FAVORITE_ONLY, true);
         fragment.setArguments(arguments);
         return fragment;
     }

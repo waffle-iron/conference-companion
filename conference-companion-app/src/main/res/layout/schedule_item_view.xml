@@ -54,4 +54,13 @@
         android:paddingBottom="4dp"
         tools:text="Karma and Protractor, test your AngularJS application" />
 
+    <!-- "In schedule" indicator -->
+    <ImageView android:id="@+id/indicator_in_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/indicator_in_schedule"
+        android:contentDescription="@null" />
+
 </fr.xebia.conference.companion.ui.schedule.ScheduleItemView>

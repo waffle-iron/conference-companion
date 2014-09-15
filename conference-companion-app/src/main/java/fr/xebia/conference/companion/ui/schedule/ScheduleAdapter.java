@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import fr.xebia.conference.companion.core.adapter.BaseAdapter;
 import fr.xebia.conference.companion.model.Talk;
+import fr.xebia.conference.companion.ui.browse.TalkItemView;
 
 import java.util.List;
 
@@ -22,7 +23,11 @@ public class ScheduleAdapter extends BaseAdapter<List<Talk>> {
 
     @Override
     protected void bindView(int position, View view) {
-        ((ScheduleItemView) view).bind(getItem(position));
+        if (view instanceof ScheduleItemView) {
+            ((ScheduleItemView) view).bind(getItem(position));
+        } else {
+            ((TalkItemView) view).bind(getItem(position));
+        }
     }
 
     @Override
