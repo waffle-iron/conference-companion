@@ -45,7 +45,7 @@ public class ScheduleItemView extends RelativeLayout implements Callback {
         Resources resources = getResources();
         bindIcons(resources, talk);
         mScheduleTitle.setText(talk.getTitle());
-        mScheduleRoom.setText(String.format("%s\n%s", talk.getPeriod(), talk.getRoom()));
+        mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
         mScheduleSpeakers.setText(talk.getPrettySpeakers());
         if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
             mScheduleSpeakers.setText(talk.getPrettySpeakers());

@@ -24,6 +24,11 @@
         <attr name="photoItemForeground" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="DrawShadowFrameLayout">
+        <attr name="shadowDrawable" format="reference" />
+        <attr name="shadowVisible" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="BezelImageView">
         <attr name="maskDrawable" format="reference" />
         <attr name="borderDrawable" format="reference" />

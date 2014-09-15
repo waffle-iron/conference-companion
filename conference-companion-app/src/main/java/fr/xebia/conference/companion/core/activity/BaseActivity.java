@@ -18,6 +18,7 @@ public class BaseActivity extends Activity {
     private int mActionBarAutoHideMinY = 0;
     private int mActionBarAutoHideSignal = 0;
     private boolean mActionBarShown = true;
+    private OnActionBarAutoShowOrHideListener mActionBarAutoShowOrHideListener;
 
     private List<View> mHideableHeaderViews = new ArrayList<>();
 
@@ -109,6 +110,13 @@ public class BaseActivity extends Activity {
                         .setInterpolator(new DecelerateInterpolator());
             }
         }
+        if (mActionBarAutoShowOrHideListener != null) {
+            mActionBarAutoShowOrHideListener.onActionBarAutoShowOrHide(shown);
+        }
+    }
+
+    public void setActionBarAutoShowOrHideListener(OnActionBarAutoShowOrHideListener listener) {
+        mActionBarAutoShowOrHideListener = listener;
     }
 
     public void registerHideableHeaderView(View hideableHeaderView) {
@@ -121,5 +129,9 @@ public class BaseActivity extends Activity {
         if (mHideableHeaderViews.contains(hideableHeaderView)) {
             mHideableHeaderViews.remove(hideableHeaderView);
         }
+    }
+
+    public interface OnActionBarAutoShowOrHideListener {
+        void onActionBarAutoShowOrHide(boolean shown);
     }
 }

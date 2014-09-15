@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import fr.xebia.conference.companion.model.TagMetadata;
 import fr.xebia.conference.companion.model.Tags;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
+import fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout;
 import fr.xebia.conference.companion.ui.widget.HeaderGridView;
 import fr.xebia.conference.companion.ui.widget.UIUtils;
 import icepick.Icepick;
@@ -37,14 +39,15 @@ import timber.log.Timber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, RestoreActionBarFragment {
+public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, RestoreActionBarFragment,
+        BaseActivity.OnActionBarAutoShowOrHideListener {
 
     public static final String TAG = "ScheduleFragment";
 
     public static final String EXTRA_TRACK_NAME = "fr.xebia.devoxx.EXTRA_TRACK_NAME";
     public static final String EXTRA_FAVORITE_ONLY = "fr.xebia.devoxx.EXTRA_FAVORITE_ONLY";
 
-    @InjectView(R.id.container) ViewGroup mContainer;
+    @InjectView(R.id.container) DrawShadowFrameLayout mContainer;
     @InjectView(R.id.empty_id) TextView mEmptyText;
     @InjectView(R.id.schedule_grid) HeaderGridView mGridView;
     @InjectView(R.id.filters_box) ViewGroup mFiltersBox;
@@ -90,8 +93,10 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         ButterKnife.inject(this, view);
         mLandscapeMode = getResources().getBoolean(R.bool.landscape);
         enableTransition();
-        ((BaseActivity) getActivity()).enableActionBarAutoHide(mGridView);
-        ((BaseActivity) getActivity()).registerHideableHeaderView(mFiltersBox);
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.enableActionBarAutoHide(mGridView);
+        activity.registerHideableHeaderView(mFiltersBox);
+        activity.setActionBarAutoShowOrHideListener(this);
 
         // TODO export num columns to resources
         if (mLandscapeMode) {
@@ -170,12 +175,17 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         } else {
             mGridView.setNumColumns(filtering ? 1 : 2);
         }
-        List<Talk> filteredTalks = mSchedule.getFilteredTalks(mFilterTags[0], mFilterTags[1], mFilterTags[2]);
-        if (reset || mGridAdapter == null) {
-            mGridAdapter = new ScheduleAdapter(getActivity(), itemLayout, filteredTalks);
-            mGridView.setAdapter(mGridAdapter);
-        } else {
-            mGridAdapter.switchData(filteredTalks);
+        List<Talk> filteredTalks = mSchedule.getFilteredTalks(mTagMetadata.getTag(mFilterTags[0]), mTagMetadata.getTag(mFilterTags[1]),
+                mTagMetadata.getTag(mFilterTags[2]));
+        mGridAdapter = new ScheduleAdapter(getActivity(), itemLayout, filteredTalks);
+
+        Parcelable gridViewState = null;
+        if (!reset) {
+            gridViewState = mGridView.onSaveInstanceState();
+        }
+        mGridView.setAdapter(mGridAdapter);
+        if (gridViewState != null) {
+            mGridView.onRestoreInstanceState(gridViewState);
         }
 
     }
@@ -266,6 +276,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         ViewGroup.LayoutParams layoutParams = mHeaderSpacer.getLayoutParams();
         layoutParams.height = actionBarSize + filterBoxSize;
         mHeaderSpacer.setLayoutParams(layoutParams);
+        mContainer.setShadowTopOffset(layoutParams.height);
     }
 
     private void computeActionBarSpinnerAdapter() {
@@ -377,7 +388,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @Override
     public void onDestroyView() {
         mSpinner = null;
-        ((BaseActivity) getActivity()).deregisterHideableHeaderView(mFiltersBox);
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setActionBarAutoShowOrHideListener(null);
+        activity.deregisterHideableHeaderView(mFiltersBox);
         ButterKnife.reset(this);
         super.onDestroyView();
     }
@@ -388,5 +401,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         arguments.putString(EXTRA_TRACK_NAME, track);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public void onActionBarAutoShowOrHide(boolean shown) {
+        if (mContainer != null) {
+            mContainer.setShadowVisible(shown, true);
+        }
     }
 }

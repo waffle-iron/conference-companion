@@ -45,7 +45,7 @@ public class TalkItemView extends FrameLayout {
         Picasso.with(getContext()).load(R.drawable.devoxx_talk_template).into(mTalkPhoto);
         mTalkCategory.setText(talk.getType());
         mTalkTitle.setText(talk.getTitle());
-        mTalkSubTitle.setText(talk.getRoom());
+        mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
         mTalkSnippet.setText(talk.getSummary());
         mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
         mInfoBox.setBackgroundColor(talk.getColor());
