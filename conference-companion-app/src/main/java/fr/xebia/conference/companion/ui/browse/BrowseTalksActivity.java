@@ -27,4 +27,6 @@ public class BrowseTalksActivity extends Activity {
         }
 
     }
+
+
 }

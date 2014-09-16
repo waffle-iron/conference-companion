@@ -26,6 +26,7 @@
 
     <declare-styleable name="DrawShadowFrameLayout">
         <attr name="shadowDrawable" format="reference" />
+        <attr name="shadowTopOffset" format="dimension" />
         <attr name="shadowVisible" format="boolean" />
     </declare-styleable>
 

@@ -52,16 +52,7 @@
         </activity>
 
         <activity
-            android:name=".ui.schedule.ScheduleActivity"
-            android:parentActivityName=".ui.HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
-        </activity>
-
-        <activity
-            android:name=".ui.schedule.MyScheduleActivity"
-            android:theme="@style/Theme.Companion.MySchedule"/>
+            android:name=".ui.schedule.MyScheduleActivity"/>
 
         <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"

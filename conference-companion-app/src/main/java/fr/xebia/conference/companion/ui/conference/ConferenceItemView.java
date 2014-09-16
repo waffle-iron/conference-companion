@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.TextView;
-import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import fr.xebia.conference.companion.R;
@@ -24,12 +23,6 @@ public class ConferenceItemView extends TextView implements Target {
 
     public ConferenceItemView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.inject(this, this);
     }
 
     public void bind(Conference conference) {

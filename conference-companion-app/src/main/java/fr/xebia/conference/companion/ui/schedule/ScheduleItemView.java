@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class ScheduleItemView extends RelativeLayout implements Callback {
     @InjectView(R.id.schedule_title) TextView mScheduleTitle;
     @InjectView(R.id.schedule_speakers) TextView mScheduleSpeakers;
     @InjectView(R.id.schedule_room) TextView mScheduleRoom;
+    @InjectView(R.id.indicator_in_schedule) View mInSchedule;
 
     public ScheduleItemView(Context context) {
         super(context);
@@ -53,6 +55,7 @@ public class ScheduleItemView extends RelativeLayout implements Callback {
         } else {
             mScheduleSpeakers.setVisibility(INVISIBLE);
         }
+        mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
     }
 
     public void bindWithDay(Talk talk) {
@@ -67,6 +70,7 @@ public class ScheduleItemView extends RelativeLayout implements Callback {
         } else {
             mScheduleSpeakers.setVisibility(INVISIBLE);
         }
+        mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
     }
 
     private void bindIcons(Resources resources, Talk talk) {

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import fr.xebia.conference.companion.core.adapter.BaseAdapter;
 import fr.xebia.conference.companion.model.Conference;
-import fr.xebia.conference.companion.model.Track;
-import fr.xebia.conference.companion.ui.talk.track.TrackItemView;
 
 import java.util.List;
 

@@ -1,17 +1,36 @@
 package fr.xebia.conference.companion.core.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.ui.HomeActivity;
+import fr.xebia.conference.companion.ui.conference.ConferenceChooserActivity;
+import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
+import fr.xebia.conference.companion.ui.navigation.NavigationDrawerFragment;
+import fr.xebia.conference.companion.ui.schedule.MyScheduleActivity;
+import fr.xebia.conference.companion.ui.settings.SettingsActivity;
+import fr.xebia.conference.companion.ui.speaker.SpeakerFragment;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseActivity extends Activity {
+public class BaseActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final int HEADER_HIDE_ANIM_DURATION = 300;
+
+    public static final String HOME_FRAG_TAG = "HOME";
+
+    protected NavigationDrawerFragment mNavigationDrawerFragment;
 
     private boolean mActionBarAutoHideEnabled = false;
     private int mActionBarAutoHideSensivity = 0;
@@ -20,7 +39,63 @@ public class BaseActivity extends Activity {
     private boolean mActionBarShown = true;
     private OnActionBarAutoShowOrHideListener mActionBarAutoShowOrHideListener;
 
+    private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
+    private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
+
     private List<View> mHideableHeaderViews = new ArrayList<>();
+
+    private Handler handler = new Handler();
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        boolean hasSelectedConference = Preferences.hasSelectedConference(this);
+        if (!hasSelectedConference) {
+            startActivity(new Intent(this, ConferenceChooserActivity.class));
+            finish();
+        } else {
+            mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
+            // Set up the drawer.
+            mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+            mNavigationDrawerFragment.setSelection(getSelfNavDrawerItem());
+
+            View mainContent = findViewById(R.id.main_content);
+            if (mainContent != null) {
+                mainContent.setAlpha(0);
+                mainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
+            } else {
+                Timber.w("No view with ID main_content to fade in.");
+            }
+        }
+    }
+
+    /**
+     * Returns the navigation drawer item that corresponds to this Activity. Subclasses
+     * of BaseActivity override this to indicate what nav drawer item corresponds to them
+     * Return NAVDRAWER_ITEM_INVALID to mean that this Activity should not have a Nav Drawer.
+     */
+    protected int getSelfNavDrawerItem() {
+        return DrawerAdapter.MENU_INVALID;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!Preferences.isBleHintDisplayed(this)) {
+            Preferences.setBleHintDisplayed(this, true);
+            final AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.informations)
+                    .setMessage(R.string.informations_ble)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(false).create();
+            dialog.show();
+        }
+    }
 
     public void enableActionBarAutoHide(final AbsListView listView) {
         initActionBarAutoHide();
@@ -128,6 +203,74 @@ public class BaseActivity extends Activity {
     public void deregisterHideableHeaderView(View hideableHeaderView) {
         if (mHideableHeaderViews.contains(hideableHeaderView)) {
             mHideableHeaderViews.remove(hideableHeaderView);
+        }
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        if(getSelfNavDrawerItem() == position){
+            return;
+        }
+
+        switch (position) {
+            case DrawerAdapter.MENU_MY_AGENDA:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(BaseActivity.this, MyScheduleActivity.class));
+                        finish();
+                    }
+                }, 300);
+                break;
+
+            case DrawerAdapter.MENU_TALKS:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(BaseActivity.this, HomeActivity.class));
+                        finish();
+                    }
+                }, 300);
+                break;
+            case DrawerAdapter.MENU_SPEAKERS:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.main_content, new SpeakerFragment(), HOME_FRAG_TAG)
+                                .commit();
+                    }
+                }, 300);
+                break;
+            case DrawerAdapter.MENU_CONFERENCES:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(BaseActivity.this, ConferenceChooserActivity.class));
+                    }
+                }, 300);
+                break;
+            case DrawerAdapter.MENU_SETTINGS:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(BaseActivity.this, SettingsActivity.class));
+                    }
+                }, 300);
+                break;
+        }
+
+        // fade out the main content
+        View mainContent = findViewById(R.id.main_content);
+        if (mainContent != null) {
+            mainContent.animate().alpha(0).setDuration(MAIN_CONTENT_FADEOUT_DURATION);
+        }
+    }
+
+    @Override
+    public void onNavigationDrawerToggle(boolean opened) {
+        if (mActionBarAutoHideEnabled && opened) {
+            autoShowOrHideActionBar(true);
         }
     }
 

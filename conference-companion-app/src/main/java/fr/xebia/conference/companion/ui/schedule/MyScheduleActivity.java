@@ -1,6 +1,6 @@
 package fr.xebia.conference.companion.ui.schedule;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -8,21 +8,27 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.MySchedule;
 import fr.xebia.conference.companion.model.Schedule;
 import fr.xebia.conference.companion.model.Talk;
+import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
+import fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout;
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 
 import java.util.ArrayList;
 
-public class MyScheduleActivity extends Activity implements ManyQuery.ResultHandler<Talk> {
+public class MyScheduleActivity extends BaseActivity implements ManyQuery.ResultHandler<Talk> {
 
+    @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
     @InjectView(R.id.pager_strip) PagerTabStrip mPagerStrip;
     @InjectView(R.id.view_pager) ViewPager mViewPager;
 
@@ -40,6 +46,31 @@ public class MyScheduleActivity extends Activity implements ManyQuery.ResultHand
         Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
         mPagerStrip.setDrawFullUnderline(true);
         getActionBar().setTitle(R.string.my_schedule);
+        mDrawShadowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mDrawShadowFrameLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                int shadowTopOffset = UIUtils.calculateActionBarSize(MyScheduleActivity.this) + mPagerStrip.getHeight();
+                mDrawShadowFrameLayout.setShadowTopOffset(shadowTopOffset);
+            }
+        });
+    }
+
+    @Override
+    public void onNavigationDrawerToggle(boolean opened) {
+        super.onNavigationDrawerToggle(opened);
+        if(!opened){
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowCustomEnabled(false);
+            actionBar.setTitle(R.string.my_schedule);
+        }
+    }
+
+    @Override
+    protected int getSelfNavDrawerItem() {
+        return DrawerAdapter.MENU_MY_AGENDA;
     }
 
     @Override

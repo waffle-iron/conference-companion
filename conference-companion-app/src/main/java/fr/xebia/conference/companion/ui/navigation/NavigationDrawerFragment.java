@@ -49,7 +49,7 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
 
     private DrawerAdapter mAdapter;
 
-    @Icicle int mLastSelection = 1;
+    @Icicle int mLastSelection = 2;
     private boolean mDrawerOpen;
     private TextView mHeader;
 
@@ -155,21 +155,11 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
     }
 
     private void selectItem(int position) {
-        if (mDrawerListView != null) {
-            if (position - 1 == DrawerAdapter.MENU_CONFERENCES) {
-                mDrawerListView.setItemChecked(mLastSelection, true);
-            } else {
-                mDrawerListView.setItemChecked(position, true);
-            }
-        }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null && position != mLastSelection) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
-            if (position - 1 != DrawerAdapter.MENU_CONFERENCES) {
-                mLastSelection = position;
-            }
+        if (mCallbacks != null && position != mLastSelection && position > 0) {
+            mCallbacks.onNavigationDrawerItemSelected(position - mDrawerListView.getHeaderViewsCount());
         }
     }
 
@@ -239,6 +229,7 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
@@ -255,6 +246,13 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         return false;
     }
 
+    public void setSelection(int selection) {
+        mLastSelection = selection + 1; // Don't forget the header offset
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(mLastSelection, true);
+        }
+    }
+
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
@@ -263,6 +261,8 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+
+        void onNavigationDrawerToggle(boolean opened);
     }
 
     final class NavigationDrawerToggle extends ActionBarDrawerToggle {
@@ -280,6 +280,9 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
             }
             mDrawerOpen = false;
             getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            if (mCallbacks != null) {
+                mCallbacks.onNavigationDrawerToggle(mDrawerOpen);
+            }
         }
 
         @Override
@@ -290,6 +293,9 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
             }
             mDrawerOpen = true;
             getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            if (mCallbacks != null) {
+                mCallbacks.onNavigationDrawerToggle(mDrawerOpen);
+            }
         }
 
 

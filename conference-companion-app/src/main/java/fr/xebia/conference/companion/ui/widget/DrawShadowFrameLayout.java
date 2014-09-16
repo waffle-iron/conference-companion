@@ -59,6 +59,9 @@ public class DrawShadowFrameLayout extends FrameLayout {
         }
 
         mShadowVisible = a.getBoolean(R.styleable.DrawShadowFrameLayout_shadowVisible, true);
+
+        mShadowTopOffset = a.getDimensionPixelSize(R.styleable.DrawShadowFrameLayout_shadowTopOffset, 0);
+
         setWillNotDraw(!mShadowVisible || mShadowDrawable == null);
 
         a.recycle();
