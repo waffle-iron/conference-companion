@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="?android:actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    app:shadowDrawable="@drawable/header_shadow">
 
-<EditText
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <EditText xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/container"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -10,6 +16,7 @@
         android:inputType="textMultiLine"
         android:singleLine="false">
 
-    <requestFocus/>
+        <requestFocus />
 
-</EditText>
+    </EditText>
+</fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout>

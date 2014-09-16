@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:id="@+id/container">
+<fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    app:shadowDrawable="@drawable/header_shadow"
+    app:shadowTopOffset="?android:actionBarSize"
+    android:id="@+id/container">
+
 
     <TextView
-            android:id="@+id/empty_id"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"/>
+        android:id="@+id/empty_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" />
 
-    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-            android:id="@+id/sticky_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"
-            android:overScrollMode="never"
-            android:drawSelectorOnTop="true"/>
-</FrameLayout>
+    <fr.xebia.conference.companion.ui.widget.HeaderGridView
+        android:id="@+id/speakers_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="true"
+        android:clipToPadding="false"
+        android:numColumns="2"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp" />
+
+</fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout>

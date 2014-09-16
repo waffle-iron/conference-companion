@@ -9,7 +9,6 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
@@ -40,7 +39,11 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_schedule_activity);
-        ButterKnife.inject(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         int conferenceId = Preferences.getSelectedConference(this);
         String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC";
         Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
@@ -59,7 +62,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     @Override
     public void onNavigationDrawerToggle(boolean opened) {
         super.onNavigationDrawerToggle(opened);
-        if(!opened){
+        if (!opened) {
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);

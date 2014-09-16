@@ -1,16 +1,15 @@
 package fr.xebia.conference.companion.ui.note;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.MemoSavedEvent;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
 import se.emilsjolander.sprinkles.Model;
@@ -20,7 +19,7 @@ import se.emilsjolander.sprinkles.Query;
 import static android.widget.Toast.LENGTH_SHORT;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
-public class MemoActivity extends Activity implements OneQuery.ResultHandler<Talk> {
+public class MemoActivity extends BaseActivity implements OneQuery.ResultHandler<Talk> {
 
     @InjectView(R.id.container) EditText mText;
 
@@ -30,7 +29,11 @@ public class MemoActivity extends Activity implements OneQuery.ResultHandler<Tal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_activity);
-        ButterKnife.inject(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
         Intent intent = getIntent();
         String talkId = intent.getStringExtra(TalkActivity.EXTRA_TALK_ID);

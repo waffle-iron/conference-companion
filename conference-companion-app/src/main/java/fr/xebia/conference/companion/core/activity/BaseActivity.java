@@ -10,6 +10,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.Optional;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.ui.HomeActivity;
@@ -18,7 +21,7 @@ import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
 import fr.xebia.conference.companion.ui.navigation.NavigationDrawerFragment;
 import fr.xebia.conference.companion.ui.schedule.MyScheduleActivity;
 import fr.xebia.conference.companion.ui.settings.SettingsActivity;
-import fr.xebia.conference.companion.ui.speaker.SpeakerFragment;
+import fr.xebia.conference.companion.ui.speaker.SpeakerActivity;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     private static final int HEADER_HIDE_ANIM_DURATION = 300;
 
     public static final String HOME_FRAG_TAG = "HOME";
+
+    @InjectView(R.id.main_content) @Optional View mMainContent;
 
     protected NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -47,22 +52,30 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     private Handler handler = new Handler();
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        ButterKnife.inject(this);
         boolean hasSelectedConference = Preferences.hasSelectedConference(this);
         if (!hasSelectedConference) {
             startActivity(new Intent(this, ConferenceChooserActivity.class));
             finish();
         } else {
             mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-            // Set up the drawer.
-            mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-            mNavigationDrawerFragment.setSelection(getSelfNavDrawerItem());
 
-            View mainContent = findViewById(R.id.main_content);
-            if (mainContent != null) {
-                mainContent.setAlpha(0);
-                mainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
+            if (mNavigationDrawerFragment != null) {
+                // Set up the drawer.
+                mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+                mNavigationDrawerFragment.setSelection(getSelfNavDrawerItem());
+            }
+
+            if (mMainContent != null) {
+                mMainContent.setAlpha(0);
+                mMainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION).setStartDelay(200);
             } else {
                 Timber.w("No view with ID main_content to fade in.");
             }
@@ -94,6 +107,10 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
                     })
                     .setCancelable(false).create();
             dialog.show();
+        }
+
+        if (mMainContent != null && mMainContent.getAlpha() == 0) {
+            mMainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
         }
     }
 
@@ -208,7 +225,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        if(getSelfNavDrawerItem() == position){
+        if (getSelfNavDrawerItem() == position) {
             return;
         }
 
@@ -236,9 +253,8 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.main_content, new SpeakerFragment(), HOME_FRAG_TAG)
-                                .commit();
+                        startActivity(new Intent(BaseActivity.this, SpeakerActivity.class));
+                        finish();
                     }
                 }, 300);
                 break;
@@ -255,6 +271,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
                     @Override
                     public void run() {
                         startActivity(new Intent(BaseActivity.this, SettingsActivity.class));
+                        finish();
                     }
                 }, 300);
                 break;

@@ -3,28 +3,24 @@
 <fr.xebia.conference.companion.ui.speaker.SpeakerItemView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:paddingLeft="5dp">
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/speaker_image"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/speaker_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="1dp"
-        android:lineSpacingExtra="4dp"
-        android:layout_marginLeft="5dp"
-        android:textSize="16sp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:background="@color/theme_primary"
+        android:padding="5dp"
+        android:textColor="@android:color/white"
         android:gravity="center_vertical" />
 
 </fr.xebia.conference.companion.ui.speaker.SpeakerItemView>

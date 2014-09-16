@@ -51,15 +51,14 @@
                 android:value=".ui.HomeActivity" />
         </activity>
 
-        <activity
-            android:name=".ui.schedule.MyScheduleActivity"/>
+        <activity android:name=".ui.schedule.MyScheduleActivity" />
 
         <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"
-            android:parentActivityName=".ui.HomeActivity">
+            android:parentActivityName=".ui.speaker.SpeakerActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
+                android:value=".ui.speaker.SpeakerActivity" />
         </activity>
 
         <activity
@@ -70,6 +69,8 @@
                 android:value=".ui.schedule.MyScheduleActivity" />
         </activity>
 
+        <activity android:name=".ui.speaker.SpeakerActivity" />
+
         <activity
             android:name=".ui.note.MemoActivity"
             android:parentActivityName=".ui.talk.TalkActivity">
@@ -78,13 +79,7 @@
                 android:value=".ui.TalkActivity" />
         </activity>
 
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:parentActivityName=".ui.HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
-        </activity>
+        <activity android:name=".ui.settings.SettingsActivity" />
 
         <activity android:name=".ui.conference.ConferenceChooserActivity" />
 

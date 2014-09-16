@@ -87,7 +87,6 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         addHeader(getActivity());
         mAdapter = new DrawerAdapter(getActivity());
         mDrawerListView.setAdapter(mAdapter);
-        mDrawerListView.setItemChecked(mLastSelection, true);
         Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", Preferences.getSelectedConference(getActivity()))
                 .getAsync(getLoaderManager(), this);
         return mDrawerListView;
@@ -244,6 +243,12 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
             mHeader.setText(conference.getName());
         }
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mDrawerListView.setItemChecked(mLastSelection, true);
     }
 
     public void setSelection(int selection) {

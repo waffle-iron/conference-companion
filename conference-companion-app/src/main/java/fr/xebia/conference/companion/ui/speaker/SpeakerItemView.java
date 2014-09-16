@@ -2,6 +2,7 @@ package fr.xebia.conference.companion.ui.speaker;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,15 +10,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
-import fr.xebia.conference.companion.core.transform.CircleTransform;
 import fr.xebia.conference.companion.model.Speaker;
-
-import static android.text.Html.fromHtml;
 
 public class SpeakerItemView extends LinearLayout {
 
     @InjectView(R.id.speaker_image) ImageView mSpeakerImage;
     @InjectView(R.id.speaker_name) TextView mSpeakerName;
+    private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener;
 
     public SpeakerItemView(Context context) {
         super(context);
@@ -37,22 +36,47 @@ public class SpeakerItemView extends LinearLayout {
         ButterKnife.inject(this, this);
     }
 
-    public void bind(Speaker speaker) {
-        String company = speaker.getCompany();
-        if (company == null) {
-            mSpeakerName.setText(fromHtml(getResources().getString(R.string.speaker_format_without_company, speaker.getFirstName(),
-                    speaker.getLastName())));
-        } else {
-            mSpeakerName.setText(fromHtml(getResources().getString(R.string.speaker_format, speaker.getFirstName(),
-                    speaker.getLastName(), company)));
-        }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    }
 
-        Picasso.with(getContext()).load(speaker.getImageURL())
-                .placeholder(R.drawable.ic_default_gravatar)
-                .transform(CircleTransform.getInstance())
-                .noFade()
-                .fit()
-                .centerCrop()
-                .into(mSpeakerImage);
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        globalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mSpeakerImage.getLayoutParams().height = getWidth() - mSpeakerName.getHeight();
+                mSpeakerImage.invalidate();
+            }
+        };
+        mSpeakerImage.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
+    }
+
+    public void bind(final Speaker speaker) {
+        mSpeakerName.setText(String.format("%s %s", speaker.getFirstName(), speaker.getLastName()));
+        post(new Runnable() {
+            @Override
+            public void run() {
+                int measuredWidth = getMeasuredWidth();
+                int measuredHeight = measuredWidth - mSpeakerName.getMeasuredHeight();
+                mSpeakerImage.getLayoutParams().height = measuredHeight;
+                mSpeakerImage.invalidate();
+                Picasso.with(getContext()).load(speaker.getImageURL())
+                        .placeholder(R.drawable.speaker_placeholder)
+                        .resize(measuredWidth, measuredHeight)
+                        .centerCrop()
+                        .into(mSpeakerImage);
+            }
+
+        });
+
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mSpeakerImage.getViewTreeObserver().removeGlobalOnLayoutListener(globalLayoutListener);
     }
 }

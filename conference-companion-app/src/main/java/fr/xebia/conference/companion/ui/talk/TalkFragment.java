@@ -3,12 +3,6 @@ package fr.xebia.conference.companion.ui.talk;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -381,15 +375,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
 
-        String track = talk.getTrack();
-        Resources resources = getResources();
-        Drawable trackDrawable = resources.getDrawable(R.drawable.ic_talk).mutate();
-        trackDrawable.setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
-        mTrackContent.setText(track);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_talk);
-        int dim = getResources().getDimensionPixelSize(R.dimen.add_to_schedule_button_height);
-        mTrackContent.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, dim,
-                dim, false)), null, null, null);
+        mTrackContent.setText(talk.getTrack());
 
         bindMemo();
 

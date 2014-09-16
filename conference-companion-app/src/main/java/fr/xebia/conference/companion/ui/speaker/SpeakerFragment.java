@@ -1,7 +1,7 @@
 package fr.xebia.conference.companion.ui.speaker;
 
 import android.animation.LayoutTransition;
-import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
@@ -15,26 +15,30 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
-import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
 import fr.xebia.conference.companion.model.Speaker;
+import fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout;
+import fr.xebia.conference.companion.ui.widget.HeaderGridView;
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 import java.util.List;
 
-public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler<Speaker>, RestoreActionBarFragment {
+public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler<Speaker>, BaseActivity.OnActionBarAutoShowOrHideListener {
 
-    @InjectView(R.id.container) ViewGroup mContainer;
+    @InjectView(R.id.container) DrawShadowFrameLayout mContainer;
     @InjectView(R.id.empty_id) TextView mEmptyText;
-    @InjectView(R.id.sticky_list) StickyListHeadersListView mListView;
-    private List<Speaker> mSpeakers;
+    @InjectView(R.id.speakers_grid) HeaderGridView mSpeakersGrid;
 
     @Icicle Parcelable mListViewState;
+
+    private List<Speaker> mSpeakers;
+    private View mHeaderSpacer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,8 +57,9 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
         enableTransition();
-        mListView.setDrawingListUnderStickyHeader(false);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ((BaseActivity) getActivity()).enableActionBarAutoHide(mSpeakersGrid);
+        ((BaseActivity) getActivity()).setActionBarAutoShowOrHideListener(this);
+        mSpeakersGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), SpeakerDetailsActivity.class);
@@ -62,17 +67,34 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
                 startActivity(intent);
             }
         });
-
-        restoreActionBar();
+        mSpeakersGrid.addHeaderView(buildSpacerView());
 
         int conferenceId = Preferences.getSelectedConference(getActivity());
         Query.many(Speaker.class, "SELECT * FROM Speakers WHERE conferenceId=? ORDER BY firstName ASC, lastName ASC",
                 conferenceId).getAsync(getLoaderManager(), this);
     }
 
+    private View buildSpacerView() {
+        Activity context = getActivity();
+        mHeaderSpacer = new View(context);
+        mHeaderSpacer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                UIUtils.calculateActionBarSize(context)));
+        return mHeaderSpacer;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getResources().getBoolean(R.bool.landscape)) {
+            mSpeakersGrid.setNumColumns(4);
+        } else {
+            mSpeakersGrid.setNumColumns(3);
+        }
+    }
+
     @Override
     public void onPause() {
-        mListViewState = mListView.onSaveInstanceState();
+        mListViewState = mSpeakersGrid.onSaveInstanceState();
         super.onPause();
     }
 
@@ -80,6 +102,13 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((BaseActivity) getActivity()).setActionBarAutoShowOrHideListener(null);
     }
 
     private void enableTransition() {
@@ -100,14 +129,14 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
         if (mSpeakers == null || mSpeakers.isEmpty()) {
             mEmptyText.setText(getString(R.string.no_data));
             mEmptyText.setVisibility(View.VISIBLE);
-            mListView.setVisibility(View.GONE);
+            mSpeakersGrid.setVisibility(View.GONE);
         } else {
             mEmptyText.setText("");
             mEmptyText.setVisibility(View.GONE);
-            mListView.setVisibility(View.VISIBLE);
-            mListView.setAdapter(new SpeakerAdapter(getActivity(), R.layout.speaker_short_item, mSpeakers, true));
+            mSpeakersGrid.setVisibility(View.VISIBLE);
+            mSpeakersGrid.setAdapter(new SpeakerAdapter(getActivity(), R.layout.speaker_short_item, mSpeakers, true));
             if (mListViewState != null) {
-                mListView.onRestoreInstanceState(mListViewState);
+                mSpeakersGrid.onRestoreInstanceState(mListViewState);
             }
         }
 
@@ -115,9 +144,9 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
     }
 
     @Override
-    public void restoreActionBar() {
-        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        getActivity().getActionBar().setDisplayShowTitleEnabled(true);
-        getActivity().getActionBar().setTitle(R.string.speakers);
+    public void onActionBarAutoShowOrHide(boolean shown) {
+        if (mContainer != null) {
+            mContainer.setShadowVisible(shown, true);
+        }
     }
 }

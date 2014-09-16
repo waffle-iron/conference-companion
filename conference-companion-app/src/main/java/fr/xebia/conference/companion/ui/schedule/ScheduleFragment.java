@@ -20,7 +20,6 @@ import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
-import fr.xebia.conference.companion.core.misc.RestoreActionBarFragment;
 import fr.xebia.conference.companion.model.Schedule;
 import fr.xebia.conference.companion.model.TagMetadata;
 import fr.xebia.conference.companion.model.Tags;
@@ -39,8 +38,7 @@ import timber.log.Timber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, RestoreActionBarFragment,
-        BaseActivity.OnActionBarAutoShowOrHideListener {
+public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, BaseActivity.OnActionBarAutoShowOrHideListener {
 
     public static final String TAG = "ScheduleFragment";
 
@@ -362,27 +360,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         filterData(false);
 
         return true;
-    }
-
-    @Override
-    public void restoreActionBar() {
-        /*ActionBar actionBar = getActivity().getActionBar();
-        if (mFavoriteOnly) {
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            actionBar.setTitle(getString(R.string.my_favorites));
-        } else if (mTrack == null) {
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            if (mSpinnerAdapter != null) {
-                actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-                actionBar.setSelectedNavigationItem(mSelectedSpinnerPosition);
-            }
-        } else {
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            actionBar.setTitle(mTrack);
-        }*/
     }
 
     @Override

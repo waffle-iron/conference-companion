@@ -39,7 +39,7 @@ public class DrawerAdapter extends BaseAdapter {
         mItems.add(new DrawerItem(R.drawable.ic_talk, R.string.talks));
         mItems.add(new DrawerItem(R.drawable.ic_speaker, R.string.speakers));
         mItems.add(new DrawerItem(R.drawable.ic_conference, R.string.conferences));
-        mItems.add(new DrawerItem(R.drawable.ic_conference, R.string.settings));
+        mItems.add(new DrawerItem(R.drawable.ic_drawer_settings, R.string.settings));
     }
 
     @Override
