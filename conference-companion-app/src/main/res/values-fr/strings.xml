@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="retry">Réessayer</string>
     <string name="conferences">Conférences</string>
     <string name="conferences_fetched">Liste des conférences à jour</string>
@@ -17,9 +17,6 @@
     <string name="navigation_drawer_close">Fermer le navigation drawer</string>
     <string name="app_name">Conf Companion</string>
     <string name="scan_nfc_hint">Posez votre tag NFC à l\'arrière de votre appareil</string>
-    <string name="confirm">Associer votre tag</string>
-    <string name="mail">Mail</string>
-    <string name="name">Prénom Nom</string>
     <string name="twitter_account">Twitter</string>
     <string name="initial_synchro">Synchro en cours</string>
     <string name="initial_synchro_conferences">Récupération des conférences</string>
@@ -36,7 +33,6 @@
     <string name="informations">Informations</string>
     <string name="summary">Description</string>
     <string name="talks">Présentations</string>
-    <string name="devoxx_menu_title">Devoxx France 2014</string>
     <string name="my_votes">Mes votes</string>
     <string name="xebia">Xebia</string>
     <string name="talk">Présentation</string>
@@ -62,5 +58,24 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="informations_ble">Cette application utilise du geofencing via le Bluetooth LE. Vous pouvez désactiver cette option dans les paramètres.</string>
-    <string name="browse_sessions">Browse sessions</string>
+    <string name="browse_sessions">Parcourir les présentations</string>
+    <string name="add_to_schedule">Ajouter à mon agenda</string>
+    <string name="session_finished">Finis</string>
+    <string name="session_now">Maintenant</string>
+    <string name="my_schedule_end_time">à <xliff:g id="endTime">%1$s</xliff:g></string>
+    <string name="my_schedule">Mon agenda</string>
+    <string name="all_talks">Toutes les présenations</string>
+    <string name="all_days">Tous les jours</string>
+    <string name="all_topics">Tous les sujets</string>
+    <string name="all_types">Tous les types</string>
+    <string name="days">Jours</string>
+    <string name="topics">Sujets</string>
+    <string name="types">Types</string>
+    <string name="schedule_conflict_with_previous">(Conflit)</string>
+
+    <plurals name="available_talks">
+        <item quantity="zero">%1$d présentation disponible</item>
+        <item quantity="one">%1$d présentation disponible</item>
+        <item quantity="other">%1$d présentations disponibles</item>
+    </plurals>
 </resources>
