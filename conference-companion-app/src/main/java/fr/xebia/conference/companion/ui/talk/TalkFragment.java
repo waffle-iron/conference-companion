@@ -361,7 +361,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         boolean favorite = mTalk.isFavorite();
         mAddScheduleBtn.setChecked(favorite, false);
-        mAddScheduleBtn.setVisibility(talk.isKeynote() ? INVISIBLE : VISIBLE);
+        mAddScheduleBtn.setVisibility(/*talk.isKeynote() ? INVISIBLE :*/ VISIBLE); // TODO waiting for validation
         UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, false);
 
         if (!TextUtils.isEmpty(talk.getSummary())) {

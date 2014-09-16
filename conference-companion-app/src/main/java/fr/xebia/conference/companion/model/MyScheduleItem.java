@@ -37,7 +37,7 @@ public class MyScheduleItem implements Parcelable {
         availableTalks.addAll(talks);
         this.startTime = startTime;
         for (Talk talk : availableTalks) {
-            if (talk.isFavorite() || talk.isKeynote()) {
+            if (talk.isFavorite() /*|| talk.isKeynote()*/) { // TODO waiting for validation
                 if (selectedTalk == null) {
                     // Keep the first talk as the selected one
                     selectedTalk = talk;
