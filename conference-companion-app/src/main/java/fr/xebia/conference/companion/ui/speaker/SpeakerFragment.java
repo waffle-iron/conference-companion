@@ -37,7 +37,6 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
 
     @Icicle Parcelable mListViewState;
 
-    private List<Speaker> mSpeakers;
     private View mHeaderSpacer;
 
     @Override
@@ -63,7 +62,7 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), SpeakerDetailsActivity.class);
-                intent.putExtra(SpeakerDetailsActivity.EXTRA_SPEAKER_ID, mSpeakers.get(position).getId());
+                intent.putExtra(SpeakerDetailsActivity.EXTRA_SPEAKER_ID, ((Speaker) mSpeakersGrid.getAdapter().getItem(position)).getId());
                 startActivity(intent);
             }
         });
@@ -122,13 +121,13 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
     }
 
     @Override
-    public boolean handleResult(CursorList<Speaker> speakers) {
-        mSpeakers = speakers.asList();
+    public boolean handleResult(CursorList<Speaker> speakersCursor) {
+        List<Speaker> speakers = speakersCursor.asList();
         if (getView() == null) {
             return false;
         }
 
-        if (mSpeakers == null || mSpeakers.isEmpty()) {
+        if (speakers == null || speakers.isEmpty()) {
             mEmptyText.setText(getString(R.string.no_data));
             mEmptyText.setVisibility(View.VISIBLE);
             mSpeakersGrid.setVisibility(View.GONE);
@@ -136,7 +135,7 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
             mEmptyText.setText("");
             mEmptyText.setVisibility(View.GONE);
             mSpeakersGrid.setVisibility(View.VISIBLE);
-            mSpeakersGrid.setAdapter(new SpeakerAdapter(getActivity(), R.layout.speaker_short_item, mSpeakers, true));
+            mSpeakersGrid.setAdapter(new SpeakerAdapter(getActivity(), R.layout.speaker_short_item, speakers, true));
             if (mListViewState != null) {
                 mSpeakersGrid.onRestoreInstanceState(mListViewState);
             }
