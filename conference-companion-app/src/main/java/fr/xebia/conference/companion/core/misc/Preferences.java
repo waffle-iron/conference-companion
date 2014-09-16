@@ -7,6 +7,7 @@ public class Preferences {
 
     private static final String APP_PREFS = "ApplicationPreferences";
     public static final String CURRENT_CONFERENCE = "SynchroOver";
+    public static final String CURRENT_CONFERENCE_DEVOXX = "DevoxxConference";
     public static final String NFC_TAG = "NfcTag";
     public static final String BLE_HINT_DISPLAYED = "bleHintDisplayed";
 
@@ -23,9 +24,7 @@ public class Preferences {
     }
 
     public static void setSelectedConference(Context context, int conferenceId) {
-        SharedPreferences.Editor editor = getAppPreferences(context).edit();
-        editor.putInt(CURRENT_CONFERENCE, conferenceId);
-        editor.commit();
+        getAppPreferences(context).edit().putInt(CURRENT_CONFERENCE, conferenceId).apply();
     }
 
     public static SharedPreferences getAppPreferences(Context context) {
@@ -37,9 +36,7 @@ public class Preferences {
     }
 
     public static void saveDevoxxianTag(Context context, String currentNfcId) {
-        SharedPreferences.Editor editor = getAppPreferences(context).edit();
-        editor.putString(NFC_TAG, currentNfcId);
-        editor.commit();
+        getAppPreferences(context).edit().putString(NFC_TAG, currentNfcId).apply();
     }
 
     public static String getNfcId(Context context) {
@@ -50,7 +47,15 @@ public class Preferences {
         return getAppPreferences(context).getBoolean(BLE_HINT_DISPLAYED, false);
     }
 
-    public static boolean setBleHintDisplayed(Context context, boolean displayed) {
-        return getAppPreferences(context).edit().putBoolean(BLE_HINT_DISPLAYED, displayed).commit();
+    public static void setBleHintDisplayed(Context context, boolean displayed) {
+        getAppPreferences(context).edit().putBoolean(BLE_HINT_DISPLAYED, displayed).apply();
+    }
+
+    public static boolean isCurrentConferenceDevoxx(Context context) {
+        return getAppPreferences(context).getBoolean(CURRENT_CONFERENCE_DEVOXX, false);
+    }
+
+    public static void setCurrentConferenceDevoxx(Context context, boolean currentConferenceDevoxx) {
+        getAppPreferences(context).edit().putBoolean(CURRENT_CONFERENCE_DEVOXX, currentConferenceDevoxx).apply();
     }
 }

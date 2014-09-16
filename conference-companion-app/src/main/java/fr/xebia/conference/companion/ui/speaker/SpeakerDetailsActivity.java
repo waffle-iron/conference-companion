@@ -1,13 +1,13 @@
 package fr.xebia.conference.companion.ui.speaker;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 
-public class SpeakerDetailsActivity extends Activity {
+public class SpeakerDetailsActivity extends BaseActivity {
 
     public static final String EXTRA_SPEAKER_ID = "fr.xebia.devoxx.EXTRA_SPEAKER_ID";
 
@@ -23,7 +23,7 @@ public class SpeakerDetailsActivity extends Activity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, SpeakerDetailsFragment.newInstance(getIntent().getStringExtra(EXTRA_SPEAKER_ID)))
+                    .replace(R.id.main_content, SpeakerDetailsFragment.newInstance(getIntent().getStringExtra(EXTRA_SPEAKER_ID)))
                     .commit();
         }
     }

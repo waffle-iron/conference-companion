@@ -1,5 +1,6 @@
 package fr.xebia.conference.companion.ui.speaker;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -20,9 +21,8 @@ import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.transform.CircleTransform;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.Talk;
-import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
-import fr.xebia.conference.companion.ui.schedule.ScheduleItemView;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
+import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
 import icepick.Icepick;
 import icepick.Icicle;
 import se.emilsjolander.sprinkles.CursorList;
@@ -43,6 +43,8 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
 
     @Icicle String mSpeakerId;
 
+    private int mThemePrimaryColor;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,6 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
-        configureHeaders();
 
         if (mSpeakerId == null) {
             mSpeakerId = getArguments().getString(EXTRA_SPEAKER_ID);
@@ -67,9 +68,20 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
         int conferenceId = Preferences.getSelectedConference(getActivity());
         Query.one(Speaker.class, "SELECT * FROM Speakers WHERE _id=? AND conferenceId=?", mSpeakerId, conferenceId)
                 .getAsync(getLoaderManager(), this);
-        Query.many(Talk.class, "SELECT * FROM Talks AS T JOIN Speaker_Talk AS ST ON T._id=ST.talkId WHERE ST.speakerId=? AND T.conferenceId=? ORDER BY T" +
+        Query.many(Talk.class, "SELECT * FROM Talks AS T JOIN Speaker_Talk AS ST ON T._id=ST.talkId WHERE ST.speakerId=? AND T" +
+                ".conferenceId=? ORDER BY T" +
                 ".fromTime ASC", mSpeakerId, conferenceId)
                 .getAsync(getLoaderManager(), this);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Activity activity = getActivity();
+        TypedValue a = new TypedValue();
+        activity.getTheme().resolveAttribute(R.attr.themePrimaryColor, a, true);
+        mThemePrimaryColor = a.data;
+        configureHeaders();
     }
 
     @Override
@@ -79,12 +91,14 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
     }
 
     private void configureHeaders() {
-        int color = getResources().getColor(R.color.xebia_color);
-        int underlineHeight = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
-        mSpeakerBio.setUnderlineColor(color);
+        int underlineColor = getResources().getColor(R.color.list_dropdown_divider_color);
+        int underlineHeight = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
+        mSpeakerBio.setTextColor(mThemePrimaryColor);
+        mSpeakerBio.setUnderlineColor(underlineColor);
         mSpeakerBio.setUnderlineHeight(underlineHeight);
 
-        mSpeakerPresentations.setUnderlineColor(color);
+        mSpeakerPresentations.setTextColor(mThemePrimaryColor);
+        mSpeakerPresentations.setUnderlineColor(underlineColor);
         mSpeakerPresentations.setUnderlineHeight(underlineHeight);
     }
 
@@ -104,7 +118,7 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
 
         Picasso.with(getActivity())
                 .load(speaker.getImageURL())
-                .placeholder(R.drawable.ic_default_gravatar)
+                .placeholder(R.drawable.speaker_placeholder_round)
                 .fit()
                 .transform(CircleTransform.getInstance())
                 .centerCrop()
@@ -159,15 +173,17 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
         if (talks != null) {
             final LayoutInflater inflater = LayoutInflater.from(getActivity());
             for (final Talk talk : talks.asList()) {
-                ScheduleItemView scheduleItemView = (ScheduleItemView) inflater.inflate(R.layout.schedule_item_view,
+                SpeakerScheduleItemView scheduleItemView = (SpeakerScheduleItemView) inflater.inflate(R.layout.speaker_schedule_item_view,
                         mSpeakerPresentationsContent, false);
-                scheduleItemView.bindWithDay(talk);
+                scheduleItemView.bind(talk);
                 scheduleItemView.setBackgroundResource(R.drawable.text_view_selector);
                 scheduleItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), TalkActivity.class);
                         intent.putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId());
+                        intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, talk.getTitle());
+                        intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, talk.getColor());
                         startActivity(intent);
                     }
                 });

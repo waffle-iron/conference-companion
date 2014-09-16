@@ -56,8 +56,11 @@ public class VoteFragment extends ListFragment implements RestoreActionBarFragme
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TalkVote talkVote = mAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), TalkActivity.class);
-                intent.putExtra(TalkActivity.EXTRA_TALK_ID, mAdapter.getItem(position).getTalkId());
+                intent.putExtra(TalkActivity.EXTRA_TALK_ID, talkVote.getTalkId());
+                intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, talkVote.getTitle());
+                intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, talkVote.getTalkColor());
                 startActivity(intent);
             }
         });

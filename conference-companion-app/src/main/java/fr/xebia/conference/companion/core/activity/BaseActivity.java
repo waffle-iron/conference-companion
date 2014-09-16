@@ -54,6 +54,13 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        selectTheme();
+    }
+
+    protected void selectTheme() {
+        boolean hasSelectedConference = Preferences.hasSelectedConference(this);
+        boolean devoxxConf = Preferences.isCurrentConferenceDevoxx(this);
+        setTheme(hasSelectedConference && devoxxConf ? R.style.Theme_Devoxx : R.style.AppTheme);
     }
 
     @Override

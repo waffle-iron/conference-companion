@@ -368,6 +368,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         BaseActivity activity = (BaseActivity) getActivity();
         activity.setActionBarAutoShowOrHideListener(null);
         activity.deregisterHideableHeaderView(mFiltersBox);
+        mGridView.setOnScrollListener(null);
         ButterKnife.reset(this);
         super.onDestroyView();
     }

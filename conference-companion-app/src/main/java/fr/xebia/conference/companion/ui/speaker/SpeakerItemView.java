@@ -4,15 +4,15 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Speaker;
+import fr.xebia.conference.companion.ui.widget.ExtendedLinearLayout;
 
-public class SpeakerItemView extends LinearLayout {
+public class SpeakerItemView extends ExtendedLinearLayout {
 
     @InjectView(R.id.speaker_image) ImageView mSpeakerImage;
     @InjectView(R.id.speaker_name) TextView mSpeakerName;

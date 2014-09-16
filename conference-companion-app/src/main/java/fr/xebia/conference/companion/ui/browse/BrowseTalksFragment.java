@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.utils.SqlUtils;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
@@ -34,15 +37,16 @@ public class BrowseTalksFragment extends ListFragment implements ManyQuery.Resul
         int conferenceId = Preferences.getSelectedConference(getActivity());
         List<String> availableTalksIds = getArguments().getStringArrayList(ARG_AVAILABLE_TALKS);
         Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? AND _id IN (" +
-                SqlUtils.toSqlArray(availableTalksIds)+ ") ORDER BY fromTime ASC", conferenceId).getAsync(getLoaderManager(), this);
+                SqlUtils.toSqlArray(availableTalksIds) + ") ORDER BY fromTime ASC", conferenceId).getAsync(getLoaderManager(), this);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setListShown(true);
-        getListView().setDividerHeight(0);
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ListView listView = getListView();
+        listView.setDividerHeight(0);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Talk talk = (Talk) getListAdapter().getItem(position);
                 Intent intent = new Intent(getActivity(), TalkActivity.class);
@@ -52,14 +56,26 @@ public class BrowseTalksFragment extends ListFragment implements ManyQuery.Resul
                 startActivity(intent);
             }
         });
+        listView.setClipToPadding(false);
+        listView.setDrawSelectorOnTop(false);
+        listView.setSelector(android.R.color.transparent);
+        listView.setPadding(listView.getPaddingLeft(), UIUtils.calculateActionBarSize(getActivity()), listView.getPaddingRight(),
+                listView.getPaddingBottom());
+        ((BaseActivity) getActivity()).enableActionBarAutoHide(listView);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mAdapter != null){
+        if (mAdapter != null) {
             setListShownNoAnimation(true);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        getListView().setOnScrollListener(null);
+        super.onDestroyView();
     }
 
     public static BrowseTalksFragment newInstance(ArrayList<String> availableTalks) {

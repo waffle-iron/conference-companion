@@ -1,13 +1,13 @@
 package fr.xebia.conference.companion.ui.conference;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.ConferenceSelectedEvent;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.service.BluetoothLocationIntentService;
 import fr.xebia.conference.companion.ui.HomeActivity;
@@ -15,7 +15,7 @@ import fr.xebia.conference.companion.ui.synchro.SynchroFragment;
 
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
-public class ConferenceChooserActivity extends Activity {
+public class ConferenceChooserActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -14,9 +13,10 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Talk;
+import fr.xebia.conference.companion.ui.widget.ExtendedRelativeLayout;
 import fr.xebia.conference.companion.ui.widget.UIUtils;
 
-public class ScheduleItemView extends RelativeLayout implements Callback {
+public class ScheduleItemView extends ExtendedRelativeLayout implements Callback {
 
     @InjectView(R.id.schedule_bg_img) ImageView mScheduleBgImg;
     @InjectView(R.id.schedule_title) TextView mScheduleTitle;

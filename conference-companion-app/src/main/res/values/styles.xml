@@ -1,22 +1,42 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="actionBarOverlayTopOffset">?android:actionBarSize</item>
         <item name="actionBarInsetStart">?android:actionBarSize</item>
         <item name="spinnerBarInsetStart">?android:actionBarSize</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
+        <item name="themePrimaryColor">@color/default_theme_primary</item>
+        <item name="themePrimaryColorLight">@color/default_theme_primary_light</item>
+        <item name="themePrimaryColorDark">@color/default_theme_primary_dark</item>
         <item name="popupItemBackground">?android:selectableItemBackground</item>
         <item name="photoItemForeground">?android:selectableItemBackground</item>
-        <item name="android:actionBarStyle">@style/XebiaActionBar</item>
+        <item name="android:actionBarStyle">@style/DefaultActionBar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav</item>
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
         <item name="android:listChoiceBackgroundIndicator">@drawable/default_list_selector_holo_light</item>
         <item name="android:activatedBackgroundIndicator">@drawable/default_activated_background_holo_light</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowActionBarOverlay">true</item>
+        <item name="listDropdownForegroundColor">@color/default_list_dropdown_foreground_color</item>
+        <item name="myScheduleItemTouchOverlay">@drawable/default_my_schedule_item_touchoverlay</item>
+        <item name="drawerItemActivatedSelector">@drawable/default_drawer_item_activated_selector</item>
+    </style>
+
+    <style name="Theme.Devoxx" parent="AppTheme">
+        <item name="themePrimaryColor">@color/devoxx_theme_primary</item>
+        <item name="themePrimaryColorLight">@color/devoxx_theme_primary_light</item>
+        <item name="themePrimaryColorDark">@color/devoxx_theme_primary_dark</item>
+        <item name="android:actionBarStyle">@style/DevoxxActionBar</item>
+        <item name="listDropdownForegroundColor">@color/devoxx_list_dropdown_foreground_color</item>
+        <item name="myScheduleItemTouchOverlay">@drawable/devoxx_my_schedule_item_touchoverlay</item>
+        <item name="drawerItemActivatedSelector">@drawable/devoxx_drawer_item_activated_selector</item>
+    </style>
+
+    <style name="Theme.Devoxx.Companion.TalkDetails" parent="Theme.Devoxx">
+        <item name="android:actionBarStyle">@style/TransparentActionBar</item>
     </style>
 
     <!-- Talk Details -->
@@ -40,8 +60,12 @@
         <item name="android:background">@null</item>
     </style>
 
-    <style name="XebiaActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="DefaultActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/actionbar_bg</item>
+    </style>
+
+    <style name="DevoxxActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/devoxx_actionbar_bg</item>
     </style>
 
     <style name="DropDownNav" parent="@android:style/Widget.Holo.Spinner">

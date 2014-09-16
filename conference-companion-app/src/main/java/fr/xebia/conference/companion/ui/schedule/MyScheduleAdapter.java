@@ -23,6 +23,7 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
     private static final int VIEW_TYPE_PAST_DURING_CONFERENCE = 2;
 
     private final Context mContext;
+    private final int mItemTouchOverlayResId;
 
     // list of items served by this adapter
     ArrayList<MyScheduleItem> mItems = new ArrayList<>();
@@ -60,16 +62,23 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
     // observers to notify about changes in the data
     ArrayList<DataSetObserver> mObservers = new ArrayList<>();
 
-    int mDefaultSessionColor;
+    int mThemePrimaryColor;
     int mDefaultStartTimeColor;
     int mDefaultEndTimeColor;
 
     public MyScheduleAdapter(Context context) {
         mContext = context;
 
-        mDefaultSessionColor = mContext.getResources().getColor(R.color.default_session_color);
+        TypedValue a = new TypedValue();
+        mContext.getTheme().resolveAttribute(R.attr.themePrimaryColor, a, true);
+        mThemePrimaryColor = a.data;
+
+        mContext.getTheme().resolveAttribute(R.attr.myScheduleItemTouchOverlay, a, true);
+        mItemTouchOverlayResId = a.resourceId;
+
         mDefaultStartTimeColor = mContext.getResources().getColor(R.color.body_text_2);
         mDefaultEndTimeColor = mContext.getResources().getColor(R.color.body_text_3);
+
     }
 
     @Override
@@ -241,14 +250,14 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
         if (item.type == MyScheduleItem.FREE) {
             view.getLayoutParams().height = isPastDuringConference ? heightPast : heightNormal;
             boxView.setBackgroundResource(R.drawable.my_schedule_item_free);
-            boxView.setForeground(res.getDrawable(R.drawable.my_schedule_item_touchoverlay));
+            boxView.setForeground(mContext.getResources().getDrawable(mItemTouchOverlayResId));
             bgImageView.setVisibility(View.GONE);
             sessionImageView.setVisibility(View.GONE);
             if (giveFeedbackButton != null) {
                 giveFeedbackButton.setVisibility(View.GONE);
             }
             slotTitleView.setText(R.string.browse_sessions);
-            slotTitleView.setTextColor(res.getColor(R.color.theme_primary));
+            slotTitleView.setTextColor(mThemePrimaryColor);
             slotTitleView.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
             if (slotSubtitleView != null) {
                 List<Talk> availableTalks = item.availableTalks;
@@ -275,7 +284,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
         } else if (item.type == MyScheduleItem.SESSION) {
             view.getLayoutParams().height = isPastDuringConference ? heightPast : heightNormal;
             boxView.setBackgroundResource(R.drawable.my_schedule_item_session);
-            boxView.setForeground(res.getDrawable(R.drawable.my_schedule_item_touchoverlay));
+            boxView.setForeground(mContext.getResources().getDrawable(mItemTouchOverlayResId));
             bgImageView.setVisibility(View.VISIBLE);
             sessionImageView.setVisibility(View.VISIBLE);
             if (giveFeedbackButton != null) {
@@ -296,7 +305,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
                     }
                 });
             }
-            int color = UIUtils.scaleSessionColorToDefaultBG(item.backgroundColor == 0 ? mDefaultSessionColor : item.backgroundColor);
+            int color = UIUtils.scaleSessionColorToDefaultBG(item.backgroundColor == 0 ? mThemePrimaryColor : item.backgroundColor);
 
             final ColorDrawable colorDrawable = new ColorDrawable(color);
             bgImageView.setImageDrawable(colorDrawable);

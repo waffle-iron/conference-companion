@@ -25,7 +25,6 @@ import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.model.Vote;
 import fr.xebia.conference.companion.ui.note.MemoActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerDetailsActivity;
-import fr.xebia.conference.companion.ui.speaker.SpeakerItemView;
 import fr.xebia.conference.companion.ui.widget.CheckableFrameLayout;
 import fr.xebia.conference.companion.ui.widget.ObservableScrollView;
 import fr.xebia.conference.companion.ui.widget.UIUtils;
@@ -36,7 +35,8 @@ import se.emilsjolander.sprinkles.*;
 
 import java.util.LinkedHashSet;
 
-import static android.view.View.*;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
@@ -397,10 +397,13 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
         mSpeakersContainer.removeAllViews();
-        if (speakers != null) {
+        if (speakers != null && speakers.size() > 0) {
+            mSpeakers.setVisibility(VISIBLE);
+            mSpeakersContainer.setVisibility(VISIBLE);
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             for (final Speaker speaker : speakers.asList()) {
-                SpeakerItemView speakerView = (SpeakerItemView) inflater.inflate(R.layout.speaker_short_item, mSpeakersContainer, false);
+                TalkSpeakerItemView speakerView = (TalkSpeakerItemView) inflater.inflate(R.layout.talk_speaker_item_view,
+                        mSpeakersContainer, false);
                 speakerView.bind(speaker);
                 speakerView.setBackgroundResource(R.drawable.text_view_selector);
                 speakerView.setOnClickListener(new View.OnClickListener() {
@@ -414,6 +417,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 mSpeakersContainer.addView(speakerView);
             }
             mTalk.setSpeakers(new LinkedHashSet<>(speakers.asList()));
+        } else {
+            mSpeakers.setVisibility(GONE);
+            mSpeakersContainer.setVisibility(GONE);
         }
         return false;
     }

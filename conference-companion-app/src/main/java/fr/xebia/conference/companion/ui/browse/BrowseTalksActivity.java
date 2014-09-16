@@ -1,15 +1,20 @@
 package fr.xebia.conference.companion.ui.browse;
 
-import android.app.Activity;
 import android.os.Bundle;
+import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.activity.BaseActivity;
+import fr.xebia.conference.companion.core.activity.BaseActivity.OnActionBarAutoShowOrHideListener;
+import fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout;
 
 import java.util.ArrayList;
 
-public class BrowseTalksActivity extends Activity {
+public class BrowseTalksActivity extends BaseActivity implements OnActionBarAutoShowOrHideListener {
 
     public static final String EXTRA_TITLE = "fr.xebia.conference.companion.EXTRA_TITLE";
     public static String EXTRA_AVAILABLE_TALKS = "fr.xebia.conference.companion.EXTRA_AVAILABLE_TALKS";
+
+    @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,15 +23,20 @@ public class BrowseTalksActivity extends Activity {
 
         String title = getIntent().getStringExtra(EXTRA_TITLE);
         getActionBar().setTitle(title);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getFragmentManager().findFragmentByTag(BrowseTalksFragment.TAG) == null) {
             ArrayList<String> availableTalksIds = getIntent().getStringArrayListExtra(EXTRA_AVAILABLE_TALKS);
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, BrowseTalksFragment.newInstance(availableTalksIds), BrowseTalksFragment.TAG)
+                    .replace(R.id.main_content, BrowseTalksFragment.newInstance(availableTalksIds), BrowseTalksFragment.TAG)
                     .commit();
         }
 
+        setActionBarAutoShowOrHideListener(this);
     }
 
+    public void onActionBarAutoShowOrHide(boolean shown) {
+        mDrawShadowFrameLayout.setShadowVisible(shown, true);
+    }
 
 }

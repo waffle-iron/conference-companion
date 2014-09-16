@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:background="@color/theme_primary"
+                android:background="?themePrimaryColor"
                 android:paddingBottom="6dp"
                 android:paddingTop="6dp"
                 android:textColor="@color/body_text_1_inverse" />

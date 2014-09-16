@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
 import fr.xebia.conference.companion.core.KouignAmanApplication;
+import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.*;
 import se.emilsjolander.sprinkles.ModelList;
 import se.emilsjolander.sprinkles.Query;
@@ -24,6 +25,8 @@ public class SynchroIntentService extends IntentService {
 
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.conference.companion.EXTRA_CONFERENCE_ID";
 
+    public static final String DEVOXX_CONF = "devoxx";
+
     public SynchroIntentService() {
         super(TAG);
     }
@@ -40,6 +43,7 @@ public class SynchroIntentService extends IntentService {
                 synchroniseSpeakers(conferenceId, transaction);
                 synchroniseTalks(conferenceId, transaction);
                 transaction.setSuccessful(true);
+                Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
                 BUS.post(new SynchroFinishedEvent(true, conference));
             }
         } catch (Exception e) {

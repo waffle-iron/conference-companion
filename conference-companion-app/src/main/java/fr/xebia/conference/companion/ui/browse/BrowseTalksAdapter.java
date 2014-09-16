@@ -30,6 +30,6 @@ public class BrowseTalksAdapter extends BaseAdapter<List<Talk>> {
 
     @Override
     public long getItemId(int position) {
-        return getData().get(position).getTalkDetailsId().hashCode();
+        return getData().get(position).getId().hashCode();
     }
 }

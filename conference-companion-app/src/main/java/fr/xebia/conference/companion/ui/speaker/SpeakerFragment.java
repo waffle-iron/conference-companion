@@ -107,8 +107,10 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         ((BaseActivity) getActivity()).setActionBarAutoShowOrHideListener(null);
+        mSpeakersGrid.setOnScrollListener(null);
+        ButterKnife.reset(this);
+        super.onDestroyView();
     }
 
     private void enableTransition() {

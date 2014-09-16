@@ -1,5 +1,6 @@
 package fr.xebia.conference.companion.ui.speaker;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
@@ -11,6 +12,9 @@ public class SpeakerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaker_activity);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(R.string.speakers);
     }
 
     @Override
@@ -26,5 +30,15 @@ public class SpeakerActivity extends BaseActivity {
     @Override
     protected int getSelfNavDrawerItem() {
         return DrawerAdapter.MENU_SPEAKERS;
+    }
+
+    @Override
+    public void onNavigationDrawerToggle(boolean opened) {
+        super.onNavigationDrawerToggle(opened);
+        if (!opened) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(R.string.speakers);
+        }
     }
 }

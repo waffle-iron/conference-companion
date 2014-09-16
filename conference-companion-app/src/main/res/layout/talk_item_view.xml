@@ -15,12 +15,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<fr.xebia.conference.companion.ui.browse.TalkItemView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.conference.companion.ui.browse.TalkItemView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:padding="3dp"
     android:layout_height="300dp"
-    android:foreground="?android:selectableItemBackground">
+    android:foreground="?photoItemForeground">
 
     <!-- Session info -->
     <LinearLayout
@@ -29,17 +28,20 @@
         android:layout_height="match_parent">
 
         <!-- Session image -->
-        <FrameLayout android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <ImageView android:id="@+id/talk_photo"
+            <ImageView
+                android:id="@+id/talk_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop" />
 
             <!-- Session category/group if non-default (e.g. "Workshop") -->
-            <TextView android:id="@+id/talk_category"
+            <TextView
+                android:id="@+id/talk_category"
                 style="@style/ExploreItem.Category"
                 android:padding="16dp"
                 android:layout_width="wrap_content"
@@ -55,23 +57,26 @@
             android:gravity="center"
             android:padding="16dp"
             android:orientation="vertical"
-            android:background="@color/theme_primary">
+            android:background="?themePrimaryColor">
 
             <!-- Session title -->
-            <TextView android:id="@+id/talk_title"
+            <TextView
+                android:id="@+id/talk_title"
                 style="@style/ExploreItem.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <!-- Subtitle -->
-            <TextView android:id="@+id/talk_subtitle"
+            <TextView
+                android:id="@+id/talk_subtitle"
                 style="@style/ExploreItem.Subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp" />
 
             <!-- Abstract snippet -->
-            <TextView android:id="@+id/talk_snippet"
+            <TextView
+                android:id="@+id/talk_snippet"
                 style="@style/ExploreItem.Snippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +86,8 @@
     </LinearLayout>
 
     <!-- "In schedule" indicator -->
-    <ImageView android:id="@+id/indicator_in_schedule"
+    <ImageView
+        android:id="@+id/indicator_in_schedule"
         android:layout_gravity="top|end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
