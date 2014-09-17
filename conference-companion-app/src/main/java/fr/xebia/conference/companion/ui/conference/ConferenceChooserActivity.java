@@ -21,6 +21,7 @@ public class ConferenceChooserActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.conference_chooser_activity);
+        mDontCheckConference = true;
         getWindow().setBackgroundDrawableResource(android.R.color.white);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);

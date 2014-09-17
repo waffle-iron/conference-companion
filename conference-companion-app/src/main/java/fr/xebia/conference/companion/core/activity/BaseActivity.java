@@ -42,6 +42,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     private int mActionBarAutoHideMinY = 0;
     private int mActionBarAutoHideSignal = 0;
     private boolean mActionBarShown = true;
+    protected boolean mDontCheckConference = false;
     private OnActionBarAutoShowOrHideListener mActionBarAutoShowOrHideListener;
 
     private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
@@ -68,7 +69,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
         super.onPostCreate(savedInstanceState);
         ButterKnife.inject(this);
         boolean hasSelectedConference = Preferences.hasSelectedConference(this);
-        if (!hasSelectedConference) {
+        if (!hasSelectedConference && !mDontCheckConference) {
             startActivity(new Intent(this, ConferenceChooserActivity.class));
             finish();
         } else {
@@ -101,7 +102,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     protected void onResume() {
         super.onResume();
-        if (!Preferences.isBleHintDisplayed(this)) {
+        if (!Preferences.isBleHintDisplayed(this) && !mDontCheckConference) {
             Preferences.setBleHintDisplayed(this, true);
             final AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.informations)
