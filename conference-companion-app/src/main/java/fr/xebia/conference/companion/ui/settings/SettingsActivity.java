@@ -2,8 +2,6 @@ package fr.xebia.conference.companion.ui.settings;
 
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.view.MenuItem;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
@@ -34,16 +32,5 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected int getSelfNavDrawerItem() {
         return DrawerAdapter.MENU_SETTINGS;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
