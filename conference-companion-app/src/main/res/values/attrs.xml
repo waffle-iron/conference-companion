@@ -45,10 +45,19 @@
         <attr name="shadowVisible" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="CollectionView">
+        <attr name="internalPadding" format="dimension" />
+        <attr name="contentTopClearance" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="BezelImageView">
         <attr name="maskDrawable" format="reference" />
         <attr name="borderDrawable" format="reference" />
         <attr name="desaturateOnPress" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="Theme.Companion">
+        <attr name="isFloatingWindow" format="boolean" />
     </declare-styleable>
 
 </resources>

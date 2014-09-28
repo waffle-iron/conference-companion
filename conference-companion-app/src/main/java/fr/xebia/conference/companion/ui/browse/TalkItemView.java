@@ -3,12 +3,15 @@ package fr.xebia.conference.companion.ui.browse;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Talk;
 
@@ -21,6 +24,7 @@ public class TalkItemView extends FrameLayout {
     @InjectView(R.id.talk_snippet) TextView mTalkSnippet;
     @InjectView(R.id.indicator_in_schedule) ImageView mInSchedule;
     @InjectView(R.id.info_box) ViewGroup mInfoBox;
+    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     public TalkItemView(Context context) {
         super(context);
@@ -38,16 +42,41 @@ public class TalkItemView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.inject(this);
+        mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                if (mTalkSnippet.getLineCount() > 3) {
+                    int lineEndIndex = mTalkSnippet.getLayout().getLineEnd(2);
+                    String text = mTalkSnippet.getText().subSequence(0, lineEndIndex - 3) + "...";
+                    mTalkSnippet.setText(text);
+                }
+
+            }
+        };
     }
 
-    public void bind(Talk talk) {
+
+    public void bind(Talk talk, boolean conferenceEnded) {
         setTag(talk);
-        Picasso.with(getContext()).load(R.drawable.devoxx_talk_template).into(mTalkPhoto);
+        setBackgroundColor(talk.getColor());
+        Picasso.with(getContext()).load(R.drawable.devoxx_talk_template)
+                .fit()
+                .centerCrop()
+                .into(mTalkPhoto);
         mTalkCategory.setText(talk.getType());
         mTalkTitle.setText(talk.getTitle());
-        mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
+
+        if (!conferenceEnded && System.currentTimeMillis() > talk.getToTime().getTime()) {
+            mTalkSubTitle.setText(getResources().getString(R.string.ended));
+        } else {
+            mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
+        }
+
         mTalkSnippet.setText(talk.getSummary());
         mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
         mInfoBox.setBackgroundColor(talk.getColor());
+
+        getViewTreeObserver().addOnGlobalLayoutListener(mGlobalLayoutListener);
     }
 }

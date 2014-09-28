@@ -77,7 +77,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @Icicle String mExtraTalkTitle;
     @Icicle int mExtraTalkColor;
 
-    private Menu mOptionsMenu;
     private Talk mTalk;
     private int mConferenceId;
     private int mAddScheduleBtnHeightPixels;
@@ -118,7 +117,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.talk, menu);
-        mOptionsMenu = menu;
     }
 
     @Override

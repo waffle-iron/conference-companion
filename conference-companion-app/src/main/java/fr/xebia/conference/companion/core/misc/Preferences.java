@@ -6,10 +6,11 @@ import android.content.SharedPreferences;
 public class Preferences {
 
     private static final String APP_PREFS = "ApplicationPreferences";
-    public static final String CURRENT_CONFERENCE = "SynchroOver";
-    public static final String CURRENT_CONFERENCE_DEVOXX = "DevoxxConference";
-    public static final String NFC_TAG = "NfcTag";
-    public static final String BLE_HINT_DISPLAYED = "bleHintDisplayed";
+    private static final String CURRENT_CONFERENCE = "SynchroOver";
+    private static final String CURRENT_CONFERENCE_DEVOXX = "DevoxxConference";
+    private static final String NFC_TAG = "NfcTag";
+    private static final String BLE_HINT_DISPLAYED = "bleHintDisplayed";
+    private static final String CURRENT_CONFERENCE_END_TIME = "CurrentConferenceEndTime";
 
     private Preferences() {
 
@@ -19,12 +20,20 @@ public class Preferences {
         return getAppPreferences(context).getInt(CURRENT_CONFERENCE, -1);
     }
 
+    public static void setSelectedConference(Context context, int conferenceId) {
+        getAppPreferences(context).edit().putInt(CURRENT_CONFERENCE, conferenceId).apply();
+    }
+
     public static boolean hasSelectedConference(Context context) {
         return getAppPreferences(context).contains(CURRENT_CONFERENCE);
     }
 
-    public static void setSelectedConference(Context context, int conferenceId) {
-        getAppPreferences(context).edit().putInt(CURRENT_CONFERENCE, conferenceId).apply();
+    public static long getSelectedConferenceEndTime(Context context) {
+        return getAppPreferences(context).getInt(CURRENT_CONFERENCE_END_TIME, -1);
+    }
+
+    public static void setSelectedConferenceEndTime(Context context, long conferenceEndTime) {
+        getAppPreferences(context).edit().putLong(CURRENT_CONFERENCE_END_TIME, conferenceEndTime).apply();
     }
 
     public static SharedPreferences getAppPreferences(Context context) {

@@ -15,9 +15,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<fr.xebia.conference.companion.ui.browse.TalkItemView xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.conference.companion.ui.browse.TalkItemView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="3dp"
     android:layout_height="300dp"
     android:foreground="?photoItemForeground">
 
@@ -37,15 +37,15 @@
                 android:id="@+id/talk_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
             <!-- Session category/group if non-default (e.g. "Workshop") -->
             <TextView
                 android:id="@+id/talk_category"
                 style="@style/ExploreItem.Category"
-                android:padding="16dp"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
         </FrameLayout>
 
@@ -54,8 +54,8 @@
             android:id="@+id/info_box"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:gravity="center"
-            android:padding="16dp"
+            android:gravity="top|left"
+            android:padding="8dp"
             android:orientation="vertical"
             android:background="?themePrimaryColor">
 
@@ -64,7 +64,7 @@
                 android:id="@+id/talk_title"
                 style="@style/ExploreItem.Title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <!-- Subtitle -->
             <TextView
@@ -72,15 +72,14 @@
                 style="@style/ExploreItem.Subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp" />
+                android:paddingBottom="8dp"/>
 
             <!-- Abstract snippet -->
             <TextView
                 android:id="@+id/talk_snippet"
                 style="@style/ExploreItem.Snippet"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="3" />
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -92,6 +91,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/indicator_in_schedule"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"/>
 
 </fr.xebia.conference.companion.ui.browse.TalkItemView>

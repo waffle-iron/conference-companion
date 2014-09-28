@@ -1,16 +1,17 @@
 package fr.xebia.conference.companion.ui.schedule;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.widget.ExtendedRelativeLayout;
@@ -23,6 +24,8 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @InjectView(R.id.schedule_speakers) TextView mScheduleSpeakers;
     @InjectView(R.id.schedule_room) TextView mScheduleRoom;
     @InjectView(R.id.indicator_in_schedule) View mInSchedule;
+    private boolean wideMode;
+    private boolean landscape;
 
     public ScheduleItemView(Context context) {
         super(context);
@@ -36,51 +39,40 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.inject(this);
+        wideMode = getContext().getResources().getBoolean(R.bool.wide_mode);
+        landscape = getContext().getResources().getBoolean(R.bool.landscape);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+        final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        super.onMeasure(widthMeasureSpec, wideMode && landscape ?
+                MeasureSpec.makeMeasureSpec((int) (widthSize / 1.7f), widthMode) : widthMeasureSpec);
     }
 
-    public void bind(Talk talk) {
-        Resources resources = getResources();
-        bindIcons(resources, talk);
-        mScheduleTitle.setText(talk.getTitle());
-        mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
-        mScheduleSpeakers.setText(talk.getPrettySpeakers());
-        if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
-            mScheduleSpeakers.setText(talk.getPrettySpeakers());
-            mScheduleSpeakers.setVisibility(VISIBLE);
-        } else {
-            mScheduleSpeakers.setVisibility(INVISIBLE);
-        }
-        mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
-    }
-
-    public void bindWithDay(Talk talk) {
-        Resources resources = getResources();
-        bindIcons(resources, talk);
-        mScheduleTitle.setText(talk.getTitle());
-        mScheduleRoom.setText(String.format("%s - %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
-        mScheduleSpeakers.setText(talk.getPrettySpeakers());
-        if (!TextUtils.isEmpty(talk.getPrettySpeakers())) {
-            mScheduleSpeakers.setText(talk.getPrettySpeakers());
-            mScheduleSpeakers.setVisibility(VISIBLE);
-        } else {
-            mScheduleSpeakers.setVisibility(INVISIBLE);
-        }
-        mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
-    }
-
-    private void bindIcons(Resources resources, Talk talk) {
+    public void bind(Talk talk, boolean conferenceEnded) {
         setBackgroundColor(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setColorFilter(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
+        mScheduleBgImg.setBackgroundColor(talk.getColor());
         Picasso.with(getContext())
                 .load(R.drawable.devoxx_template)
                 .fit()
-                .centerInside()
+                .centerCrop()
                 .into(mScheduleBgImg);
+
+        mScheduleTitle.setText(talk.getTitle());
+
+        if (!conferenceEnded && System.currentTimeMillis() > talk.getToTime().getTime()) {
+            mScheduleRoom.setText(getResources().getString(R.string.ended));
+        } else {
+            mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
+        }
+
+        mScheduleSpeakers.setText(talk.getPrettySpeakers());
+        mScheduleSpeakers.setVisibility(TextUtils.isEmpty(talk.getPrettySpeakers()) ? INVISIBLE : VISIBLE);
+
+        mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
     }
 
     @Override

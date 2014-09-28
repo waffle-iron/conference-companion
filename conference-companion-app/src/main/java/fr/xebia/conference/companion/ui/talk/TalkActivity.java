@@ -1,10 +1,14 @@
 package fr.xebia.conference.companion.ui.talk;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.WindowManager;
+
 import butterknife.ButterKnife;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
@@ -18,6 +22,10 @@ public class TalkActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (shouldBeFloatingWindow()) {
+            setupFloatingWindow();
+        }
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.talk_activity);
@@ -32,6 +40,27 @@ public class TalkActivity extends BaseActivity {
                             intent.getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)))
                     .commit();
         }
+    }
+
+    private void setupFloatingWindow() {
+        // configure this Activity as a floating window, dimming the background
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.width = getResources().getDimensionPixelSize(R.dimen.talk_details_floating_width);
+        params.height = getResources().getDimensionPixelSize(R.dimen.talk_details_floating_height);
+        params.alpha = 1;
+        params.dimAmount = 0.7f;
+        params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        getWindow().setAttributes(params);
+    }
+
+    private boolean shouldBeFloatingWindow() {
+        Resources.Theme theme = getTheme();
+        TypedValue floatingWindowFlag = new TypedValue();
+        if (theme == null || !theme.resolveAttribute(R.attr.isFloatingWindow, floatingWindowFlag, true)) {
+            // isFloatingWindow flag is not defined in theme
+            return false;
+        }
+        return (floatingWindowFlag.data != 0);
     }
 
     @Override

@@ -1,3 +1,4 @@
 <resources>
     <bool name="landscape">false</bool>
+    <bool name="wide_mode">false</bool>
 </resources>

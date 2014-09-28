@@ -10,6 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
@@ -24,30 +28,21 @@ import fr.xebia.conference.companion.ui.settings.SettingsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerActivity;
 import timber.log.Timber;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BaseActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private static final int HEADER_HIDE_ANIM_DURATION = 300;
-
     public static final String HOME_FRAG_TAG = "HOME";
-
-    @InjectView(R.id.main_content) @Optional View mMainContent;
-
+    private static final int HEADER_HIDE_ANIM_DURATION = 300;
+    private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
+    private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
     protected NavigationDrawerFragment mNavigationDrawerFragment;
-
+    protected boolean mDontCheckConference = false;
+    @InjectView(R.id.main_content) @Optional View mMainContent;
     private boolean mActionBarAutoHideEnabled = false;
     private int mActionBarAutoHideSensivity = 0;
     private int mActionBarAutoHideMinY = 0;
     private int mActionBarAutoHideSignal = 0;
     private boolean mActionBarShown = true;
-    protected boolean mDontCheckConference = false;
     private OnActionBarAutoShowOrHideListener mActionBarAutoShowOrHideListener;
-
-    private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
-    private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
-
     private List<View> mHideableHeaderViews = new ArrayList<>();
 
     private Handler handler = new Handler();

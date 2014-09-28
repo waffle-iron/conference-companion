@@ -42,4 +42,8 @@
     <dimen name="action_bar_auto_hide_sensivity">48dp</dimen>
 
     <dimen name="tag_color_dot_size">12dp</dimen>
+    <dimen name="explore_grid_padding">4dp</dimen>
+
+    <dimen name="talk_details_floating_width">500dp</dimen>
+    <dimen name="talk_details_floating_height">650dp</dimen>
 </resources>

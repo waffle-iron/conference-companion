@@ -9,6 +9,9 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
+import java.util.ArrayList;
+
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
@@ -23,15 +26,12 @@ import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 
-import java.util.ArrayList;
-
 public class MyScheduleActivity extends BaseActivity implements ManyQuery.ResultHandler<Talk> {
 
     @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
     @InjectView(R.id.pager_strip) PagerTabStrip mPagerStrip;
     @InjectView(R.id.view_pager) ViewPager mViewPager;
 
-    private MySchedulePagerAdapter mAdapter;
     private MySchedule mMySchedule;
     private boolean mStopped;
 
@@ -39,14 +39,14 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_schedule_activity);
+        int conferenceId = Preferences.getSelectedConference(this);
+        String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC";
+        Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        int conferenceId = Preferences.getSelectedConference(this);
-        String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC";
-        Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
         mPagerStrip.setDrawFullUnderline(true);
         getActionBar().setTitle(R.string.my_schedule);
         mDrawShadowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -102,12 +102,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     }
 
     private void setAdapter() {
-        if (mAdapter == null) {
-            mAdapter = new MySchedulePagerAdapter(mMySchedule, getFragmentManager());
-            mViewPager.setAdapter(mAdapter);
-        } else {
-            mAdapter.setSchedule(mMySchedule);
-        }
+        mViewPager.setAdapter(new MySchedulePagerAdapter(mMySchedule, getFragmentManager()));
     }
 
     public static class MySchedulePagerAdapter extends FragmentPagerAdapter {
