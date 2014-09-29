@@ -8,7 +8,7 @@
     <string name="memo_saved">Memo saved</string>
     <string name="memo">Memo</string>
     <string name="markdown_allowed">Markdown allowed</string>
-    <string name="action_send">Sent</string>
+    <string name="action_send">Send</string>
     <string name="cannot_send_email">No mail client found</string>
     <string name="send_memo_via">Send memo by</string>
     <string name="authors">Authors</string>
