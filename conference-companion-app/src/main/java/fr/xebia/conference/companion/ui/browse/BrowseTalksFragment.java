@@ -143,6 +143,7 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
                         .setDisplayCols(numColumns)
                         .setShowHeader(true)
                         .setHeaderLabel(getString(R.string.talks_ended))
+                        .setOffset(futureTalks.size())
                         .setItemCount(pastTalks.size());
                 inventory.addGroup(pastTalksGroup);
             }

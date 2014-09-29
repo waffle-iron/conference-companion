@@ -69,12 +69,12 @@ public class BrowseTalksAdapter extends BaseAdapter<List<Talk>> implements Colle
     }
 
     @Override
-    public View newCollectionItemView(Context context, int groupId, ViewGroup parent) {
+    public View newCollectionItemView(Context context, int index, ViewGroup parent) {
         return newView(parent);
     }
 
     @Override
-    public void bindCollectionItemView(Context context, View view, int groupId, int indexInGroup) {
-        bindView(indexInGroup, view);
+    public void bindCollectionItemView(Context context, View view, int index) {
+        bindView(index, view);
     }
 }

@@ -240,7 +240,7 @@ public class CollectionView extends ListView {
             view = mCallbacks.newCollectionItemView(getContext(), rowInfo.groupId, parent);
         }
 
-        mCallbacks.bindCollectionItemView(getContext(), view, rowInfo.groupId, indexInGroup);
+        mCallbacks.bindCollectionItemView(getContext(), view, rowInfo.group.getOffset() + indexInGroup);
         return view;
     }
 
@@ -373,6 +373,7 @@ public class CollectionView extends ListView {
         private int mDataIndexStart = 0;
         private int mDisplayCols = 1;
         private int mItemCount = 0;
+        private int mOffset;
 
         public InventoryGroup(int groupId) {
             mGroupId = groupId;
@@ -385,6 +386,7 @@ public class CollectionView extends ListView {
             mDisplayCols = copyFrom.mDisplayCols;
             mItemCount = copyFrom.mItemCount;
             mHeaderLabel = copyFrom.mHeaderLabel;
+            mOffset = copyFrom.mOffset;
         }
 
         public InventoryGroup setShowHeader(boolean showHeader) {
@@ -423,6 +425,15 @@ public class CollectionView extends ListView {
 
         public int getRowCount() {
             return (mShowHeader ? 1 : 0) + (mItemCount / mDisplayCols) + ((mItemCount % mDisplayCols > 0) ? 1 : 0);
+        }
+
+        public int getOffset() {
+            return mOffset;
+        }
+
+        public InventoryGroup setOffset(int offset) {
+            mOffset = offset;
+            return this;
         }
     }
 

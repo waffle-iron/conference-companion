@@ -3,6 +3,7 @@ package fr.xebia.conference.companion.ui.talk;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -77,7 +78,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.track_memo_value) TextView mMemoContent;
     @InjectView(R.id.speakers) UnderlinedTextView mSpeakers;
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
-    @InjectView(R.id.talk_note) RatingBar mTalkNote;
+    @InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
+    @InjectView(R.id.talk_rating_bar) RatingBar mTalkRatingBar;
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
@@ -195,16 +197,12 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 .ResultHandler<Vote>() {
             @Override
             public boolean handleResult(Vote vote) {
-                if (getView() == null) {
+                if (vote == null || getView() == null) {
                     return false;
                 }
 
-                if (vote == null) {
-                    mTalkNote.setVisibility(GONE);
-                } else {
-                    mTalkNote.setVisibility(VISIBLE);
-                    mTalkNote.setRating(vote.getNote());
-                }
+                mTalkRatingBar.setRating(vote.getNote());
+
                 return false;
             }
         }, null);
@@ -233,6 +231,10 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mMemo.setUnderlineColor(dividerColor);
         mMemo.setUnderlineHeight(underlineHeight);
         mMemo.setTextColor(mExtraTalkColor);
+
+        mTalkRating.setUnderlineColor(dividerColor);
+        mTalkRating.setUnderlineHeight(underlineHeight);
+        mTalkRating.setTextColor(mExtraTalkColor);
     }
 
     private void setupCustomScrolling() {
@@ -390,6 +392,15 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mTrackContent.setText(talk.getTrack());
 
         bindMemo();
+
+        long now = System.currentTimeMillis();
+        boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
+        if (now > talk.getToUtcTime() - 5 * 60 * 1000 && !conferenceEnded) {
+            mTalkRating.setVisibility(VISIBLE);
+            mTalkRatingBar.setVisibility(VISIBLE);
+        }
+        mTalkRatingBar.setIsIndicator(conferenceEnded);
+        mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
                         ".conferenceId=?",

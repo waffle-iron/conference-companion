@@ -24,6 +24,6 @@ public interface CollectionViewCallbacks {
     View newCollectionHeaderView(Context context, ViewGroup parent);
     void bindCollectionHeaderView(Context context, View view, int groupId, String headerLabel);
 
-    View newCollectionItemView(Context context, int groupId, ViewGroup parent);
-    void bindCollectionItemView(Context context, View view, int groupId, int indexInGroup);
+    View newCollectionItemView(Context context, int index, ViewGroup parent);
+    void bindCollectionItemView(Context context, View view, int index);
 }

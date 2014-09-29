@@ -200,6 +200,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                         .setDisplayCols(numColumns)
                         .setShowHeader(true)
                         .setHeaderLabel(getString(R.string.talks_ended))
+                        .setOffset(futureTalks.size())
                         .setItemCount(pastTalks.size());
                 inventory.addGroup(pastTalksGroup);
             }

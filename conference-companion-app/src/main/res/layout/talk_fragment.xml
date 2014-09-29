@@ -36,22 +36,29 @@
             android:paddingRight="10dp"
             android:paddingBottom="10dp">
 
-            <LinearLayout
+            <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
+                android:id="@+id/talk_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="end">
+                android:layout_gravity="start"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="72dp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:text="@string/my_rating" />
 
-                <RatingBar
-                    android:id="@+id/talk_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    style="@style/talkRatingBar"
-                    android:max="5"
-                    android:isIndicator="true" />
-            </LinearLayout>
+            <RatingBar
+                android:id="@+id/talk_rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="77dp"
+                style="@style/talkRatingBar"
+                android:numStars="5"
+                android:stepSize="1"
+                android:visibility="gone" />
 
             <fr.xebia.conference.companion.ui.widget.UnderlinedTextView
                 android:id="@+id/track_memo_title"
