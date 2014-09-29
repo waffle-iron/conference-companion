@@ -51,6 +51,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectTheme();
+        getActionBar().setIcon(R.drawable.ic_app_no_bg);
     }
 
     protected void selectTheme() {

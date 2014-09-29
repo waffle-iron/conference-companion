@@ -109,7 +109,7 @@ public class NotificationSchedulerIntentService extends IntentService {
                         talk.getColor(),
                         NotificationSchedulerIntentService.NOTIFICATION_LED_ON_MS,
                         NotificationSchedulerIntentService.NOTIFICATION_LED_OFF_MS)
-                .setSmallIcon(R.drawable.ic_talk)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(pi)
                 .setLocalOnly(true) // make it local to the phone
                 .setAutoCancel(true);
