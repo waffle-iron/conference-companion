@@ -1,11 +1,11 @@
 package fr.xebia.conference.companion.model;
 
+import java.util.Date;
+
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
-
-import java.util.Date;
 
 @Table("Votes")
 public class TalkVote extends Model {

@@ -1,5 +1,6 @@
 package fr.xebia.conference.companion.ui.talk;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -13,12 +14,21 @@ import butterknife.ButterKnife;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.model.Talk;
 
 public class TalkActivity extends BaseActivity {
 
     public static final String EXTRA_TALK_ID = "fr.xebia.devoxx.EXTRA_TALK_ID";
     public static final String EXTRA_TALK_TITLE = "fr.xebia.devoxx.EXTRA_TALK_TITLE";
     public static final String EXTRA_TALK_COLOR = "fr.xebia.devoxx.EXTRA_TALK_COLOR";
+
+    public static Intent buildIntentFromTalk(Context context, Talk talk) {
+        Intent intent = new Intent(context, TalkActivity.class);
+        intent.putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId());
+        intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, talk.getTitle());
+        intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, talk.getColor());
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

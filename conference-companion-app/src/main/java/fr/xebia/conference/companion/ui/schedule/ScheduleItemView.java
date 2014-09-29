@@ -63,7 +63,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
 
         mScheduleTitle.setText(talk.getTitle());
 
-        if (!conferenceEnded && System.currentTimeMillis() > talk.getToTime().getTime()) {
+        if (!conferenceEnded && System.currentTimeMillis() > talk.getToUtcTime()) {
             mScheduleRoom.setText(getResources().getString(R.string.ended));
         } else {
             mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));

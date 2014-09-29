@@ -2,6 +2,7 @@ package fr.xebia.conference.companion.model.location;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
+
 import timber.log.Timber;
 
 /**

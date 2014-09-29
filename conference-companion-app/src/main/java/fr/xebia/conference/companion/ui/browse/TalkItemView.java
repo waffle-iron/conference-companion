@@ -67,7 +67,7 @@ public class TalkItemView extends FrameLayout {
         mTalkCategory.setText(talk.getType());
         mTalkTitle.setText(talk.getTitle());
 
-        if (!conferenceEnded && System.currentTimeMillis() > talk.getToTime().getTime()) {
+        if (!conferenceEnded && System.currentTimeMillis() > talk.getToUtcTime()) {
             mTalkSubTitle.setText(getResources().getString(R.string.ended));
         } else {
             mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));

@@ -4,20 +4,22 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.utils.TimeUtils;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
-
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 
 
 @Table("Talks")
@@ -33,8 +35,10 @@ public class Talk extends Model implements Parcelable {
 
     @JsonProperty @Column("_id") @Key private String id;
     @JsonProperty @Column("conferenceId") private int conferenceId;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT") @Column("fromTime") private Date fromTime;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT") @Column("toTime") private Date toTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris") @Column("fromTime") private Date fromTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris") @Column("toTime") private Date toTime;
+    @Column("fromUtcTime") private long fromUtcTime;
+    @Column("toUtcTime") private long toUtcTime;
     @JsonProperty private LinkedHashSet<Speaker> speakers;
     @JsonProperty @Column("room") private String room;
     @JsonProperty @Column("type") private String type;
@@ -73,6 +77,22 @@ public class Talk extends Model implements Parcelable {
 
     public Date getToTime() {
         return toTime;
+    }
+
+    public long getFromUtcTime() {
+        return fromUtcTime;
+    }
+
+    public void setFromUtcTime(long fromUtcTime) {
+        this.fromUtcTime = fromUtcTime;
+    }
+
+    public long getToUtcTime() {
+        return toUtcTime;
+    }
+
+    public void setToUtcTime(long toUtcTime) {
+        this.toUtcTime = toUtcTime;
     }
 
     public Collection<Speaker> getSpeakers() {
@@ -275,6 +295,8 @@ public class Talk extends Model implements Parcelable {
         fromTime = tmpFromTime != -1 ? new Date(tmpFromTime) : null;
         long tmpToTime = in.readLong();
         toTime = tmpToTime != -1 ? new Date(tmpToTime) : null;
+        fromUtcTime = in.readLong();
+        toUtcTime = in.readLong();
         speakers = (LinkedHashSet) in.readValue(LinkedHashSet.class.getClassLoader());
         room = in.readString();
         type = in.readString();
@@ -303,6 +325,8 @@ public class Talk extends Model implements Parcelable {
         dest.writeInt(conferenceId);
         dest.writeLong(fromTime != null ? fromTime.getTime() : -1L);
         dest.writeLong(toTime != null ? toTime.getTime() : -1L);
+        dest.writeLong(fromUtcTime);
+        dest.writeLong(toUtcTime);
         dest.writeValue(speakers);
         dest.writeString(room);
         dest.writeString(type);

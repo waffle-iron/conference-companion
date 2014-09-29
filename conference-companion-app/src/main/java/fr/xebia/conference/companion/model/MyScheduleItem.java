@@ -26,7 +26,7 @@ public class MyScheduleItem implements Parcelable {
     public boolean conflicting;
 
     public MyScheduleItem(Talk talk, boolean conflicting) {
-        this.startTime = talk.getFromTime().getTime();
+        this.startTime = talk.getFromUtcTime();
         this.selectedTalk = talk;
         this.conflicting = conflicting;
         this.type = SESSION;
@@ -54,7 +54,7 @@ public class MyScheduleItem implements Parcelable {
                 type = BREAK;
                 title = talk.getTitle();
             }
-            endTime = talk.getToTime().getTime();
+            endTime = talk.getToUtcTime();
         } else if (selectedTalk == null) {
             type = FREE;
             endTime = startTime;
@@ -64,7 +64,7 @@ public class MyScheduleItem implements Parcelable {
     }
 
     private void buildAttributesFromSelectedTalk() {
-        endTime = selectedTalk.getToTime().getTime();
+        endTime = selectedTalk.getToUtcTime();
         backgroundColor = selectedTalk.getColor();
         title = selectedTalk.getTitle();
     }

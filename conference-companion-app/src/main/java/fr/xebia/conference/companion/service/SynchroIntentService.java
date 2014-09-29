@@ -3,19 +3,28 @@ package fr.xebia.conference.companion.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.text.TextUtils;
-import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
-import fr.xebia.conference.companion.core.KouignAmanApplication;
-import fr.xebia.conference.companion.core.misc.Preferences;
-import fr.xebia.conference.companion.model.*;
-import se.emilsjolander.sprinkles.ModelList;
-import se.emilsjolander.sprinkles.Query;
-import se.emilsjolander.sprinkles.Transaction;
-import timber.log.Timber;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
+
+import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
+import fr.xebia.conference.companion.core.KouignAmanApplication;
+import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.model.Conference;
+import fr.xebia.conference.companion.model.Speaker;
+import fr.xebia.conference.companion.model.SpeakerTalk;
+import fr.xebia.conference.companion.model.Talk;
+import fr.xebia.conference.companion.model.TrackColors;
+import se.emilsjolander.sprinkles.ModelList;
+import se.emilsjolander.sprinkles.Query;
+import se.emilsjolander.sprinkles.Transaction;
+import timber.log.Timber;
 
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
@@ -41,7 +50,7 @@ public class SynchroIntentService extends IntentService {
                 BUS.post(new SynchroFinishedEvent(false, null));
             } else {
                 synchroniseSpeakers(conferenceId, transaction);
-                synchroniseTalks(conferenceId, transaction);
+                synchroniseTalks(conference, transaction);
                 transaction.setSuccessful(true);
                 Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
                 BUS.post(new SynchroFinishedEvent(true, conference));
@@ -55,7 +64,8 @@ public class SynchroIntentService extends IntentService {
         }
     }
 
-    private void synchroniseTalks(int conferenceId, Transaction transaction) {
+    private void synchroniseTalks(Conference conference, Transaction transaction) {
+        int conferenceId = conference.getId();
         Map<String, Talk> talksFromWsById = loadTalks(conferenceId);
         Map<String, Talk> talksInDbById = loadTalksFromDb(conferenceId);
         List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getSchedule(conferenceId);
@@ -80,11 +90,21 @@ public class SynchroIntentService extends IntentService {
 
             talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
 
-            if (talkToSave.getConferenceId() == 12) {
-                // Devoxx UK 2014 is a specific case
-                talkToSave.getFromTime().setTime(talkToSave.getFromTime().getTime() - 60 * 60 * 1000);
-                talkToSave.getToTime().setTime(talkToSave.getToTime().getTime() - 60 * 60 * 1000);
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+            DateTime jodaStartTime = new DateTime(talkToSave.getFromTime(), apiTimeZone);
+            DateTime jodaEndTime = new DateTime(talkToSave.getToTime(), apiTimeZone);
+
+            DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
+            if (conference.getName().toLowerCase().contains("uk")) {
+                // Devoxx UK is a specific case
+                DateTimeZone ukTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
+                talkToSave.getFromTime().setTime(jodaStartTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
+                talkToSave.getToTime().setTime(jodaEndTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
             }
+
+
+            talkToSave.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
+            talkToSave.setToUtcTime(jodaEndTime.withZone(utcTimeZone).getMillis());
 
             if (talkDetails != null || talkToSave.isBreak()) {
                 talksToSave.add(talkToSave);

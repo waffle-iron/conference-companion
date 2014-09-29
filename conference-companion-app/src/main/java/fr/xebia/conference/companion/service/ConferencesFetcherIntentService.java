@@ -2,16 +2,22 @@ package fr.xebia.conference.companion.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.DurationFieldType;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+
 import fr.xebia.conference.companion.bus.ConferenceFetchedEvent;
 import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.model.Conference;
 import retrofit.RetrofitError;
 import se.emilsjolander.sprinkles.ModelList;
 import se.emilsjolander.sprinkles.Query;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
@@ -27,11 +33,18 @@ public class ConferencesFetcherIntentService extends IntentService {
             List<Conference> conferences = KouignAmanApplication.getConferenceApi().getAvailableConferences();
             Map<Integer, Conference> conferencesInDbById = retrieveConferencesInDbById();
             ModelList<Conference> conferencesToStore = new ModelList<>();
+            DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
             for (Conference conference : conferences) {
                 Conference conferenceInDb = conferencesInDbById.remove(conference.getId());
                 if (conferenceInDb != null) {
                     conference.setNfcTag(conferenceInDb.getNfcTag());
                 }
+
+                DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
+                DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
+                conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
+                conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
                 conferencesToStore.add(conference);
             }
             conferencesToStore.addAll(conferences);

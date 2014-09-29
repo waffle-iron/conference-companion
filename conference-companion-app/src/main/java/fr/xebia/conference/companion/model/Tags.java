@@ -1,9 +1,9 @@
 package fr.xebia.conference.companion.model;
 
-import fr.xebia.conference.companion.R;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.xebia.conference.companion.R;
 
 public class Tags {
 
@@ -15,7 +15,7 @@ public class Tags {
     public static final Map<String, Integer> CATEGORY_DISPLAY_ORDERS = new HashMap<String, Integer>();
 
     public static final String[] FILTER_CATEGORIES =
-            { CATEGORY_DAY, CATEGORY_TOPIC, CATEGORY_TYPE };
+            {CATEGORY_DAY, CATEGORY_TOPIC, CATEGORY_TYPE};
 
     public static final int[] EXPLORE_CATEGORY_ALL_STRING = {
             R.string.all_days, R.string.all_topics, R.string.all_types

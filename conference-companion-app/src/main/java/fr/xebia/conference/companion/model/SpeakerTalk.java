@@ -29,7 +29,8 @@ public class SpeakerTalk extends Model {
         SpeakerTalk that = (SpeakerTalk) o;
 
         if (conferenceId != that.conferenceId) return false;
-        if (speakerId != null ? !speakerId.equals(that.speakerId) : that.speakerId != null) return false;
+        if (speakerId != null ? !speakerId.equals(that.speakerId) : that.speakerId != null)
+            return false;
         if (talkId != null ? !talkId.equals(that.talkId) : that.talkId != null) return false;
 
         return true;

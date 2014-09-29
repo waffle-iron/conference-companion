@@ -19,13 +19,11 @@ import fr.xebia.conference.companion.ui.widget.CollectionViewCallbacks;
 
 public class ScheduleAdapter extends BaseAdapter<List<Talk>> implements CollectionViewCallbacks {
 
-    private final int headerTextColor;
     private final long conferenceEndTime;
 
     public ScheduleAdapter(Context context, int viewResId, List<Talk> data) {
         super(context, viewResId, data);
         conferenceEndTime = Preferences.getSelectedConferenceEndTime(context);
-        headerTextColor = context.getResources().getColor(R.color.body_text_1);
     }
 
     @Override

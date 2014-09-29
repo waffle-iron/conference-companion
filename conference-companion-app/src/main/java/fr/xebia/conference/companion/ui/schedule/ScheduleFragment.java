@@ -173,14 +173,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 scheduleGridState = mScheduleGrid.onSaveInstanceState();
             }
 
-            mScheduleGrid.setCollectionAdapter(new ScheduleAdapter(getActivity(), itemLayout, filteredTalks));
-
             long selectedConferenceEndTime = Preferences.getSelectedConferenceEndTime(getActivity());
             List<Talk> futureTalks = new ArrayList<>();
-            List<Talk> pastTalks = new ArrayList<>();
+            final List<Talk> pastTalks = new ArrayList<>();
             long currentTime = System.currentTimeMillis();
             for (Talk talk : filteredTalks) {
-                if (currentTime > talk.getToTime().getTime() && !(currentTime > selectedConferenceEndTime)) {
+                if (currentTime >= talk.getToUtcTime() && !(currentTime > selectedConferenceEndTime)) {
                     pastTalks.add(talk);
                 } else {
                     futureTalks.add(talk);
@@ -205,6 +203,11 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                         .setItemCount(pastTalks.size());
                 inventory.addGroup(pastTalksGroup);
             }
+
+            List<Talk> mergedTalks = new ArrayList<Talk>(futureTalks) {{
+                addAll(pastTalks);
+            }};
+            mScheduleGrid.setCollectionAdapter(new ScheduleAdapter(getActivity(), itemLayout, mergedTalks));
 
             mScheduleGrid.updateInventory(inventory, mResumed);
 

@@ -1,15 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.xebia.conference.companion">
+          package="fr.xebia.conference.companion">
 
-    <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
-        android:required="false" />
+        android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -23,22 +23,22 @@
             android:launchMode="singleTop"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
             <!-- NFC  -->
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.ACTION_TAG_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.nfc.action.ACTION_TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.ACTION_TECH_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.nfc.action.ACTION_TECH_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -48,17 +48,17 @@
             android:parentActivityName=".ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
+                android:value=".ui.HomeActivity"/>
         </activity>
 
-        <activity android:name=".ui.schedule.MyScheduleActivity" />
+        <activity android:name=".ui.schedule.MyScheduleActivity"/>
 
         <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"
             android:parentActivityName=".ui.speaker.SpeakerActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.speaker.SpeakerActivity" />
+                android:value=".ui.speaker.SpeakerActivity"/>
         </activity>
 
         <activity
@@ -66,33 +66,41 @@
             android:parentActivityName=".ui.schedule.MyScheduleActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.schedule.MyScheduleActivity" />
+                android:value=".ui.schedule.MyScheduleActivity"/>
         </activity>
 
-        <activity android:name=".ui.speaker.SpeakerActivity" />
+        <activity android:name=".ui.speaker.SpeakerActivity"/>
 
         <activity
             android:name=".ui.note.MemoActivity"
             android:parentActivityName=".ui.talk.TalkActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.TalkActivity" />
+                android:value=".ui.TalkActivity"/>
         </activity>
 
-        <activity android:name=".ui.settings.SettingsActivity" />
+        <activity android:name=".ui.settings.SettingsActivity"/>
 
-        <activity android:name=".ui.conference.ConferenceChooserActivity" />
+        <activity android:name=".ui.conference.ConferenceChooserActivity"/>
 
-        <service android:name=".service.SynchroIntentService" />
-        <service android:name=".service.BluetoothLocationIntentService" />
-        <service android:name=".service.ConferencesFetcherIntentService" />
+        <service android:name=".service.SynchroIntentService"/>
+        <service android:name=".service.BluetoothLocationIntentService"/>
+        <service android:name=".service.ConferencesFetcherIntentService"/>
+        <service android:name=".service.NotificationSchedulerIntentService">
+            <intent-filter>
+                <action android:name="fr.xebia.conference.companion.service.ACTION_SCHEDULE_NOTIFICATION"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="fr.xebia.conference.companion.service.ACTION_SEND_NOTIFICATION"/>
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".core.receiver.TriggerLocationReceiver"
-            android:exported="false" />
+            android:exported="false"/>
         <meta-data
             android:name="com.crashlytics.ApiKey"
-            android:value="fcabb38c426eb4d270413b164597dce840653258" />
+            android:value="fcabb38c426eb4d270413b164597dce840653258"/>
     </application>
 
 </manifest>

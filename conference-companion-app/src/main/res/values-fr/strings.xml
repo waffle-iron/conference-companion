@@ -75,7 +75,8 @@
     <string name="ended">ended</string>
     <string name="talks_ended">Ended talks</string>
     <string name="no_talks">No talks</string>
-
+    <string name="session_notification_text">starting in <xliff:g id="remaining_time">%1$d</xliff:g> min.</string>
+    <string name="scheduled_talk_notification_ticker">1 session is about to start.</string>
     <plurals name="available_talks">
         <item quantity="zero">%1$d présentation disponible</item>
         <item quantity="one">%1$d présentation disponible</item>

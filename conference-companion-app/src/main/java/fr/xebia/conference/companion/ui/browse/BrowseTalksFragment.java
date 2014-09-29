@@ -121,7 +121,7 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
             List<Talk> pastTalks = new ArrayList<>();
             long currentTime = System.currentTimeMillis();
             for (Talk talk : mTalks) {
-                if (currentTime > talk.getToTime().getTime() && !(currentTime > selectedConferenceEndTime)) {
+                if (currentTime > talk.getToUtcTime()&& !(currentTime > selectedConferenceEndTime)) {
                     pastTalks.add(talk);
                 } else {
                     futureTalks.add(talk);

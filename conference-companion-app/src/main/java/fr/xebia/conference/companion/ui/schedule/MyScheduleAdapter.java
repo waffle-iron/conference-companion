@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.core.utils.TimeUtils;
 import fr.xebia.conference.companion.model.MyScheduleItem;
 import fr.xebia.conference.companion.model.Talk;

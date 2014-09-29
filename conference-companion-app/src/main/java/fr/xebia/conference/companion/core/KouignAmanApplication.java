@@ -2,7 +2,9 @@ package fr.xebia.conference.companion.core;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.crashlytics.android.Crashlytics;
+
 import de.greenrobot.event.EventBus;
 import fr.xebia.conference.companion.BuildConfig;
 import fr.xebia.conference.companion.api.BleLocationApi;
@@ -15,16 +17,7 @@ import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 import timber.log.Timber;
 
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
-
 public class KouignAmanApplication extends Application {
-
-    static {
-        // We don't want timezone in our application, every date is absolute
-        SimpleTimeZone tz = new SimpleTimeZone(0, "Out Timezone");
-        TimeZone.setDefault(tz);
-    }
 
     private static VoteApi sVoteApi;
     private static ConferenceApi sConferenceApi;
@@ -61,6 +54,15 @@ public class KouignAmanApplication extends Application {
             }
         });
 
+        sprinkles.addMigration(new Migration() {
+            @Override
+            protected void doMigration(SQLiteDatabase sqLiteDatabase) {
+                sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_FROM_UTC_TIME);
+                sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_TO_UTC_TIME);
+                sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_FROM_UTC_TIME);
+                sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_TO_UTC_TIME);
+            }
+        });
     }
 
     /**

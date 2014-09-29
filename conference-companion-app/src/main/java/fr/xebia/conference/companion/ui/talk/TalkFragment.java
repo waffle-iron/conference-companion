@@ -7,16 +7,26 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.commonsware.cwac.anddown.AndDown;
+
+import java.util.LinkedHashSet;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.commonsware.cwac.anddown.AndDown;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.MemoSavedEvent;
 import fr.xebia.conference.companion.core.misc.Preferences;
@@ -31,13 +41,16 @@ import fr.xebia.conference.companion.ui.widget.UIUtils;
 import fr.xebia.conference.companion.ui.widget.UnderlinedTextView;
 import icepick.Icepick;
 import icepick.Icicle;
-import se.emilsjolander.sprinkles.*;
-
-import java.util.LinkedHashSet;
+import se.emilsjolander.sprinkles.CursorList;
+import se.emilsjolander.sprinkles.ManyQuery;
+import se.emilsjolander.sprinkles.Model;
+import se.emilsjolander.sprinkles.OneQuery;
+import se.emilsjolander.sprinkles.Query;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
+import static fr.xebia.conference.companion.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -92,6 +105,16 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     private int mHeaderHeightPixels;
     private int mHeaderTopClearance;
     private boolean mGapFillShown;
+
+    public static Fragment newInstance(String talkId, String talkTitle, int color) {
+        Bundle arguments = new Bundle();
+        arguments.putString(EXTRA_TALK_ID, talkId);
+        arguments.putString(EXTRA_TALK_TITLE, talkTitle);
+        arguments.putInt(EXTRA_TALK_COLOR, color);
+        Fragment fragment = new TalkFragment();
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -220,7 +243,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
     }
 
-
     private void recomputePhotoAndScrollingMetrics() {
         final int actionBarSize = UIUtils.calculateActionBarSize(getActivity());
         mHeaderTopClearance = actionBarSize - mTalkHeaderContents.getPaddingTop();
@@ -297,6 +319,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                     boolean favorite = mTalk.isFavorite();
                     mAddScheduleBtn.setChecked(favorite, true);
                     UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, true);
+                    if (favorite && getActivity() != null) {
+                        getActivity().startService(buildScheduleNotificationIntentFromTalk(mTalk));
+                    }
                 }
             });
         }
@@ -308,7 +333,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
-
 
     @Override
     public void onStop() {
@@ -331,16 +355,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     public void onDestroy() {
         mTalk = null;
         super.onDestroy();
-    }
-
-    public static Fragment newInstance(String talkId, String talkTitle, int color) {
-        Bundle arguments = new Bundle();
-        arguments.putString(EXTRA_TALK_ID, talkId);
-        arguments.putString(EXTRA_TALK_TITLE, talkTitle);
-        arguments.putInt(EXTRA_TALK_COLOR, color);
-        Fragment fragment = new TalkFragment();
-        fragment.setArguments(arguments);
-        return fragment;
     }
 
     @Override

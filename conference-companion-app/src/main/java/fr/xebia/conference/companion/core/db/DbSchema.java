@@ -36,6 +36,15 @@ public class DbSchema {
             "  PRIMARY KEY (_id, conferenceId)\n" +
             ");";
 
+    public static final String TALKS_ADD_FROM_UTC_TIME = "ALTER TABLE Talks ADD fromUtcTime INTEGER;";
+
+    public static final String TALKS_ADD_TO_UTC_TIME = "ALTER TABLE Talks ADD toUtcTime INTEGER;";
+
+    public static final String CONFERENCES_ADD_FROM_UTC_TIME = "ALTER TABLE Conferences ADD fromUtcTime INTEGER;";
+
+    public static final String CONFERENCES_ADD_TO_UTC_TIME = "ALTER TABLE Conferences ADD toUtcTime INTEGER;";
+
+
     public static final String SPEAKER_TALKS = "CREATE TABLE Speaker_Talk (\n" +
             "  speakerId TEXT,\n" +
             "  talkId    TEXT,\n" +

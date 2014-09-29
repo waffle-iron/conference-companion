@@ -3,6 +3,8 @@ package fr.xebia.conference.companion.core.misc;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import fr.xebia.conference.companion.model.Talk;
+
 public class Preferences {
 
     private static final String APP_PREFS = "ApplicationPreferences";
@@ -29,7 +31,7 @@ public class Preferences {
     }
 
     public static long getSelectedConferenceEndTime(Context context) {
-        return getAppPreferences(context).getInt(CURRENT_CONFERENCE_END_TIME, -1);
+        return getAppPreferences(context).getLong(CURRENT_CONFERENCE_END_TIME, -1);
     }
 
     public static void setSelectedConferenceEndTime(Context context, long conferenceEndTime) {
@@ -66,5 +68,13 @@ public class Preferences {
 
     public static void setCurrentConferenceDevoxx(Context context, boolean currentConferenceDevoxx) {
         getAppPreferences(context).edit().putBoolean(CURRENT_CONFERENCE_DEVOXX, currentConferenceDevoxx).apply();
+    }
+
+    public static boolean isTalkAlreadyNotified(Context context, Talk talk) {
+        return getAppPreferences(context).getBoolean(String.format("notification_%d_%s", talk.getConferenceId(), talk.getId()), false);
+    }
+
+    public static void flagTalkAsNotified(Context context, Talk talk) {
+        getAppPreferences(context).edit().putBoolean(String.format("notification_%d_%s", talk.getConferenceId(), talk.getId()), true).apply();
     }
 }

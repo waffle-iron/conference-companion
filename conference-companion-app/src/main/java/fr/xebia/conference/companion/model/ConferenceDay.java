@@ -2,7 +2,6 @@ package fr.xebia.conference.companion.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import fr.xebia.conference.companion.core.utils.Compatibility;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,6 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import fr.xebia.conference.companion.core.utils.Compatibility;
 
 public class ConferenceDay implements Parcelable {
 
@@ -21,7 +22,7 @@ public class ConferenceDay implements Parcelable {
     public ConferenceDay(List<Talk> talks) {
         Map<Long, List<Talk>> mapTalksByStartTime = new LinkedHashMap<>();
         for (Talk talk : talks) {
-            long talkStartTime = talk.getFromTime().getTime();
+            long talkStartTime = talk.getFromUtcTime();
             List<Talk> talksForSlot = mapTalksByStartTime.get(talkStartTime);
             if (talksForSlot == null) {
                 talksForSlot = new ArrayList<>();
