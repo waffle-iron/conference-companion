@@ -72,13 +72,13 @@
     <string name="topics">Sujets</string>
     <string name="types">Types</string>
     <string name="schedule_conflict_with_previous">(Conflit)</string>
-    <string name="ended">ended</string>
-    <string name="talks_ended">Ended talks</string>
-    <string name="no_talks">No talks</string>
-    <string name="session_notification_text">starting in <xliff:g id="remaining_time">%1$d</xliff:g> min.</string>
-    <string name="scheduled_talk_notification_ticker">1 session is about to start.</string>
-    <string name="my_rating">My rating</string>
-    <string name="feedback_notification">Give your feedback</string>
+    <string name="ended">Terminée</string>
+    <string name="talks_ended">Présentations terminées</string>
+    <string name="no_talks">Pas de présentations</string>
+    <string name="session_notification_text">Démarre dans <xliff:g id="remaining_time">%1$d</xliff:g> min.</string>
+    <string name="scheduled_talk_notification_ticker">1 presentation va bientôt commencer.</string>
+    <string name="my_rating">Ma note</string>
+    <string name="feedback_notification">Donnez votre avis</string>
     <plurals name="available_talks">
         <item quantity="zero">%1$d présentation disponible</item>
         <item quantity="one">%1$d présentation disponible</item>

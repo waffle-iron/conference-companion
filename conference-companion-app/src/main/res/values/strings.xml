@@ -71,7 +71,7 @@
     <string name="topics">Topics</string>
     <string name="types">Types</string>
     <string name="schedule_conflict_with_previous">(Conflict)</string>
-    <string name="ended">ended</string>
+    <string name="ended">Ended</string>
     <string name="talks_ended">Ended talks</string>
     <string name="no_talks">No talks</string>
     <string name="session_notification_text">starting in <xliff:g id="remaining_time">%1$d</xliff:g> min.</string>
