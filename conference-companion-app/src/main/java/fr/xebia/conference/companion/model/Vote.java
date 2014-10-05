@@ -16,6 +16,16 @@ public class Vote extends Model {
     @JsonProperty @Column("_id") @Key private String talkId;
     @JsonProperty @Column("conferenceId") @Key private int conferenceId;
 
+    public Vote(){
+
+    }
+
+    public Vote(int note, String talkId, int conferenceId) {
+        this.note = note;
+        this.talkId = talkId;
+        this.conferenceId = conferenceId;
+    }
+
     public int getNote() {
         return note;
     }

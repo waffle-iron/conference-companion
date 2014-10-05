@@ -1,9 +1,12 @@
 package fr.xebia.conference.companion.core;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
+
+import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 import fr.xebia.conference.companion.BuildConfig;
@@ -11,6 +14,7 @@ import fr.xebia.conference.companion.api.BleLocationApi;
 import fr.xebia.conference.companion.api.ConferenceApi;
 import fr.xebia.conference.companion.api.VoteApi;
 import fr.xebia.conference.companion.core.db.DbSchema;
+import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.network.JacksonConverter;
 import retrofit.RestAdapter;
 import se.emilsjolander.sprinkles.Migration;
@@ -35,13 +39,18 @@ public class KouignAmanApplication extends Application {
             Timber.plant(new CrashReportingTree());
         }
 
+        Context applicationContext = getApplicationContext();
+        if(!Preferences.isDeviceIdGenerated(applicationContext)){
+            Preferences.saveGeneratedDeviceId(applicationContext, UUID.randomUUID().toString());
+        }
+
         RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setConverter(new JacksonConverter());
 
         sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.ROOT_URL).build().create(VoteApi.class);
         sBleLocationApi = restAdapterBuilder.setEndpoint(BuildConfig.LOCATION_URL).build().create(BleLocationApi.class);
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
 
-        Sprinkles sprinkles = Sprinkles.init(getApplicationContext(), "conferences.db", 0);
+        Sprinkles sprinkles = Sprinkles.init(applicationContext, "conferences.db", 0);
 
         sprinkles.addMigration(new Migration() {
             @Override

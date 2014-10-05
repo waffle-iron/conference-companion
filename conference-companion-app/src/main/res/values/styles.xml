@@ -71,6 +71,7 @@
 
     <style name="DefaultActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/actionbar_bg</item>
+        <item name="android:icon">@drawable/ic_app_no_bg</item>
     </style>
 
     <style name="DevoxxActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">

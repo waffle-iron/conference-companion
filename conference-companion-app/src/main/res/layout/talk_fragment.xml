@@ -55,6 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="77dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 style="@style/talkRatingBar"
                 android:numStars="5"
                 android:stepSize="1"

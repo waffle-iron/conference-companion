@@ -20,7 +20,7 @@
 
         <activity
             android:name=".ui.HomeActivity"
-            android:icon="@drawable/ic_app_no_bg"
+            android:icon="@drawable/ic_launcher"
             android:launchMode="singleTop"
             android:label="@string/app_name">
             <intent-filter>
@@ -93,6 +93,15 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="fr.xebia.conference.companion.service.ACTION_SEND_NOTIFICATION"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="fr.xebia.conference.companion.service.ACTION_SEND_FEEDBACK_NOTIFICATION"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".service.SendRatingIntentService">
+            <intent-filter>
+                <action android:name="fr.xebia.conference.companion.service.ACTION_SEND_RATING"/>
             </intent-filter>
         </service>
 

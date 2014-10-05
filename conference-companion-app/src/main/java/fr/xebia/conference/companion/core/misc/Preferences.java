@@ -11,8 +11,9 @@ public class Preferences {
     private static final String CURRENT_CONFERENCE = "SynchroOver";
     private static final String CURRENT_CONFERENCE_DEVOXX = "DevoxxConference";
     private static final String NFC_TAG = "NfcTag";
-    private static final String BLE_HINT_DISPLAYED = "bleHintDisplayed";
+    private static final String BLE_HINT_DISPLAYED = "BleHintDisplayed";
     private static final String CURRENT_CONFERENCE_END_TIME = "CurrentConferenceEndTime";
+    private static final String GENERATED_DEVICE_ID = "GeneratedDeviceId";
 
     private Preferences() {
 
@@ -50,6 +51,18 @@ public class Preferences {
         getAppPreferences(context).edit().putString(NFC_TAG, currentNfcId).apply();
     }
 
+    public static boolean isDeviceIdGenerated(Context context) {
+        return getAppPreferences(context).getString(GENERATED_DEVICE_ID, null) != null;
+    }
+
+    public static String getGeneratedDeviceId(Context context) {
+        return getAppPreferences(context).getString(GENERATED_DEVICE_ID, null);
+    }
+
+    public static void saveGeneratedDeviceId(Context context, String generatedDeviceId) {
+        getAppPreferences(context).edit().putString(GENERATED_DEVICE_ID, generatedDeviceId).apply();
+    }
+
     public static String getNfcId(Context context) {
         return getAppPreferences(context).getString(NFC_TAG, "");
     }
@@ -76,5 +89,13 @@ public class Preferences {
 
     public static void flagTalkAsNotified(Context context, Talk talk) {
         getAppPreferences(context).edit().putBoolean(String.format("notification_%d_%s", talk.getConferenceId(), talk.getId()), true).apply();
+    }
+
+    public static boolean isTalkFeedbackAlreadyNotified(Context context, Talk talk) {
+        return getAppPreferences(context).getBoolean(String.format("notification_feedback_%d_%s", talk.getConferenceId(), talk.getId()), false);
+    }
+
+    public static void flagTalkFeedbackAsNotified(Context context, Talk talk) {
+        getAppPreferences(context).edit().putBoolean(String.format("notification_feedback_%d_%s", talk.getConferenceId(), talk.getId()), true).apply();
     }
 }

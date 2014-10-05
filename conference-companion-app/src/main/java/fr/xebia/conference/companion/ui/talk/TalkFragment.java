@@ -52,6 +52,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 import static fr.xebia.conference.companion.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
+import static fr.xebia.conference.companion.service.SendRatingIntentService.buildSendRatingIntent;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -93,6 +94,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @Icicle int mExtraTalkColor;
 
     private Talk mTalk;
+    private Vote mVote;
+
     private int mConferenceId;
     private int mAddScheduleBtnHeightPixels;
 
@@ -131,6 +134,12 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     public void onStart() {
         super.onStart();
         BUS.register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshRatingBarState();
     }
 
     @Override
@@ -197,6 +206,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 .ResultHandler<Vote>() {
             @Override
             public boolean handleResult(Vote vote) {
+                mVote = vote;
                 if (vote == null || getView() == null) {
                     return false;
                 }
@@ -322,7 +332,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                     mAddScheduleBtn.setChecked(favorite, true);
                     UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, true);
                     if (favorite && getActivity() != null) {
-                        getActivity().startService(buildScheduleNotificationIntentFromTalk(mTalk));
+                        getActivity().startService(buildScheduleNotificationIntentFromTalk(getActivity(), mTalk));
                     }
                 }
             });
@@ -393,13 +403,22 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         bindMemo();
 
-        long now = System.currentTimeMillis();
-        boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
-        if (now > talk.getToUtcTime() - 5 * 60 * 1000 && !conferenceEnded) {
-            mTalkRating.setVisibility(VISIBLE);
-            mTalkRatingBar.setVisibility(VISIBLE);
-        }
-        mTalkRatingBar.setIsIndicator(conferenceEnded);
+        refreshRatingBarState();
+        mTalkRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (mVote != null && (int) rating == mVote.getNote()) {
+                    return;
+                }
+                Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
+                vote.saveAsync(new Model.OnSavedCallback() {
+                    @Override
+                    public void onSaved() {
+                        getActivity().startService(buildSendRatingIntent(getActivity(), mTalk));
+                    }
+                });
+            }
+        });
         mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
@@ -411,6 +430,19 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
         return false;
+    }
+
+    public void refreshRatingBarState() {
+        if (mTalk == null) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
+        if (now > mTalk.getToUtcTime() - 10 * 60 * 1000 && !conferenceEnded) {
+            mTalkRating.setVisibility(VISIBLE);
+            mTalkRatingBar.setVisibility(VISIBLE);
+        }
+        mTalkRatingBar.setIsIndicator(conferenceEnded);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -22,6 +23,7 @@ public class NotificationSchedulerIntentService extends IntentService {
 
     public static final String ACTION_SCHEDULE_NOTIFICATION = "fr.xebia.conference.companion.service.ACTION_SCHEDULE_NOTIFICATION";
     public static final String ACTION_SEND_NOTIFICATION = "fr.xebia.conference.companion.service.ACTION_SEND_NOTIFICATION";
+    public static final String ACTION_SEND_FEEDBACK_NOTIFICATION = "fr.xebia.conference.companion.service.ACTION_SEND_FEEDBACK_NOTIFICATION";
 
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.conference.companion.service.EXTRA_CONFERENCE_ID";
     public static final String EXTRA_TALK_ID = "fr.xebia.conference.companion.service.EXTRA_TALK_ID";
@@ -31,6 +33,7 @@ public class NotificationSchedulerIntentService extends IntentService {
     private static final int NOTIFICATION_LED_OFF_MS = 1000;
     private static final int MILLIS_IN_MIN = 60 * 1000;
     private static final int MILLIS_GAP_FOR_NOTIFICATION = 5 * 60 * 1000;
+    private static final int MILLIS_GAP_FOR_FEEDBACK_NOTIFICATION = 10 * 60 * 1000;
 
     private AlarmManager mAlarmManager;
 
@@ -38,17 +41,29 @@ public class NotificationSchedulerIntentService extends IntentService {
         super("NotificationSchedulerIntentService");
     }
 
-    public static Intent buildScheduleNotificationIntentFromTalk(Talk talk) {
-        Intent sendNotificationIntent = new Intent(ACTION_SCHEDULE_NOTIFICATION);
+    public static Intent buildScheduleNotificationIntentFromTalk(Context context, Talk talk) {
+        Intent sendNotificationIntent = new Intent(ACTION_SCHEDULE_NOTIFICATION, null, context, NotificationSchedulerIntentService.class);
         sendNotificationIntent.putExtra(EXTRA_CONFERENCE_ID, talk.getConferenceId());
         sendNotificationIntent.putExtra(EXTRA_TALK_ID, talk.getId());
         return sendNotificationIntent;
     }
 
-    public static Intent buildSendNotificationIntentFromTalk(Talk talk) {
-        Intent sendNotificationIntent = new Intent(ACTION_SEND_NOTIFICATION);
+    public static Intent buildSendNotificationIntentFromTalk(Context context, Talk talk) {
+        Intent sendNotificationIntent = new Intent(ACTION_SEND_NOTIFICATION, null, context, NotificationSchedulerIntentService.class);
         sendNotificationIntent.putExtra(EXTRA_CONFERENCE_ID, talk.getConferenceId());
         sendNotificationIntent.putExtra(EXTRA_TALK_ID, talk.getId());
+        sendNotificationIntent.setData(new Uri.Builder().authority("fr.xebia.conference.companion")
+                .path(String.valueOf(talk.getConferenceId())).path(talk.getId()).build());
+        return sendNotificationIntent;
+    }
+
+
+    private static Intent buildSendFeedbackNotificationIntentFromTalk(Context context, Talk talk) {
+        Intent sendNotificationIntent = new Intent(ACTION_SEND_FEEDBACK_NOTIFICATION, null, context, NotificationSchedulerIntentService.class);
+        sendNotificationIntent.putExtra(EXTRA_CONFERENCE_ID, talk.getConferenceId());
+        sendNotificationIntent.putExtra(EXTRA_TALK_ID, talk.getId());
+        sendNotificationIntent.setData(new Uri.Builder().authority("fr.xebia.conference.companion")
+                .path(String.valueOf(talk.getConferenceId())).path(talk.getId()).build());
         return sendNotificationIntent;
     }
 
@@ -73,11 +88,15 @@ public class NotificationSchedulerIntentService extends IntentService {
             case ACTION_SEND_NOTIFICATION:
                 sendNotification(talk);
                 break;
+            case ACTION_SEND_FEEDBACK_NOTIFICATION:
+                sendFeedbackNotification(talk);
+                break;
         }
     }
 
+
     private void sendNotification(Talk talk) {
-        if (!talk.isFavorite() /*|| Preferences.isTalkAlreadyNotified(this, talk) Disable for testing*/) {
+        if (!talk.isFavorite() /*|| Preferences.isTalkAlreadyNotified(this, talk)*/) {
             return;
         }
 
@@ -120,9 +139,49 @@ public class NotificationSchedulerIntentService extends IntentService {
         Preferences.flagTalkAsNotified(this, talk);
     }
 
+    private void sendFeedbackNotification(Talk talk) {
+        if (!talk.isFavorite() /*|| Preferences.isTalkFeedbackAlreadyNotified(this, talk)*/) {
+            return;
+        }
+
+        int minutesLeft = Math.round((talk.getToUtcTime() - System.currentTimeMillis()) / (float) MILLIS_IN_MIN);
+        if (minutesLeft < 0) {
+            return;
+        }
+
+        PendingIntent pi = TaskStackBuilder.create(this)
+                .addNextIntent(new Intent(this, MyScheduleActivity.class))
+                .addNextIntent(TalkActivity.buildIntentFromTalk(this, talk))
+                .getPendingIntent(1, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
+                .setContentTitle(talk.getTitle())
+                .setContentText(getString(R.string.feedback_notification))
+                .setTicker(getString(R.string.feedback_notification))
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .setLights(
+                        talk.getColor(),
+                        NotificationSchedulerIntentService.NOTIFICATION_LED_ON_MS,
+                        NotificationSchedulerIntentService.NOTIFICATION_LED_OFF_MS)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentIntent(pi)
+                .setLocalOnly(true) // make it local to the phone
+                .setAutoCancel(true);
+        NotificationManager nm = (NotificationManager) getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        nm.notify(talk.getId(), TALK_NOTIFICATION_ID, notifBuilder.build());
+
+        Preferences.flagTalkFeedbackAsNotified(this, talk);
+    }
+
     private void scheduleNotification(Talk talk) {
         PendingIntent sendNotificationPendingIntent =
-                PendingIntent.getService(this, 2, buildSendNotificationIntentFromTalk(talk), PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.getService(this, 2, buildSendNotificationIntentFromTalk(getBaseContext(), talk), PendingIntent.FLAG_CANCEL_CURRENT);
         mAlarmManager.set(AlarmManager.RTC_WAKEUP, talk.getFromUtcTime() - MILLIS_GAP_FOR_NOTIFICATION, sendNotificationPendingIntent);
+
+        PendingIntent sendFeedBackNotificationPendingIntent =
+                PendingIntent.getService(this, 3, buildSendFeedbackNotificationIntentFromTalk(getBaseContext(), talk), PendingIntent.FLAG_CANCEL_CURRENT);
+        mAlarmManager.set(AlarmManager.RTC_WAKEUP, talk.getToUtcTime() - MILLIS_GAP_FOR_FEEDBACK_NOTIFICATION, sendFeedBackNotificationPendingIntent);
     }
+
 }
