@@ -64,7 +64,7 @@
     <string name="session_now">Maintenant</string>
     <string name="my_schedule_end_time">à <xliff:g id="endTime">%1$s</xliff:g></string>
     <string name="my_schedule">Mon agenda</string>
-    <string name="all_talks">Toutes les présenations</string>
+    <string name="all_talks">Toutes les présentations</string>
     <string name="all_days">Tous les jours</string>
     <string name="all_topics">Tous les sujets</string>
     <string name="all_types">Tous les types</string>
