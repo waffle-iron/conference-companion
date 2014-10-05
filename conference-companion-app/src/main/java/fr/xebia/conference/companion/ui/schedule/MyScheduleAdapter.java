@@ -302,7 +302,12 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
                 giveFeedbackButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO go to session for feedback
+                        Talk selectedTalk = item.selectedTalk;
+                        Intent intent = new Intent(mContext, TalkActivity.class);
+                        intent.putExtra(TalkActivity.EXTRA_TALK_ID, selectedTalk.getId());
+                        intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, selectedTalk.getTitle());
+                        intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, selectedTalk.getColor());
+                        mContext.startActivity(intent);
                     }
                 });
             }
