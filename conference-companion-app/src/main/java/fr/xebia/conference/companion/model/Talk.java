@@ -55,6 +55,7 @@ public class Talk extends Model implements Parcelable {
     @Column("color") private int color;
     @Column("memo") private String memo = "";
     @Column("prettySpeakers") private String prettySpeakers;
+    @Column("position") private int position;
 
     public Talk() {
 
@@ -312,6 +313,7 @@ public class Talk extends Model implements Parcelable {
         color = in.readInt();
         memo = in.readString();
         prettySpeakers = in.readString();
+        position = in.readInt();
     }
 
     @Override
@@ -342,6 +344,7 @@ public class Talk extends Model implements Parcelable {
         dest.writeInt(color);
         dest.writeString(memo);
         dest.writeString(prettySpeakers);
+        dest.writeInt(position);
     }
 
     @SuppressWarnings("unused")
@@ -359,5 +362,13 @@ public class Talk extends Model implements Parcelable {
 
     public boolean isKeynote() {
         return kind.equalsIgnoreCase(KEYNOTE);
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

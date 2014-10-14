@@ -57,10 +57,10 @@ public class TalkItemView extends FrameLayout {
     }
 
 
-    public void bind(Talk talk, boolean conferenceEnded) {
+    public void bind(Talk talk, boolean currentConferenceDevoxx, boolean conferenceEnded) {
         setTag(talk);
         setBackgroundColor(talk.getColor());
-        Picasso.with(getContext()).load(R.drawable.devoxx_talk_template)
+        Picasso.with(getContext()).load(getItemBackgroundResource(talk, currentConferenceDevoxx))
                 .fit()
                 .centerCrop()
                 .into(mTalkPhoto);
@@ -78,5 +78,10 @@ public class TalkItemView extends FrameLayout {
         mInfoBox.setBackgroundColor(talk.getColor());
 
         getViewTreeObserver().addOnGlobalLayoutListener(mGlobalLayoutListener);
+    }
+
+    private int getItemBackgroundResource(Talk talk, boolean currentConferenceDevoxx) {
+        return !currentConferenceDevoxx ? R.drawable.default_talk_template :
+                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 8, "drawable", getContext().getPackageName());
     }
 }

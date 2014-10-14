@@ -73,6 +73,7 @@ public class SynchroIntentService extends IntentService {
 
         // Save talks keeping favorite info and retrieving date/time from
         ModelList<Talk> talksToSave = new ModelList<>();
+        int index = 0;
         for (Talk talkToSave : scheduledTalks) {
             Talk talkFromDb = talksInDbById.remove(talkToSave.getId());
             if (talkFromDb != null) {
@@ -102,10 +103,10 @@ public class SynchroIntentService extends IntentService {
                 talkToSave.getToTime().setTime(jodaEndTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
             }
 
-
             talkToSave.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
             talkToSave.setToUtcTime(jodaEndTime.withZone(utcTimeZone).getMillis());
 
+            talkToSave.setPosition(index++);
             if (talkDetails != null || talkToSave.isBreak()) {
                 talksToSave.add(talkToSave);
             } else {

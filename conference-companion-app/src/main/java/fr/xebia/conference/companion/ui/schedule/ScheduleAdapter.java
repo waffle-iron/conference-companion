@@ -20,19 +20,21 @@ import fr.xebia.conference.companion.ui.widget.CollectionViewCallbacks;
 public class ScheduleAdapter extends BaseAdapter<List<Talk>> implements CollectionViewCallbacks {
 
     private final long conferenceEndTime;
+    private final boolean currentConferenceDevoxx;
 
     public ScheduleAdapter(Context context, int viewResId, List<Talk> data) {
         super(context, viewResId, data);
         conferenceEndTime = Preferences.getSelectedConferenceEndTime(context);
+        currentConferenceDevoxx = Preferences.isCurrentConferenceDevoxx(context);
     }
 
     @Override
     protected void bindView(final int position, View view) {
         boolean conferenceEnded = System.currentTimeMillis() > conferenceEndTime;
         if (view instanceof ScheduleItemView) {
-            ((ScheduleItemView) view).bind(getItem(position), conferenceEnded);
+            ((ScheduleItemView) view).bind(getItem(position), currentConferenceDevoxx, conferenceEnded);
         } else {
-            ((TalkItemView) view).bind(getItem(position), conferenceEnded);
+            ((TalkItemView) view).bind(getItem(position), currentConferenceDevoxx, conferenceEnded);
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override

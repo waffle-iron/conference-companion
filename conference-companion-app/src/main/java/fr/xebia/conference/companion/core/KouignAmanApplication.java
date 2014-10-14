@@ -68,6 +68,7 @@ public class KouignAmanApplication extends Application {
             protected void doMigration(SQLiteDatabase sqLiteDatabase) {
                 sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_FROM_UTC_TIME);
                 sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_TO_UTC_TIME);
+                sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_POSITION);
                 sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_FROM_UTC_TIME);
                 sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_TO_UTC_TIME);
             }

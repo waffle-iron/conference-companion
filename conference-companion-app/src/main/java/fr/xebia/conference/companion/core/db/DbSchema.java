@@ -40,6 +40,8 @@ public class DbSchema {
 
     public static final String TALKS_ADD_TO_UTC_TIME = "ALTER TABLE Talks ADD toUtcTime INTEGER;";
 
+    public static final String TALKS_ADD_POSITION = "ALTER TABLE Talks ADD position INTEGER;";
+
     public static final String CONFERENCES_ADD_FROM_UTC_TIME = "ALTER TABLE Conferences ADD fromUtcTime INTEGER;";
 
     public static final String CONFERENCES_ADD_TO_UTC_TIME = "ALTER TABLE Conferences ADD toUtcTime INTEGER;";

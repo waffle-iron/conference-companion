@@ -194,7 +194,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
 
-        mTalkPhoto.setImageResource(R.drawable.devoxx_talk_template);
         configureHeaders();
         setupCustomScrolling();
 
@@ -401,6 +400,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         mTrackContent.setText(talk.getTrack());
 
+        mTalkPhoto.setImageResource(getTalkBackgroundResource(talk));
+
         bindMemo();
 
         refreshRatingBarState();
@@ -430,6 +431,11 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
         return false;
+    }
+
+    private int getTalkBackgroundResource(Talk talk) {
+        return !Preferences.isCurrentConferenceDevoxx(getActivity()) ? R.drawable.default_talk_template :
+                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 8, "drawable", getActivity().getPackageName());
     }
 
     public void refreshRatingBarState() {
@@ -478,6 +484,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
         return false;
     }
+
 
     private void bindMemo() {
         if (mTalk.getMemo() != null && mTalk.getMemo().trim().length() > 0) {
