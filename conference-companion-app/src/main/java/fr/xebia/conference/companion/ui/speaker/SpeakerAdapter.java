@@ -19,7 +19,6 @@ public class SpeakerAdapter extends BaseAdapter<List<Speaker>> implements Sticky
     private int mUnderlineColor;
     private int mUnderlineHeight;
     private LayoutInflater inflater;
-    private boolean mShowDays;
 
     public SpeakerAdapter(Context context, int viewResId, List<Speaker> data) {
         super(context, viewResId, data);
@@ -31,12 +30,6 @@ public class SpeakerAdapter extends BaseAdapter<List<Speaker>> implements Sticky
         Resources resources = context.getResources();
         mUnderlineColor = resources.getColor(R.color.xebia_color);
         mUnderlineHeight = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, resources.getDisplayMetrics()));
-    }
-
-    public SpeakerAdapter(Context context, int viewResId, List<Speaker> data, boolean showDays) {
-        super(context, viewResId, data);
-        init(context);
-        mShowDays = showDays;
     }
 
     @Override

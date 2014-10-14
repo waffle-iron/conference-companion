@@ -23,6 +23,6 @@
         android:background="?themePrimaryColor"
         android:padding="5dp"
         android:textColor="@android:color/white"
-        android:gravity="center_vertical" />
+        android:gravity="center" />
 
 </fr.xebia.conference.companion.ui.speaker.SpeakerItemView>

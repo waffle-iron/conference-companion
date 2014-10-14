@@ -37,8 +37,6 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
 
     @Icicle Parcelable mListViewState;
 
-    private View mHeaderSpacer;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +73,7 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
 
     private View buildSpacerView() {
         Activity context = getActivity();
-        mHeaderSpacer = new View(context);
+        View mHeaderSpacer = new View(context);
         mHeaderSpacer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 UIUtils.calculateActionBarSize(context)));
         return mHeaderSpacer;
@@ -135,7 +133,7 @@ public class SpeakerFragment extends Fragment implements ManyQuery.ResultHandler
             mEmptyText.setText("");
             mEmptyText.setVisibility(View.GONE);
             mSpeakersGrid.setVisibility(View.VISIBLE);
-            mSpeakersGrid.setAdapter(new SpeakerAdapter(getActivity(), R.layout.speaker_short_item, speakers, true));
+            mSpeakersGrid.setAdapter(new SpeakerAdapter(getActivity(), R.layout.speaker_short_item, speakers));
             if (mListViewState != null) {
                 mSpeakersGrid.onRestoreInstanceState(mListViewState);
             }
