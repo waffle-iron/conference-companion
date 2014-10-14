@@ -34,6 +34,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
 
     private MySchedule mMySchedule;
     private boolean mStopped;
+    private int mSelectedPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,22 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mPagerStrip.setDrawFullUnderline(true);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int selectedPage) {
+                mSelectedPage = selectedPage;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         getActionBar().setTitle(R.string.my_schedule);
         mDrawShadowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -103,6 +120,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
 
     private void setAdapter() {
         mViewPager.setAdapter(new MySchedulePagerAdapter(mMySchedule, getFragmentManager()));
+        mViewPager.setCurrentItem(mSelectedPage);
     }
 
     public static class MySchedulePagerAdapter extends FragmentPagerAdapter {
