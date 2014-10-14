@@ -210,7 +210,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             }};
             mScheduleGrid.setCollectionAdapter(new ScheduleAdapter(getActivity(), itemLayout, mergedTalks));
 
-            mScheduleGrid.updateInventory(inventory, mResumed);
+            mScheduleGrid.updateInventory(inventory, mResumed && reset);
 
             if (scheduleGridState != null) {
                 mScheduleGrid.onRestoreInstanceState(scheduleGridState);
