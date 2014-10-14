@@ -22,6 +22,8 @@ import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
 import fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout;
 import fr.xebia.conference.companion.ui.widget.UIUtils;
+import icepick.Icepick;
+import icepick.Icicle;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
@@ -34,7 +36,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
 
     private MySchedule mMySchedule;
     private boolean mStopped;
-    private int mSelectedPage;
+    @Icicle int mSelectedPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,18 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
                 mDrawShadowFrameLayout.setShadowTopOffset(shadowTopOffset);
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
     @Override
