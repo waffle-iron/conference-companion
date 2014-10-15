@@ -2,10 +2,12 @@ package fr.xebia.conference.companion.ui.note;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.MemoSavedEvent;
@@ -43,6 +45,7 @@ public class MemoActivity extends BaseActivity implements OneQuery.ResultHandler
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setBackgroundDrawable(new ColorDrawable(intent.getIntExtra(TalkActivity.EXTRA_TALK_COLOR, 0)));
             actionBar.setTitle(R.string.action_bar_note);
         }
 

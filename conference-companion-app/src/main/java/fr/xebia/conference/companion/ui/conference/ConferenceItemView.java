@@ -6,12 +6,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.model.Conference;
 
 public class ConferenceItemView extends TextView implements Target {
+
+    public static final int DEVOXX_CONF_ID = 14;
 
     public ConferenceItemView(Context context) {
         super(context);
@@ -27,8 +31,13 @@ public class ConferenceItemView extends TextView implements Target {
 
     public void bind(Conference conference) {
         setText(conference.getName());
-        Picasso.with(getContext()).load(conference.getLogoUrl())
-                .resizeDimen(R.dimen.conference_icon, R.dimen.conference_icon).into(this);
+        if (conference.getId() == DEVOXX_CONF_ID) {
+            Picasso.with(getContext()).load(R.drawable.devoxx_2014_logo)
+                    .resizeDimen(R.dimen.conference_icon, R.dimen.conference_icon).into(this);
+        } else {
+            Picasso.with(getContext()).load(conference.getLogoUrl())
+                    .resizeDimen(R.dimen.conference_icon, R.dimen.conference_icon).into(this);
+        }
     }
 
     @Override

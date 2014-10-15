@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -304,5 +307,26 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
 
     public interface OnActionBarAutoShowOrHideListener {
         void onActionBarAutoShowOrHide(boolean shown);
+    }
+
+    protected void setupFloatingWindow() {
+        // configure this Activity as a floating window, dimming the background
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.width = getResources().getDimensionPixelSize(R.dimen.talk_details_floating_width);
+        params.height = getResources().getDimensionPixelSize(R.dimen.talk_details_floating_height);
+        params.alpha = 1;
+        params.dimAmount = 0.7f;
+        params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        getWindow().setAttributes(params);
+    }
+
+    protected boolean shouldBeFloatingWindow() {
+        Resources.Theme theme = getTheme();
+        TypedValue floatingWindowFlag = new TypedValue();
+        if (theme == null || !theme.resolveAttribute(R.attr.isFloatingWindow, floatingWindowFlag, true)) {
+            // isFloatingWindow flag is not defined in theme
+            return false;
+        }
+        return (floatingWindowFlag.data != 0);
     }
 }

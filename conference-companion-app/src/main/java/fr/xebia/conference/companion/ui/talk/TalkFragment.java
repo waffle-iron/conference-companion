@@ -162,6 +162,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                     Intent intent = new Intent(getActivity(), MemoActivity.class);
                     intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
                     intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
+                    intent.putExtra(EXTRA_TALK_COLOR, mTalk.getColor());
                     startActivity(intent);
                 }
                 return true;

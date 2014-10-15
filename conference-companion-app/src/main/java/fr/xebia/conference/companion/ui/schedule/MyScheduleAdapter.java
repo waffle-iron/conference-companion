@@ -324,9 +324,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
             Picasso.with(mContext).load(R.drawable.devoxx_talk_template).into(sessionImageView);
             // }
             slotTitleView.setText(item.title);
-            slotTitleView.setTextColor(isBlockNow
-                    ? Color.WHITE
-                    : res.getColor(R.color.body_text_1_inverse));
+            slotTitleView.setTextColor(isBlockNow ? Color.WHITE : res.getColor(R.color.body_text_1_inverse));
             slotTitleView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             if (slotSubtitleView != null) {
                 slotSubtitleView.setText(item.subtitle);

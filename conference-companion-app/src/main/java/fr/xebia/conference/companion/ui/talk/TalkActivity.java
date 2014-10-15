@@ -52,27 +52,6 @@ public class TalkActivity extends BaseActivity {
         }
     }
 
-    private void setupFloatingWindow() {
-        // configure this Activity as a floating window, dimming the background
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = getResources().getDimensionPixelSize(R.dimen.talk_details_floating_width);
-        params.height = getResources().getDimensionPixelSize(R.dimen.talk_details_floating_height);
-        params.alpha = 1;
-        params.dimAmount = 0.7f;
-        params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        getWindow().setAttributes(params);
-    }
-
-    private boolean shouldBeFloatingWindow() {
-        Resources.Theme theme = getTheme();
-        TypedValue floatingWindowFlag = new TypedValue();
-        if (theme == null || !theme.resolveAttribute(R.attr.isFloatingWindow, floatingWindowFlag, true)) {
-            // isFloatingWindow flag is not defined in theme
-            return false;
-        }
-        return (floatingWindowFlag.data != 0);
-    }
-
     @Override
     protected void selectTheme() {
         boolean hasSelectedConference = Preferences.hasSelectedConference(this);
