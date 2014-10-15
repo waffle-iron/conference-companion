@@ -20,6 +20,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.bus.SyncEvent;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.Schedule;
@@ -35,6 +36,8 @@ import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 import timber.log.Timber;
+
+import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, BaseActivity.OnActionBarAutoShowOrHideListener {
 
@@ -74,6 +77,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        BUS.register(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.schedule_fragment, container, false);
     }
@@ -110,6 +119,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     public void onPause() {
         super.onPause();
         mResumed = false;
+    }
+
+    @Override
+    public void onStop() {
+        BUS.unregister(this);
+        super.onStop();
     }
 
     private void configureActionBarSpinner() {
@@ -369,6 +384,14 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             LayoutTransition layoutTransition = new LayoutTransition();
             layoutTransition.enableTransitionType(LayoutTransition.APPEARING);
             mContainer.setLayoutTransition(layoutTransition);
+        }
+    }
+
+
+    public void onEventMainThread(SyncEvent syncEvent) {
+        BaseActivity baseActivity = (BaseActivity) getActivity();
+        if (mScheduleGrid != null && !baseActivity.isMainContentScrolling()) {
+            populateScheduleGrid(false);
         }
     }
 

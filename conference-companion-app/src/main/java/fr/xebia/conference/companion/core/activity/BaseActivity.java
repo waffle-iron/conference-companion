@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     private List<View> mHideableHeaderViews = new ArrayList<>();
 
     private Handler handler = new Handler();
+    private boolean mMainContentScrolling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,7 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+                mMainContentScrolling = scrollState != SCROLL_STATE_IDLE;
             }
 
             @Override
@@ -293,6 +296,10 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
         if (mActionBarAutoHideEnabled && opened) {
             autoShowOrHideActionBar(true);
         }
+    }
+
+    public boolean isMainContentScrolling() {
+        return mMainContentScrolling;
     }
 
     public interface OnActionBarAutoShowOrHideListener {

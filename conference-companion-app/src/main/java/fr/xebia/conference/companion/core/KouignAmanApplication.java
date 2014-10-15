@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
@@ -13,6 +16,7 @@ import fr.xebia.conference.companion.BuildConfig;
 import fr.xebia.conference.companion.api.BleLocationApi;
 import fr.xebia.conference.companion.api.ConferenceApi;
 import fr.xebia.conference.companion.api.VoteApi;
+import fr.xebia.conference.companion.bus.SyncEvent;
 import fr.xebia.conference.companion.core.db.DbSchema;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.network.JacksonConverter;
@@ -73,6 +77,9 @@ public class KouignAmanApplication extends Application {
                 sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_TO_UTC_TIME);
             }
         });
+
+        // TODO temporary hack to send sync event
+        new Timer(true).scheduleAtFixedRate(new SendSyncEventTask(),new Date(), 5_000);
     }
 
     /**
@@ -83,6 +90,13 @@ public class KouignAmanApplication extends Application {
         public void e(Throwable t, String message, Object... args) {
             e(message, args);
             Crashlytics.logException(t);
+        }
+    }
+
+    public static class SendSyncEventTask extends TimerTask {
+        @Override
+        public void run() {
+            BUS.post(SyncEvent.getInstance());
         }
     }
 

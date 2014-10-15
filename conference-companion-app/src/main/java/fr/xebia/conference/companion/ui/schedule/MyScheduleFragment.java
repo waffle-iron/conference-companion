@@ -9,10 +9,14 @@ import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
+import fr.xebia.conference.companion.bus.SyncEvent;
+import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.model.ConferenceDay;
 import fr.xebia.conference.companion.model.MyScheduleItem;
 
 import java.util.List;
+
+import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 public class MyScheduleFragment extends Fragment {
 
@@ -20,6 +24,7 @@ public class MyScheduleFragment extends Fragment {
 
     private MyScheduleAdapter mAdapter;
     private List<MyScheduleItem> myScheduleItems;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +40,24 @@ public class MyScheduleFragment extends Fragment {
         if (myScheduleItems != null) {
             mAdapter.updateItems(myScheduleItems);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        BUS.register(this);
+    }
+
+    public void onEventMainThread(SyncEvent syncEvent) {
+        if(mAdapter != null){
+            mAdapter.forceUpdate();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        BUS.unregister(this);
+        super.onStart();
     }
 
     public static Fragment newInstance() {
