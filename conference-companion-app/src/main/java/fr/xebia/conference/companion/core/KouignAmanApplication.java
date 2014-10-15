@@ -2,6 +2,7 @@ package fr.xebia.conference.companion.core;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
@@ -20,6 +21,7 @@ import fr.xebia.conference.companion.bus.SyncEvent;
 import fr.xebia.conference.companion.core.db.DbSchema;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.network.JacksonConverter;
+import fr.xebia.conference.companion.service.SynchroIntentService;
 import retrofit.RestAdapter;
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
@@ -44,7 +46,7 @@ public class KouignAmanApplication extends Application {
         }
 
         Context applicationContext = getApplicationContext();
-        if(!Preferences.isDeviceIdGenerated(applicationContext)){
+        if (!Preferences.isDeviceIdGenerated(applicationContext)) {
             Preferences.saveGeneratedDeviceId(applicationContext, UUID.randomUUID().toString());
         }
 
@@ -79,7 +81,14 @@ public class KouignAmanApplication extends Application {
         });
 
         // TODO temporary hack to send sync event
-        new Timer(true).scheduleAtFixedRate(new SendSyncEventTask(),new Date(), 5_000);
+        new Timer(true).scheduleAtFixedRate(new SendSyncEventTask(), new Date(), 5_000);
+
+        if (Preferences.hasSelectedConference(this)) {
+            Intent intent = new Intent(this, SynchroIntentService.class);
+            intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(this));
+            intent.putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, true);
+            startService(intent);
+        }
     }
 
     /**

@@ -1,6 +1,8 @@
 package fr.xebia.conference.companion.service;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.text.TextUtils;
 
@@ -33,6 +35,7 @@ public class SynchroIntentService extends IntentService {
     private static final String TAG = "SynchroIntentService";
 
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.conference.companion.EXTRA_CONFERENCE_ID";
+    public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.conference.companion.EXTRA_FROM_APP_CREATE";
 
     public static final String DEVOXX_CONF = "devoxx";
 
@@ -59,9 +62,19 @@ public class SynchroIntentService extends IntentService {
             Timber.e(e, "Error synchronizing data");
             transaction.setSuccessful(false);
             BUS.post(new SynchroFinishedEvent(false, null));
+            // Retry in 1 hour
+            long oneHourLater = System.currentTimeMillis() + 3_600 * 1000;
+            ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC, oneHourLater, buildSynchroPendingIntent());
         } finally {
             transaction.finish();
         }
+    }
+
+    private PendingIntent buildSynchroPendingIntent() {
+        Intent intent = new Intent(this, SynchroIntentService.class);
+        intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(this));
+        intent.putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, true);
+        return PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void synchroniseTalks(Conference conference, Transaction transaction) {
