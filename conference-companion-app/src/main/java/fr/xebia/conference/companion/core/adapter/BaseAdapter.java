@@ -9,7 +9,7 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 
     private Context mContext;
     private int mViewResId;
-    private T mData;
+    protected T mData;
     private LayoutInflater mLayoutInflater;
 
     public BaseAdapter(Context context, int viewResId, T data) {

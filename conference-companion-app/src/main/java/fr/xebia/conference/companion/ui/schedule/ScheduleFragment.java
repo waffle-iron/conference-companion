@@ -252,10 +252,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void showSecondaryFilters() {
-        showFilterBox(false);
-
         // repopulate secondary filter spinners
-        if (!TextUtils.isEmpty(mFilterTags[0])) {
+        boolean showFilter = !TextUtils.isEmpty(mFilterTags[0]);
+        if (showFilter) {
             TagMetadata.Tag topTag = mTagMetadata.getTag(mFilterTags[0]);
             String topCategory = topTag.getCategory();
             if (topCategory.equals(Tags.FILTER_CATEGORIES[0])) {
@@ -268,8 +267,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 populateSecondLevelFilterSpinner(0, 0);
                 populateSecondLevelFilterSpinner(1, 1);
             }
-            showFilterBox(true);
+
         }
+        showFilterBox(showFilter);
     }
 
     private void populateSecondLevelFilterSpinner(int spinnerIndex, int catIndex) {
