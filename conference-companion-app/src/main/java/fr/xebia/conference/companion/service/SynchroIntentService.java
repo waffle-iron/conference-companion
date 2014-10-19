@@ -127,7 +127,7 @@ public class SynchroIntentService extends IntentService {
         if (DEVOXX_2014_CONF_ID == conferenceId) {
             Collection<Talk> missingTalks = Devoxx2014Hack.generateKeynotes(this);
             for (Talk talk : missingTalks) {
-                talk.setFavorite(true);
+                talk.setFavorite(talk.isKeynote());
                 talk.setPrettySpeakers(new ArrayList<Speaker>(), new HashMap<String, Speaker>());
                 setConferenceUtcTime(conference, talk);
                 talksInDbById.remove(talk.getId());
