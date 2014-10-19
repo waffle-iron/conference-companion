@@ -2,9 +2,9 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background"
-          android:drawable="@drawable/heart_empty_xebia" />
+          android:drawable="@drawable/rate_empty" />
     <item android:id="@android:id/secondaryProgress"
-          android:drawable="@drawable/heart_empty_xebia" />
+          android:drawable="@drawable/rate_empty" />
     <item android:id="@android:id/progress"
-          android:drawable="@drawable/heart_full_xebia" />
+          android:drawable="@drawable/rate_full" />
 </layer-list>
