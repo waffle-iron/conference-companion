@@ -61,6 +61,7 @@ public class SynchroIntentService extends IntentService {
                 synchroniseTalks(conference, transaction);
                 transaction.setSuccessful(true);
                 Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
+                startService(new Intent(NotificationSchedulerIntentService.ACTION_SCHEDULE_NOTIFICATION, null, this, NotificationSchedulerIntentService.class));
                 BUS.post(new SynchroFinishedEvent(true, conference));
             }
         } catch (Exception e) {

@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.util.List;
+
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.Talk;
@@ -22,6 +24,7 @@ import se.emilsjolander.sprinkles.Query;
 public class NotificationSchedulerIntentService extends IntentService {
 
     public static final String ACTION_SCHEDULE_NOTIFICATION = "fr.xebia.conference.companion.service.ACTION_SCHEDULE_NOTIFICATION";
+    public static final String ACTION_SCHEDULE_ALL_NOTIFICATIONS = "fr.xebia.conference.companion.service.ACTION_SCHEDULE_ALL_NOTIFICATION";
     public static final String ACTION_SEND_NOTIFICATION = "fr.xebia.conference.companion.service.ACTION_SEND_NOTIFICATION";
     public static final String ACTION_SEND_FEEDBACK_NOTIFICATION = "fr.xebia.conference.companion.service.ACTION_SEND_FEEDBACK_NOTIFICATION";
 
@@ -75,6 +78,22 @@ public class NotificationSchedulerIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        if (ACTION_SCHEDULE_ALL_NOTIFICATIONS.equals(intent.getAction())) {
+            handleAllTalksNotifications(intent);
+        } else {
+            handleSingleTalkNotifications(intent);
+        }
+    }
+
+    private void handleAllTalksNotifications(Intent intent) {
+        int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
+        List<Talk> talks = Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? AND favorite=1", conferenceId).get().asList();
+        for (Talk talk : talks) {
+            scheduleNotification(talk);
+        }
+    }
+
+    private void handleSingleTalkNotifications(Intent intent) {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         String talkId = intent.getStringExtra(EXTRA_TALK_ID);
         Talk talk = Query.one(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? AND _id=?", conferenceId, talkId).get();
