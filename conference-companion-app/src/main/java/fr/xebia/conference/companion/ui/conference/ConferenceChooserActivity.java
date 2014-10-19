@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.bus.ConferenceSelectedEvent;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
@@ -49,6 +50,9 @@ public class ConferenceChooserActivity extends BaseActivity {
 
     public void onEventMainThread(SynchroFinishedEvent synchroFinishedEvent) {
         if (synchroFinishedEvent.success) {
+            if (synchroFinishedEvent.conference.getId() == Preferences.getSelectedConference(this)) {
+                return;
+            }
             Preferences.setSelectedConference(this, synchroFinishedEvent.conference.getId());
             Preferences.setSelectedConferenceEndTime(this, synchroFinishedEvent.conference.getTo().getTime());
             Preferences.saveDevoxxianTag(this, synchroFinishedEvent.conference.getNfcTag());

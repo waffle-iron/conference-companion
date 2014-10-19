@@ -34,17 +34,18 @@ public class ConferenceDay implements Parcelable {
         long currentEndTime = -1;
         for (Map.Entry<Long, List<Talk>> entry : mapTalksByStartTime.entrySet()) {
             MyScheduleItem myScheduleItem = new MyScheduleItem(entry.getKey(), entry.getValue());
-            if (myScheduleItem.startTime >= currentEndTime) {
-                myScheduleItems.add(myScheduleItem);
-            } else {
+            if (myScheduleItem.startTime < currentEndTime) {
                 myScheduleItem.conflicting = true;
             }
+            myScheduleItems.add(myScheduleItem);
             if (myScheduleItem.conflictingTalks.size() > 0) {
                 for (Talk talk : myScheduleItem.conflictingTalks) {
                     myScheduleItems.add(new MyScheduleItem(talk, true));
                 }
             }
-            currentEndTime = myScheduleItem.endTime;
+            if (myScheduleItem.type != MyScheduleItem.BREAK) {
+                currentEndTime = myScheduleItem.endTime;
+            }
         }
 
         if (myScheduleItems.size() > 0) {

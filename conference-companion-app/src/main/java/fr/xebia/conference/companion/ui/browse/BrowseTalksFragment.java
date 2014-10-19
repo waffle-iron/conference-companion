@@ -56,7 +56,7 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
         mWideMode = getResources().getBoolean(R.bool.wide_mode);
         List<String> availableTalksIds = getArguments().getStringArrayList(ARG_AVAILABLE_TALKS);
         Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? AND _id IN (" +
-                SqlUtils.toSqlArray(availableTalksIds) + ") ORDER BY fromTime ASC", conferenceId).getAsync(getLoaderManager(), this);
+                SqlUtils.toSqlArray(availableTalksIds) + ") ORDER BY fromTime ASC, toTime ASC, _id ASC", conferenceId).getAsync(getLoaderManager(), this);
     }
 
     @Nullable

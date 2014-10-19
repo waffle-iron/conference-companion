@@ -1,0 +1,82 @@
+[
+    {
+        "conferenceId": 14,
+        "fromTime": "2014-11-12 09:30:00",
+        "id": "key_wednesday_12_8h30_10h30",
+        "toTime": "2014-11-12 11:30:00",
+        "presentation": {
+            "uri": "",
+            "title": ""
+        },
+        "speakers": [],
+        "partnerSlot": false,
+        "note": "",
+        "room": "Room 8, overflows in room 4, 5 and 9",
+        "track": "Keynote",
+        "kind": "Keynote",
+        "type": "Conference",
+        "code": "Keynote",
+        "title": "Opening Keynote",
+        "summary": "Welcome and announcements by Stephan Janssen and guests \r\n JBoss, Infinite Possibilities \r\n Oracle with Richard Bair, Jasper Potts and Brian Goetz"
+    },
+    {
+        "conferenceId": 14,
+        "fromTime": "2014-11-12 19:00:00",
+        "id": "key_wednesday_12_18h00_18h30",
+        "toTime": "2014-11-12 19:30:00",
+        "presentation": {
+            "uri": "",
+            "title": ""
+        },
+        "speakers": [],
+        "partnerSlot": false,
+        "note": "",
+        "room": "Room 8, overflows in room 4, 5 and 9",
+        "track": "Keynote",
+        "kind": "Talk",
+        "type": "Conference",
+        "code": "Keynote",
+        "title": "Evening Keynote",
+        "summary": "by Ron Van Kemenade  (CIO ING group)"
+    },
+    {
+        "conferenceId": 14,
+        "fromTime": "2014-11-13 09:30:00",
+        "id": "key_thursday_13_8h30_9h30",
+        "toTime": "2014-11-13 10:30:00",
+        "presentation": {
+            "uri": "",
+            "title": ""
+        },
+        "speakers": [],
+        "partnerSlot": false,
+        "note": "",
+        "room": "Room 8, overflows in room 4, 5 and 9",
+        "track": "Keynote",
+        "kind": "Keynote",
+        "type": "Conference",
+        "code": "Keynote",
+        "title": "Morning Keynote",
+        "summary": "Material Witness – the state of software design across mobile and web platforms by Chet Haase and Nick Butcher"
+    },
+    {
+        "conferenceId": 14,
+        "fromTime": "2014-11-13 19:00:00",
+        "id": "key_thursday_13_18h00_18h30",
+        "toTime": "2014-11-13 19:30:00",
+        "presentation": {
+            "uri": "",
+            "title": ""
+        },
+        "speakers": [],
+        "partnerSlot": false,
+        "note": "",
+        "room": "Room 8, overflows in room 4, 5 and 9",
+        "track": "Keynote",
+        "kind": "Keynote",
+        "type": "Conference",
+        "code": "Keynote",
+        "title": "Closing Keynote",
+        "summary": "Infinite Possibilities by Denise Jacobs"
+    }
+]

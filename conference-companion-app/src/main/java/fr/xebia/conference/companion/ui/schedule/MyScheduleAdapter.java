@@ -27,10 +27,21 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import fr.xebia.conference.companion.R;
-import fr.xebia.conference.companion.core.KouignAmanApplication;
+import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.utils.TimeUtils;
 import fr.xebia.conference.companion.model.MyScheduleItem;
 import fr.xebia.conference.companion.model.Talk;
@@ -38,10 +49,6 @@ import fr.xebia.conference.companion.ui.browse.BrowseTalksActivity;
 import fr.xebia.conference.companion.ui.talk.TalkActivity;
 import fr.xebia.conference.companion.ui.widget.UIUtils;
 import timber.log.Timber;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Adapter that produces views to render (one day of) the "My Schedule" screen.
@@ -317,12 +324,14 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
             bgImageView.setImageDrawable(colorDrawable);
             bgImageView.setColorFilter(UIUtils.setColorAlpha(color, UIUtils.SESSION_PHOTO_SCRIM_ALPHA));
 
-           /* if (TextUtils.isEmpty(item.backgroundImageUrl)) {
-                sessionImageView.setVisibility(View.GONE);
-            } else {*/
             sessionImageView.setColorFilter(UIUtils.setColorAlpha(color, UIUtils.SESSION_PHOTO_SCRIM_ALPHA));
-            Picasso.with(mContext).load(R.drawable.devoxx_talk_template).into(sessionImageView);
-            // }
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    Picasso.with(mContext).load(getTalkBackgroundResource(item.selectedTalk)).into(sessionImageView);
+                }
+            });
+
             slotTitleView.setText(item.title);
             slotTitleView.setTextColor(isBlockNow ? Color.WHITE : res.getColor(R.color.body_text_1_inverse));
             slotTitleView.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
@@ -349,6 +358,11 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
         }
 
         return view;
+    }
+
+    private int getTalkBackgroundResource(Talk talk) {
+        return !Preferences.isCurrentConferenceDevoxx(mContext) ? R.drawable.default_talk_template :
+                mContext.getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 8, "drawable", mContext.getPackageName());
     }
 
     @Override

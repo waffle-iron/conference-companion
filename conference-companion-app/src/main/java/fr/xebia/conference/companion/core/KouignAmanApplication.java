@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.Date;
 import java.util.Timer;
@@ -23,6 +24,7 @@ import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.network.JacksonConverter;
 import fr.xebia.conference.companion.service.SynchroIntentService;
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 import timber.log.Timber;
@@ -50,7 +52,8 @@ public class KouignAmanApplication extends Application {
             Preferences.saveGeneratedDeviceId(applicationContext, UUID.randomUUID().toString());
         }
 
-        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setConverter(new JacksonConverter());
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setClient(new OkClient(okHttpClient)).setConverter(new JacksonConverter());
 
         sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.ROOT_URL).build().create(VoteApi.class);
         sBleLocationApi = restAdapterBuilder.setEndpoint(BuildConfig.LOCATION_URL).build().create(BleLocationApi.class);

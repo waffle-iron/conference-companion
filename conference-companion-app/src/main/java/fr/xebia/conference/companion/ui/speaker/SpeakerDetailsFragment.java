@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.squareup.picasso.Picasso;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.transform.CircleTransform;
@@ -120,7 +122,7 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
                 .load(speaker.getImageURL())
                 .placeholder(R.drawable.speaker_placeholder_round)
                 .fit()
-                .transform(CircleTransform.getInstance())
+                .transform(new CircleTransform())
                 .centerCrop()
                 .into(mSpeakerImage);
         mSpeakerBioContent.setText(speaker.getBio());

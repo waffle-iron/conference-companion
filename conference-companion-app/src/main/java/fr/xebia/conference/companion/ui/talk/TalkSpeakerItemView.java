@@ -49,7 +49,7 @@ public class TalkSpeakerItemView extends LinearLayout {
 
         Picasso.with(getContext()).load(speaker.getImageURL())
                 .placeholder(R.drawable.speaker_placeholder_round)
-                .transform(CircleTransform.getInstance())
+                .transform(new CircleTransform())
                 .noFade()
                 .fit()
                 .centerCrop()

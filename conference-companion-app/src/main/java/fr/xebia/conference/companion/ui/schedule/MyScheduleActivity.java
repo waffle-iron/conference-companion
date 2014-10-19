@@ -43,7 +43,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_schedule_activity);
         int conferenceId = Preferences.getSelectedConference(this);
-        String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC";
+        String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC, toTime ASC, _id ASC";
         Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
     }
 

@@ -38,7 +38,7 @@ public class HomeActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
         if (!isFinishing() && savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.main_content, new ScheduleFragment(), HOME_FRAG_TAG)
+                    .replace(R.id.main_container, new ScheduleFragment(), HOME_FRAG_TAG)
                     .commit();
         }
     }

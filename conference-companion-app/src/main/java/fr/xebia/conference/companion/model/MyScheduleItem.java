@@ -37,7 +37,7 @@ public class MyScheduleItem implements Parcelable {
         availableTalks.addAll(talks);
         this.startTime = startTime;
         for (Talk talk : availableTalks) {
-            if (talk.isFavorite() /*|| talk.isKeynote()*/) { // TODO waiting for validation
+            if (talk.isFavorite() || talk.isKeynote()) {
                 if (selectedTalk == null) {
                     // Keep the first talk as the selected one
                     selectedTalk = talk;
@@ -48,7 +48,7 @@ public class MyScheduleItem implements Parcelable {
             }
         }
 
-        if (availableTalks.size() == 1 && selectedTalk == null) {
+        if (isBreakSlot()) {
             Talk talk = talks.get(0);
             if (talk.isBreak()) {
                 type = BREAK;
@@ -61,6 +61,15 @@ public class MyScheduleItem implements Parcelable {
         } else {
             type = SESSION;
         }
+    }
+
+    private boolean isBreakSlot() {
+        for(Talk talk : availableTalks){
+            if(!talk.isBreak()){
+                return false;
+            }
+        }
+        return selectedTalk == null;
     }
 
     private void buildAttributesFromSelectedTalk() {

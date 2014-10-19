@@ -14,8 +14,6 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +68,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     private int mScheduleGridPaddingTop;
     private boolean mResumed;
     private boolean mPopulated;
+    private boolean mFirstLoad;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,18 +91,18 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mFirstLoad = true;
         ButterKnife.inject(this, view);
         mLandscapeMode = getResources().getBoolean(R.bool.landscape);
         mWideMode = getResources().getBoolean(R.bool.wide_mode);
         mScheduleGridPaddingTop = getResources().getDimensionPixelSize(R.dimen.explore_grid_padding);
-        enableTransition();
         BaseActivity activity = (BaseActivity) getActivity();
         activity.enableActionBarAutoHide(mScheduleGrid);
         activity.registerHideableHeaderView(mFiltersBox);
         activity.setActionBarAutoShowOrHideListener(this);
 
         int conferenceId = Preferences.getSelectedConference(getActivity());
-        Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC", conferenceId)
+        Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC, toTime ASC, _id ASC", conferenceId)
                 .getAsync(getLoaderManager(), this);
         configureActionBarSpinner();
     }
@@ -164,7 +163,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         for (int i = 1; i < mFilterTags.length; i++) {
             mFilterTags[i] = "";
         }
-        showSecondaryFilters();
         populateScheduleGrid(true);
     }
 
@@ -173,7 +171,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void populateScheduleGrid(boolean reset, boolean computeActionBar) {
-        if(computeActionBar){
+        if (computeActionBar) {
             computeActionBarSpinnerAdapter();
         }
 
@@ -190,6 +188,10 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         } else {
             mScheduleGrid.setVisibility(View.VISIBLE);
             mEmptyText.setVisibility(View.GONE);
+
+            if (!reset && !computeActionBar && mScheduleGrid.getFirstVisiblePosition() == 0) {
+                return;
+            }
 
             Parcelable scheduleGridState = null;
             if (!reset) {
@@ -260,8 +262,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void showSecondaryFilters() {
-        showFilterBox(false);
-
         // repopulate secondary filter spinners
         boolean showFilter = !TextUtils.isEmpty(mFilterTags[0]);
         if (showFilter) {
@@ -278,6 +278,8 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 populateSecondLevelFilterSpinner(1, 1);
             }
             showFilterBox(true);
+        } else {
+            showFilterBox(false);
         }
     }
 
@@ -364,7 +366,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
         if (mSchedule != null) {
             int itemToSelect = -1;
-
             mTagMetadata = TagMetadata.fromSchedule(mSchedule);
             for (int i = 0; i < Tags.FILTER_CATEGORIES.length; i++) {
                 String category = Tags.FILTER_CATEGORIES[i];
@@ -397,15 +398,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         showSecondaryFilters();
     }
 
-    private void enableTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            LayoutTransition layoutTransition = new LayoutTransition();
-            layoutTransition.enableTransitionType(LayoutTransition.APPEARING);
-            mContainer.setLayoutTransition(layoutTransition);
-        }
-    }
-
-
     public void onEventMainThread(SyncEvent syncEvent) {
         BaseActivity baseActivity = (BaseActivity) getActivity();
         if (mScheduleGrid != null && !baseActivity.isMainContentScrolling()) {
@@ -425,12 +417,15 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @Override
     public boolean handleResult(CursorList<Talk> cursorList) {
         mSchedule = new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList(), true);
+        mTagMetadata = TagMetadata.fromSchedule(mSchedule);
 
         if (getView() == null) {
             return true;
         }
 
-        populateScheduleGrid(false);
+        populateScheduleGrid(false, mFirstLoad);
+
+        mFirstLoad = false;
 
         return true;
     }

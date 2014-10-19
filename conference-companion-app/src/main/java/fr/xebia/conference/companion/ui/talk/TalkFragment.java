@@ -49,6 +49,7 @@ import se.emilsjolander.sprinkles.OneQuery;
 import se.emilsjolander.sprinkles.Query;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 import static fr.xebia.conference.companion.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
@@ -385,7 +386,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         boolean favorite = mTalk.isFavorite();
         mAddScheduleBtn.setChecked(favorite, false);
-        mAddScheduleBtn.setVisibility(/*talk.isKeynote() ? INVISIBLE :*/ VISIBLE); // TODO waiting for validation
+        mAddScheduleBtn.setVisibility(talk.isKeynote() ? INVISIBLE : VISIBLE);
         UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, false);
 
         if (!TextUtils.isEmpty(talk.getSummary())) {

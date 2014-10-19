@@ -8,10 +8,9 @@ import com.squareup.picasso.Transformation;
 
 public class CircleTransform implements Transformation {
 
-    private static final Transformation INSTANCE = new CircleTransform();
     private final Paint paint;
 
-    private CircleTransform() {
+    public CircleTransform() {
         paint = new Paint();
     }
 
@@ -46,9 +45,5 @@ public class CircleTransform implements Transformation {
     @Override
     public String key() {
         return "circle";
-    }
-
-    public static Transformation getInstance() {
-        return INSTANCE;
     }
 }

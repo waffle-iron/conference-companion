@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,6 +174,10 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
         } else {
             // add to accumulated signal
             mActionBarAutoHideSignal += deltaY;
+        }
+
+        if (deltaY == 0) {
+            return;
         }
 
         boolean shouldShow = currentY < mActionBarAutoHideMinY ||

@@ -9,7 +9,9 @@ import android.text.TextUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import java.util.TimeZone;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
 import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.core.utils.Devoxx2014Hack;
 import fr.xebia.conference.companion.model.Conference;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.SpeakerTalk;
@@ -38,6 +41,8 @@ public class SynchroIntentService extends IntentService {
     public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.conference.companion.EXTRA_FROM_APP_CREATE";
 
     public static final String DEVOXX_CONF = "devoxx";
+
+    private static final int DEVOXX_2014_CONF_ID = 14;
 
     public SynchroIntentService() {
         super(TAG);
@@ -88,6 +93,9 @@ public class SynchroIntentService extends IntentService {
         ModelList<Talk> talksToSave = new ModelList<>();
         int index = 0;
         for (Talk talkToSave : scheduledTalks) {
+            if (conferenceId == DEVOXX_2014_CONF_ID && talkToSave.isKeynote()) {
+                continue;
+            }
             Talk talkFromDb = talksInDbById.remove(talkToSave.getId());
             if (talkFromDb != null) {
                 talkToSave.setFavorite(talkFromDb.isFavorite());
@@ -104,20 +112,7 @@ public class SynchroIntentService extends IntentService {
 
             talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
 
-            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
-            DateTime jodaStartTime = new DateTime(talkToSave.getFromTime(), apiTimeZone);
-            DateTime jodaEndTime = new DateTime(talkToSave.getToTime(), apiTimeZone);
-
-            DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
-            if (conference.getName().toLowerCase().contains("uk")) {
-                // Devoxx UK is a specific case
-                DateTimeZone ukTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
-                talkToSave.getFromTime().setTime(jodaStartTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
-                talkToSave.getToTime().setTime(jodaEndTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
-            }
-
-            talkToSave.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
-            talkToSave.setToUtcTime(jodaEndTime.withZone(utcTimeZone).getMillis());
+            setConferenceUtcTime(conference, talkToSave);
 
             talkToSave.setPosition(index++);
             if (talkDetails != null || talkToSave.isBreak()) {
@@ -127,6 +122,17 @@ public class SynchroIntentService extends IntentService {
                 // So put back to the map for later deletion
                 talksInDbById.put(talkToSave.getId(), talkToSave);
             }
+        }
+
+        if (DEVOXX_2014_CONF_ID == conferenceId) {
+            Collection<Talk> missingTalks = Devoxx2014Hack.generateKeynotes(this);
+            for (Talk talk : missingTalks) {
+                talk.setFavorite(true);
+                talk.setPrettySpeakers(new ArrayList<Speaker>(), new HashMap<String, Speaker>());
+                setConferenceUtcTime(conference, talk);
+                talksInDbById.remove(talk.getId());
+            }
+            talksToSave.addAll(missingTalks);
         }
 
         generateColorByTrack(talksToSave);
@@ -156,6 +162,23 @@ public class SynchroIntentService extends IntentService {
             new ModelList<>(speakerTalks).deleteAll(transaction);
         }
         speakerTalks.saveAll(transaction);
+    }
+
+    private void setConferenceUtcTime(Conference conference, Talk talkToSave) {
+        DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+        DateTime jodaStartTime = new DateTime(talkToSave.getFromTime(), apiTimeZone);
+        DateTime jodaEndTime = new DateTime(talkToSave.getToTime(), apiTimeZone);
+
+        DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
+        if (conference.getName().toLowerCase().contains("uk")) {
+            // Devoxx UK is a specific case
+            DateTimeZone ukTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
+            talkToSave.getFromTime().setTime(jodaStartTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
+            talkToSave.getToTime().setTime(jodaEndTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
+        }
+
+        talkToSave.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
+        talkToSave.setToUtcTime(jodaEndTime.withZone(utcTimeZone).getMillis());
     }
 
     private HashMap<String, Speaker> loadEverySpeakers() {
@@ -188,20 +211,26 @@ public class SynchroIntentService extends IntentService {
     private void generateColorByTrack(List<Talk> talks) {
         HashMap<String, Integer> colorByTrack = new HashMap<>();
         int position = 0;
+        List<String> availableTracks = new ArrayList<>();
+        for (Talk talk : talks) {
+            String track = talk.getTrack();
+            if(!availableTracks.contains(track)){
+                availableTracks.add(track);
+            }
+        }
+        Collections.sort(availableTracks);
+        for(String track : availableTracks){
+            colorByTrack.put(track, TrackColors.LIST.get(position));
+            position++;
+            position = position % TrackColors.LIST.size();
+        }
         for (Talk talk : talks) {
             String track = talk.getTrack();
             if (TextUtils.isEmpty(track)) {
                 talk.setColor(TrackColors.NO_TRACK);
                 continue;
             }
-            Integer color = colorByTrack.get(track);
-            if (color == null) {
-                color = TrackColors.LIST.get(position);
-                colorByTrack.put(track, color);
-                position++;
-                position = position % TrackColors.LIST.size();
-            }
-            talk.setColor(color);
+            talk.setColor(colorByTrack.get(track));
         }
     }
 
