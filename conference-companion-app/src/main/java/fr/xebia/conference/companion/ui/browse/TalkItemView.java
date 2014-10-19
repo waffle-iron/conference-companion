@@ -1,6 +1,7 @@
 package fr.xebia.conference.companion.ui.browse;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -62,6 +63,7 @@ public class TalkItemView extends FrameLayout {
         setBackgroundColor(talk.getColor());
         Picasso.with(getContext()).load(getItemBackgroundResource(talk, currentConferenceDevoxx))
                 .fit()
+                .config(Bitmap.Config.RGB_565)
                 .centerCrop()
                 .into(mTalkPhoto);
         mTalkCategory.setText(talk.getType());

@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,7 +169,13 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void populateScheduleGrid(boolean reset) {
-        computeActionBarSpinnerAdapter();
+        populateScheduleGrid(reset, true);
+    }
+
+    private void populateScheduleGrid(boolean reset, boolean computeActionBar) {
+        if(computeActionBar){
+            computeActionBarSpinnerAdapter();
+        }
 
         boolean filtering = !"".equals(mFilterTags[0]);
         int itemLayout = filtering ? R.layout.talk_item_view : R.layout.schedule_item_view;
@@ -252,6 +260,8 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void showSecondaryFilters() {
+        showFilterBox(false);
+
         // repopulate secondary filter spinners
         boolean showFilter = !TextUtils.isEmpty(mFilterTags[0]);
         if (showFilter) {
@@ -267,19 +277,26 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 populateSecondLevelFilterSpinner(0, 0);
                 populateSecondLevelFilterSpinner(1, 1);
             }
-
+            showFilterBox(true);
         }
-        showFilterBox(showFilter);
     }
 
     private void populateSecondLevelFilterSpinner(int spinnerIndex, int catIndex) {
         String tagToRestore = mFilterTagsToRestore[spinnerIndex + 1];
         Spinner spinner = spinnerIndex == 0 ? mSecondaryFilterSpinner1 : mSecondaryFilterSpinner2;
+        Parcelable spinnerState = spinner.onSaveInstanceState();
         final int filterIndex = spinnerIndex + 1;
         String tagCategory = Tags.FILTER_CATEGORIES[catIndex];
         boolean isTopicCategory = Tags.CATEGORY_TOPIC.equals(tagCategory);
 
-        final FilterScheduleSpinnerAdapter adapter = new FilterScheduleSpinnerAdapter(getActivity(), false);
+        final FilterScheduleSpinnerAdapter adapter;
+        if (spinner.getAdapter() == null) {
+            adapter = new FilterScheduleSpinnerAdapter(getActivity(), false);
+            spinner.setAdapter(adapter);
+        } else {
+            adapter = (FilterScheduleSpinnerAdapter) spinner.getAdapter();
+            adapter.clear();
+        }
         adapter.addItem("", getString(Tags.EXPLORE_CATEGORY_ALL_STRING[catIndex]), false, 0);
 
         List<TagMetadata.Tag> tags = mTagMetadata.getTagsInCategory(tagCategory);
@@ -298,7 +315,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         }
         mFilterTagsToRestore[spinnerIndex + 1] = null;
 
-        spinner.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -320,6 +337,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
         if (itemToSelect != spinner.getSelectedItemPosition()) {
             spinner.setSelection(itemToSelect, false);
+            spinner.onRestoreInstanceState(spinnerState);
         }
     }
 
@@ -391,7 +409,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     public void onEventMainThread(SyncEvent syncEvent) {
         BaseActivity baseActivity = (BaseActivity) getActivity();
         if (mScheduleGrid != null && !baseActivity.isMainContentScrolling()) {
-            populateScheduleGrid(false);
+            populateScheduleGrid(false, false);
         }
     }
 
@@ -431,7 +449,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @Override
     public void onActionBarAutoShowOrHide(boolean shown) {
         if (mContainer != null) {
-            mContainer.setShadowVisible(shown, true);
+            mContainer.setShadowVisible(shown, shown);
         }
     }
 }

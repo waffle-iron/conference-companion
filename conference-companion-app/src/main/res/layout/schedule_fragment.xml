@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,43 +25,34 @@
         android:clipToPadding="false"
         android:padding="2dp"
         android:scrollbarStyle="outsideOverlay"
-        app:internalPadding="@dimen/explore_grid_padding" />
+        app:internalPadding="@dimen/explore_grid_padding"/>
 
+    <!-- Spinners for additional filters -->
     <LinearLayout
-        style="@style/HeaderBar"
-        android:id="@+id/headerbar"
+        android:id="@+id/filters_box"
+        android:visibility="gone"
+        android:layout_marginTop="?actionBarOverlayTopOffset"
+        android:paddingLeft="?spinnerBarInsetStart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/filterbar_height"
+        android:background="?themePrimaryColor"
         android:clickable="true"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <!-- Spinners for additional filters -->
-        <LinearLayout
-            android:id="@+id/filters_box"
-            android:visibility="gone"
-            android:layout_marginTop="?actionBarOverlayTopOffset"
-            android:paddingLeft="?spinnerBarInsetStart"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/filterbar_height"
-            android:background="?themePrimaryColor"
-            android:orientation="horizontal">
+        <Spinner
+            style="@style/Widget.Companion.HeaderBar.Spinner"
+            android:id="@+id/secondary_filter_spinner_1"
+            android:layout_width="@dimen/filter_spinner_width"
+            android:layout_weight="@integer/filter_spinner_weight"
+            android:layout_height="match_parent"/>
 
-            <Spinner
-                style="@style/Widget.Companion.HeaderBar.Spinner"
-                android:id="@+id/secondary_filter_spinner_1"
-                android:layout_width="@dimen/filter_spinner_width"
-                android:layout_weight="@integer/filter_spinner_weight"
-                android:layout_height="match_parent" />
+        <Spinner
+            style="@style/Widget.Companion.HeaderBar.Spinner"
+            android:id="@+id/secondary_filter_spinner_2"
+            android:layout_width="@dimen/filter_spinner_width"
+            android:layout_weight="@integer/filter_spinner_weight"
+            android:layout_height="match_parent"/>
 
-            <Spinner
-                style="@style/Widget.Companion.HeaderBar.Spinner"
-                android:id="@+id/secondary_filter_spinner_2"
-                android:layout_width="@dimen/filter_spinner_width"
-                android:layout_weight="@integer/filter_spinner_weight"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
     </LinearLayout>
-
 
 </fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout>

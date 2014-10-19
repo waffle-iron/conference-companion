@@ -1,6 +1,7 @@
 package fr.xebia.conference.companion.ui.schedule;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -59,6 +60,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
                 .load(getItemBackgroundResource(talk, currentConferenceDevoxx))
                 .fit()
                 .centerCrop()
+                .config(Bitmap.Config.RGB_565)
                 .into(mScheduleBgImg);
 
         mScheduleTitle.setText(talk.getTitle());
