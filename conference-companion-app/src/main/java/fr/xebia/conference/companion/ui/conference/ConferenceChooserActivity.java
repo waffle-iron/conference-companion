@@ -50,12 +50,6 @@ public class ConferenceChooserActivity extends BaseActivity {
 
     public void onEventMainThread(SynchroFinishedEvent synchroFinishedEvent) {
         if (synchroFinishedEvent.success) {
-            if (synchroFinishedEvent.conference.getId() == Preferences.getSelectedConference(this)) {
-                return;
-            }
-            Preferences.setSelectedConference(this, synchroFinishedEvent.conference.getId());
-            Preferences.setSelectedConferenceEndTime(this, synchroFinishedEvent.conference.getTo().getTime());
-            Preferences.saveDevoxxianTag(this, synchroFinishedEvent.conference.getNfcTag());
             startService(new Intent(this, BluetoothLocationIntentService.class));
             Intent homeIntent = new Intent(this, HomeActivity.class);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

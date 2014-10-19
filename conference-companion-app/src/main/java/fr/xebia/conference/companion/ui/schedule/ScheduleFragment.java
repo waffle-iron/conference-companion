@@ -1,9 +1,7 @@
 package fr.xebia.conference.companion.ui.schedule;
 
-import android.animation.LayoutTransition;
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -67,7 +65,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     private boolean mWideMode;
     private int mScheduleGridPaddingTop;
     private boolean mResumed;
-    private boolean mPopulated;
     private boolean mFirstLoad;
 
     @Override
@@ -111,7 +108,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     public void onResume() {
         super.onResume();
         mResumed = true;
-        if (mSchedule != null && !mPopulated) {
+        if (mSchedule != null) {
             populateScheduleGrid(true);
         }
     }
@@ -178,6 +175,10 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         boolean filtering = !"".equals(mFilterTags[0]);
         int itemLayout = filtering ? R.layout.talk_item_view : R.layout.schedule_item_view;
 
+        if (mTagMetadata == null) {
+            return;
+        }
+
         List<Talk> filteredTalks = mSchedule.getFilteredTalks(mTagMetadata.getTag(mFilterTags[0]),
                 mTagMetadata.getTag(mFilterTags[1]),
                 mTagMetadata.getTag(mFilterTags[2]));
@@ -241,8 +242,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 mScheduleGrid.onRestoreInstanceState(scheduleGridState);
             }
         }
-
-        mPopulated = true;
     }
 
     private int getNumColumns(boolean filtering) {
@@ -400,7 +399,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
     public void onEventMainThread(SyncEvent syncEvent) {
         BaseActivity baseActivity = (BaseActivity) getActivity();
-        if (mScheduleGrid != null && !baseActivity.isMainContentScrolling()) {
+        if (mScheduleGrid != null && !baseActivity.isMainContentScrolling() && mTagMetadata != null) {
             populateScheduleGrid(false, false);
         }
     }

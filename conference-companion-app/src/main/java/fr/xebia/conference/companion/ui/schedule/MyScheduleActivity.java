@@ -30,6 +30,8 @@ import se.emilsjolander.sprinkles.Query;
 
 public class MyScheduleActivity extends BaseActivity implements ManyQuery.ResultHandler<Talk> {
 
+    private static final long DAY_MILLIS = 24 * 60 * 60 * 1000;
+
     @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
     @InjectView(R.id.pager_strip) PagerTabStrip mPagerStrip;
     @InjectView(R.id.view_pager) ViewPager mViewPager;
@@ -45,6 +47,15 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
         int conferenceId = Preferences.getSelectedConference(this);
         String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC, toTime ASC, _id ASC";
         Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
+        computSelectedPage();
+    }
+
+    private void computSelectedPage() {
+        long conferenceStartTime = Preferences.getSelectedConferenceStartTime(this);
+        long gapFromStart = System.currentTimeMillis() - conferenceStartTime;
+        if (gapFromStart > 0) {
+            mSelectedPage = (int) (gapFromStart / DAY_MILLIS);
+        }
     }
 
     @Override
@@ -91,6 +102,15 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mViewPager.getAdapter() != null) {
+            computSelectedPage();
+            mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
+        }
+    }
+
+    @Override
     public void onNavigationDrawerToggle(boolean opened) {
         super.onNavigationDrawerToggle(opened);
         if (!opened) {
@@ -134,7 +154,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
 
     private void setAdapter() {
         mViewPager.setAdapter(new MySchedulePagerAdapter(mMySchedule, getFragmentManager()));
-        mViewPager.setCurrentItem(mSelectedPage);
+        mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
     }
 
     public static class MySchedulePagerAdapter extends FragmentPagerAdapter {

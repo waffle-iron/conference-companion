@@ -62,6 +62,10 @@ public class SynchroIntentService extends IntentService {
                 transaction.setSuccessful(true);
                 Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
                 startService(new Intent(NotificationSchedulerIntentService.ACTION_SCHEDULE_ALL_NOTIFICATIONS, null, this, NotificationSchedulerIntentService.class));
+                Preferences.setSelectedConference(this, conference.getId());
+                Preferences.setSelectedConferenceEndTime(this, conference.getToUtcTime());
+                Preferences.setSelectedConferenceStartTime(this, conference.getFromUtcTime());
+                Preferences.saveDevoxxianTag(this, conference.getNfcTag());
                 BUS.post(new SynchroFinishedEvent(true, conference));
             }
         } catch (Exception e) {
@@ -215,12 +219,12 @@ public class SynchroIntentService extends IntentService {
         List<String> availableTracks = new ArrayList<>();
         for (Talk talk : talks) {
             String track = talk.getTrack();
-            if(!availableTracks.contains(track)){
+            if (!availableTracks.contains(track)) {
                 availableTracks.add(track);
             }
         }
         Collections.sort(availableTracks);
-        for(String track : availableTracks){
+        for (String track : availableTracks) {
             colorByTrack.put(track, TrackColors.LIST.get(position));
             position++;
             position = position % TrackColors.LIST.size();

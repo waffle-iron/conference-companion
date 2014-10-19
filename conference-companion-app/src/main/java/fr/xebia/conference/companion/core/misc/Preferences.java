@@ -13,6 +13,7 @@ public class Preferences {
     private static final String NFC_TAG = "NfcTag";
     private static final String BLE_HINT_DISPLAYED = "BleHintDisplayed";
     private static final String CURRENT_CONFERENCE_END_TIME = "CurrentConferenceEndTime";
+    private static final String CURRENT_CONFERENCE_START_TIME = "CurrentConferenceStartTime";
     private static final String GENERATED_DEVICE_ID = "GeneratedDeviceId";
 
     private Preferences() {
@@ -37,6 +38,14 @@ public class Preferences {
 
     public static void setSelectedConferenceEndTime(Context context, long conferenceEndTime) {
         getAppPreferences(context).edit().putLong(CURRENT_CONFERENCE_END_TIME, conferenceEndTime).apply();
+    }
+
+    public static long getSelectedConferenceStartTime(Context context) {
+        return getAppPreferences(context).getLong(CURRENT_CONFERENCE_START_TIME, -1);
+    }
+
+    public static void setSelectedConferenceStartTime(Context context, long conferenceStartTime) {
+        getAppPreferences(context).edit().putLong(CURRENT_CONFERENCE_START_TIME, conferenceStartTime).apply();
     }
 
     public static SharedPreferences getAppPreferences(Context context) {
