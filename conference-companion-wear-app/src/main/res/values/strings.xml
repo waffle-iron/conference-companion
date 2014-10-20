@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">My Module</string>
+    <string name="rate_this_presentation">Rate this presentation</string>
+    <string name="saving">Saving...</string>
+    <string name="thanks">Thanks!</string>
+
+</resources>

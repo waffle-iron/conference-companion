@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="notification_secondary">#434343</color>
+    <color name="circle_blue">#ff1c5bff</color>
+    <color name="light_blue">#ff81a9ff</color>
+</resources>

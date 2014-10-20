@@ -109,7 +109,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         super.onResume();
         mResumed = true;
         if (mSchedule != null) {
-            populateScheduleGrid(true);
+            populateScheduleGrid(false);
         }
     }
 

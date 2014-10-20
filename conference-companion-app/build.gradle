@@ -81,6 +81,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v13:20.0.0'
     compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.google.android.gms:play-services:6.1.11'
     compile 'se.emilsjolander:stickylistheaders:2.3.0'
     compile 'de.greenrobot:eventbus:2.2.0'
     compile 'com.fluent.android:fluent-android-bundle:0.1.2'
@@ -101,6 +102,8 @@ dependencies {
     compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'com.commonsware.cwac:anddown:0.2.0'
     compile 'com.jakewharton.timber:timber:2.3.0'
+
+    project(':conference-companion-wear-app')
 }
 
 def xebiaStoreFile() {

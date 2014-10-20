@@ -75,8 +75,8 @@
     <string name="ended">Terminée</string>
     <string name="talks_ended">Présentations terminées</string>
     <string name="no_talks">Pas de présentations</string>
-    <string name="session_notification_text">Démarre dans <xliff:g id="remaining_time">%1$d</xliff:g> min.</string>
-    <string name="scheduled_talk_notification_ticker">1 presentation va bientôt commencer.</string>
+    <string name="session_notification_text">Démarre dans <xliff:g id="remaining_time">%1$d</xliff:g> min</string>
+    <string name="scheduled_talk_notification_ticker">1 présentation va bientôt commencer.</string>
     <string name="my_rating">Ma note</string>
     <string name="feedback_notification">Donnez votre avis</string>
     <plurals name="available_talks">

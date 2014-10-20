@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="8dp"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/notification_secondary"
+        android:textSize="@dimen/notification_rate_size"/>
+
+    <RatingBar
+        android:id="@+id/ratingbar"
+        style="@style/TalkRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:numStars="5"
+        android:stepSize="1.0"/>
+
+    <LinearLayout
+        android:id="@+id/delayed_confirmation_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <android.support.wearable.view.DelayedConfirmationView
+            android:id="@+id/delayed_confirmation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_cancel"
+            app:circle_color="@color/circle_blue"
+            app:circle_border_color="@color/light_blue"
+            app:circle_radius="@dimen/circle_radius"
+            app:circle_radius_pressed="@dimen/circle_radius_pressed"
+            app:circle_padding="@dimen/circle_padding"
+            app:circle_border_width="@dimen/circle_border_normal_width">
+        </android.support.wearable.view.DelayedConfirmationView>
+
+        <TextView
+            android:id="@+id/saving"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="middle"
+            android:textColor="@color/notification_secondary"
+            android:maxLines="2"
+            android:text="@string/saving"
+            android:textSize="@dimen/notification_title_size"/>
+    </LinearLayout>
+
+</RelativeLayout>

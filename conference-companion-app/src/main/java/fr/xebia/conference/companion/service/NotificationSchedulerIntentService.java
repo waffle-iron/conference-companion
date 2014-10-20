@@ -8,11 +8,19 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
+
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Preferences;
@@ -30,7 +38,9 @@ public class NotificationSchedulerIntentService extends IntentService {
 
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.conference.companion.service.EXTRA_CONFERENCE_ID";
     public static final String EXTRA_TALK_ID = "fr.xebia.conference.companion.service.EXTRA_TALK_ID";
+
     public static final int TALK_NOTIFICATION_ID = 100;
+    public static final int FEEDBACK_NOTIFICATION_ID = 101;
 
     private static final int NOTIFICATION_LED_ON_MS = 100;
     private static final int NOTIFICATION_LED_OFF_MS = 1000;
@@ -39,6 +49,7 @@ public class NotificationSchedulerIntentService extends IntentService {
     private static final int MILLIS_GAP_FOR_FEEDBACK_NOTIFICATION = 10 * 60 * 1000;
 
     private AlarmManager mAlarmManager;
+    private GoogleApiClient mGoogleApiClient;
 
     public NotificationSchedulerIntentService() {
         super("NotificationSchedulerIntentService");
@@ -74,10 +85,14 @@ public class NotificationSchedulerIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API)
+                .build();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        mGoogleApiClient.blockingConnect(2000, TimeUnit.MILLISECONDS);
         if (ACTION_SCHEDULE_ALL_NOTIFICATIONS.equals(intent.getAction())) {
             handleAllTalksNotifications(intent);
         } else {
@@ -148,12 +163,21 @@ public class NotificationSchedulerIntentService extends IntentService {
                         NotificationSchedulerIntentService.NOTIFICATION_LED_ON_MS,
                         NotificationSchedulerIntentService.NOTIFICATION_LED_OFF_MS)
                 .setSmallIcon(R.drawable.ic_notification)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .extend(new NotificationCompat.WearableExtender()
+                        .setHintHideIcon(true)
+                        .setBackground(BitmapFactory.decodeResource(getResources(), getTalkBackgroundResource(talk))))
                 .setContentIntent(pi)
-                .setLocalOnly(true) // make it local to the phone
                 .setAutoCancel(true);
-        NotificationManager nm = (NotificationManager) getSystemService(
-                Context.NOTIFICATION_SERVICE);
-        nm.notify(talk.getId(), TALK_NOTIFICATION_ID, notifBuilder.build());
+
+        NotificationCompat.InboxStyle richNotification = new NotificationCompat.InboxStyle(
+                notifBuilder)
+                .setBigContentTitle(talk.getTitle())
+                .addLine(contentText)
+                .addLine(talk.getRoom());
+
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(talk.getId(), TALK_NOTIFICATION_ID, richNotification.build());
 
         Preferences.flagTalkAsNotified(this, talk);
     }
@@ -173,6 +197,11 @@ public class NotificationSchedulerIntentService extends IntentService {
                 .addNextIntent(TalkActivity.buildIntentFromTalk(this, talk))
                 .getPendingIntent(1, PendingIntent.FLAG_CANCEL_CURRENT);
 
+        // this is used to synchronize deletion of notifications on phone and wear
+        Intent dismissalIntent = new Intent(WearListenerService.ACTION_NOTIFICATION_DISMISSAL);
+        dismissalIntent.putExtra(WearListenerService.EXTRA_TALK_ID, talk.getId());
+        PendingIntent dismissalPendingIntent = PendingIntent.getService(this, (int) new Date().getTime(), dismissalIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle(talk.getTitle())
                 .setContentText(getString(R.string.feedback_notification))
@@ -184,13 +213,37 @@ public class NotificationSchedulerIntentService extends IntentService {
                         NotificationSchedulerIntentService.NOTIFICATION_LED_OFF_MS)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(pi)
+                .setDeleteIntent(dismissalPendingIntent)
                 .setLocalOnly(true) // make it local to the phone
                 .setAutoCancel(true);
-        NotificationManager nm = (NotificationManager) getSystemService(
-                Context.NOTIFICATION_SERVICE);
-        nm.notify(talk.getId(), TALK_NOTIFICATION_ID, notifBuilder.build());
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(talk.getId(), FEEDBACK_NOTIFICATION_ID, notifBuilder.build());
 
         Preferences.flagTalkFeedbackAsNotified(this, talk);
+
+        sendNotificationToWear(talk);
+    }
+
+    private void sendNotificationToWear(Talk talk) {
+        if (!mGoogleApiClient.isConnected()) {
+            return;
+        }
+        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WearListenerService.buildFeedbackPath(talk.getId()));
+        putDataMapRequest.getDataMap().putLong(WearListenerService.TIME, new Date().getTime());
+        putDataMapRequest.getDataMap().putString(WearListenerService.KEY_TALK_ID, talk.getId());
+        putDataMapRequest.getDataMap().putString(WearListenerService.KEY_TALK_TITLE, talk.getTitle());
+        putDataMapRequest.getDataMap().putString(WearListenerService.KEY_TALK_SPEAKERS, talk.getPrettySpeakers());
+        putDataMapRequest.getDataMap().putInt(WearListenerService.KEY_TALK_COLOR, talk.getColor());
+        putDataMapRequest.getDataMap().putString(WearListenerService.KEY_TALK_ROOM, talk.getRoom());
+
+        PutDataRequest request = putDataMapRequest.asPutDataRequest();
+
+        Wearable.DataApi.putDataItem(mGoogleApiClient, request).await();
+    }
+
+    private int getTalkBackgroundResource(Talk talk) {
+        return !Preferences.isCurrentConferenceDevoxx(this) ? R.drawable.default_talk_template :
+                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 8, "drawable", this.getPackageName());
     }
 
     private void scheduleNotification(Talk talk) {
@@ -202,5 +255,4 @@ public class NotificationSchedulerIntentService extends IntentService {
                 PendingIntent.getService(this, 3, buildSendFeedbackNotificationIntentFromTalk(getBaseContext(), talk), PendingIntent.FLAG_CANCEL_CURRENT);
         mAlarmManager.set(AlarmManager.RTC_WAKEUP, talk.getToUtcTime() - MILLIS_GAP_FOR_FEEDBACK_NOTIFICATION, sendFeedBackNotificationPendingIntent);
     }
-
 }

@@ -1,1 +1,1 @@
-include ':conference-companion-app'
+include ':conference-companion-app', ':conference-companion-wear-app'

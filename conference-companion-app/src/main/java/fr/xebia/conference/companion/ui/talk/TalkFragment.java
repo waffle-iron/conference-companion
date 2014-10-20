@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -125,7 +127,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         Icepick.restoreInstanceState(this, savedInstanceState);
         setHasOptionsMenu(true);
         mConferenceId = Preferences.getSelectedConference(getActivity());
@@ -206,15 +207,19 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 (), new OneQuery
                 .ResultHandler<Vote>() {
             @Override
-            public boolean handleResult(Vote vote) {
+            public boolean handleResult(final Vote vote) {
                 mVote = vote;
                 if (vote == null || getView() == null) {
-                    return false;
+                    return true;
                 }
 
-                mTalkRatingBar.setRating(vote.getNote());
-
-                return false;
+                mTalkRatingBar.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTalkRatingBar.setRating(vote.getNote());
+                    }
+                });
+                return true;
             }
         }, null);
     }
@@ -410,7 +415,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mTalkRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (mVote != null && (int) rating == mVote.getNote()) {
+                if ((mVote != null && (int) rating == mVote.getNote()) || !fromUser) {
                     return;
                 }
                 Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
