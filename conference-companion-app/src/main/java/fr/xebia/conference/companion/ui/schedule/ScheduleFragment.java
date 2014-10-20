@@ -261,6 +261,10 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void showSecondaryFilters() {
+        if (mTagMetadata == null) {
+            showFilterBox(false);
+            return;
+        }
         // repopulate secondary filter spinners
         boolean showFilter = !TextUtils.isEmpty(mFilterTags[0]);
         if (showFilter) {
