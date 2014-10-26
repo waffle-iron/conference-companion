@@ -1,9 +1,5 @@
 package fr.xebia.conference.companion.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.Date;
-
 public class Rating {
 
     public final String deviceId;

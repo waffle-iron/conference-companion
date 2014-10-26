@@ -130,7 +130,7 @@ public class NotificationSchedulerIntentService extends IntentService {
 
 
     private void sendNotification(Talk talk) {
-        if (!talk.isFavorite() /*|| Preferences.isTalkAlreadyNotified(this, talk)*/) {
+        if (!talk.isFavorite() || Preferences.isTalkAlreadyNotified(this, talk)) {
             return;
         }
 
@@ -183,7 +183,7 @@ public class NotificationSchedulerIntentService extends IntentService {
     }
 
     private void sendFeedbackNotification(Talk talk) {
-        if (!talk.isFavorite() /*|| Preferences.isTalkFeedbackAlreadyNotified(this, talk)*/) {
+        if (!talk.isFavorite() || Preferences.isTalkFeedbackAlreadyNotified(this, talk)) {
             return;
         }
 

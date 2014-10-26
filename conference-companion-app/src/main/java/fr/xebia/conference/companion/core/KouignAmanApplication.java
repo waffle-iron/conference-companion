@@ -15,9 +15,7 @@ import java.util.UUID;
 
 import de.greenrobot.event.EventBus;
 import fr.xebia.conference.companion.BuildConfig;
-import fr.xebia.conference.companion.api.BleLocationApi;
 import fr.xebia.conference.companion.api.ConferenceApi;
-import fr.xebia.conference.companion.api.VoteApi;
 import fr.xebia.conference.companion.bus.SyncEvent;
 import fr.xebia.conference.companion.core.db.DbSchema;
 import fr.xebia.conference.companion.core.misc.Preferences;
@@ -31,9 +29,7 @@ import timber.log.Timber;
 
 public class KouignAmanApplication extends Application {
 
-    private static VoteApi sVoteApi;
     private static ConferenceApi sConferenceApi;
-    private static BleLocationApi sBleLocationApi;
 
     public static final EventBus BUS = EventBus.getDefault();
 
@@ -55,8 +51,6 @@ public class KouignAmanApplication extends Application {
         OkHttpClient okHttpClient = new OkHttpClient();
         RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setClient(new OkClient(okHttpClient)).setConverter(new JacksonConverter());
 
-        sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.ROOT_URL).build().create(VoteApi.class);
-        sBleLocationApi = restAdapterBuilder.setEndpoint(BuildConfig.LOCATION_URL).build().create(BleLocationApi.class);
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
 
         Sprinkles sprinkles = Sprinkles.init(applicationContext, "conferences.db", 0);
@@ -118,15 +112,7 @@ public class KouignAmanApplication extends Application {
         }
     }
 
-    public static VoteApi getVoteApi() {
-        return sVoteApi;
-    }
-
     public static ConferenceApi getConferenceApi() {
         return sConferenceApi;
-    }
-
-    public static BleLocationApi getBleLocationApi() {
-        return sBleLocationApi;
     }
 }

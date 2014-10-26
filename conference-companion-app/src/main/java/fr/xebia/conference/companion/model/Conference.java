@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-import fr.xebia.conference.companion.core.KouignAmanApplication;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
@@ -82,7 +81,7 @@ public class Conference extends Model {
     }
 
     public boolean isStarted() {
-        return System.currentTimeMillis()> fromUtcTime;
+        return System.currentTimeMillis() > fromUtcTime;
     }
 
     public String getNfcTag() {

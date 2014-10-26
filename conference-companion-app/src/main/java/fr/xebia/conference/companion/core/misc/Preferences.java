@@ -10,8 +10,6 @@ public class Preferences {
     private static final String APP_PREFS = "ApplicationPreferences";
     private static final String CURRENT_CONFERENCE = "SynchroOver";
     private static final String CURRENT_CONFERENCE_DEVOXX = "DevoxxConference";
-    private static final String NFC_TAG = "NfcTag";
-    private static final String BLE_HINT_DISPLAYED = "BleHintDisplayed";
     private static final String CURRENT_CONFERENCE_END_TIME = "CurrentConferenceEndTime";
     private static final String CURRENT_CONFERENCE_START_TIME = "CurrentConferenceStartTime";
     private static final String GENERATED_DEVICE_ID = "GeneratedDeviceId";
@@ -52,14 +50,6 @@ public class Preferences {
         return context.getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
     }
 
-    public static boolean isTagRegistered(Context context) {
-        return getAppPreferences(context).getString(NFC_TAG, null) != null;
-    }
-
-    public static void saveDevoxxianTag(Context context, String currentNfcId) {
-        getAppPreferences(context).edit().putString(NFC_TAG, currentNfcId).apply();
-    }
-
     public static boolean isDeviceIdGenerated(Context context) {
         return getAppPreferences(context).getString(GENERATED_DEVICE_ID, null) != null;
     }
@@ -70,18 +60,6 @@ public class Preferences {
 
     public static void saveGeneratedDeviceId(Context context, String generatedDeviceId) {
         getAppPreferences(context).edit().putString(GENERATED_DEVICE_ID, generatedDeviceId).apply();
-    }
-
-    public static String getNfcId(Context context) {
-        return getAppPreferences(context).getString(NFC_TAG, "");
-    }
-
-    public static boolean isBleHintDisplayed(Context context) {
-        return getAppPreferences(context).getBoolean(BLE_HINT_DISPLAYED, false);
-    }
-
-    public static void setBleHintDisplayed(Context context, boolean displayed) {
-        getAppPreferences(context).edit().putBoolean(BLE_HINT_DISPLAYED, displayed).apply();
     }
 
     public static boolean isCurrentConferenceDevoxx(Context context) {

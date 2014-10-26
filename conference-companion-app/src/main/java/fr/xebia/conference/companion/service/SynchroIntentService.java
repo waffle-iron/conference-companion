@@ -61,11 +61,10 @@ public class SynchroIntentService extends IntentService {
                 synchroniseTalks(conference, transaction);
                 transaction.setSuccessful(true);
                 Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
-                startService(new Intent(NotificationSchedulerIntentService.ACTION_SCHEDULE_ALL_NOTIFICATIONS, null, this, NotificationSchedulerIntentService.class));
                 Preferences.setSelectedConference(this, conference.getId());
                 Preferences.setSelectedConferenceEndTime(this, conference.getToUtcTime());
                 Preferences.setSelectedConferenceStartTime(this, conference.getFromUtcTime());
-                Preferences.saveDevoxxianTag(this, conference.getNfcTag());
+                startService(new Intent(NotificationSchedulerIntentService.ACTION_SCHEDULE_ALL_NOTIFICATIONS, null, this, NotificationSchedulerIntentService.class));
                 BUS.post(new SynchroFinishedEvent(true, conference));
             }
         } catch (Exception e) {

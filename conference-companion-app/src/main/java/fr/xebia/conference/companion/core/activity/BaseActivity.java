@@ -102,21 +102,6 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     protected void onResume() {
         super.onResume();
-        if (!Preferences.isBleHintDisplayed(this) && !mDontCheckConference) {
-            Preferences.setBleHintDisplayed(this, true);
-            final AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.informations)
-                    .setMessage(R.string.informations_ble)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .setCancelable(false).create();
-            dialog.show();
-        }
-
         if (mMainContent != null && mMainContent.getAlpha() == 0) {
             mMainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
         }

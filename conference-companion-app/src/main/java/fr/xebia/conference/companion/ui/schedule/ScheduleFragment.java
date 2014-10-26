@@ -129,8 +129,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         ActionBar actionBar = getActivity().getActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         View spinnerContainer = LayoutInflater.from(actionBar.getThemedContext()).inflate(R.layout.actionbar_spinner, null);
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         actionBar.setCustomView(spinnerContainer, lp);
+        actionBar.setDisplayShowTitleEnabled(false);
         mFilterScheduleSpinnerAdapter = new FilterScheduleSpinnerAdapter(getActivity(), true);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
