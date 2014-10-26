@@ -384,7 +384,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
         if (getView() == null) {
-            return false;
+            return true;
         }
         mTitle.setText(talk.getTitle());
         mInformations.setText(String.format("%s | %s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
@@ -437,7 +437,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             getView().animate().alpha(1).start();
         }
 
-        return false;
+        return true;
     }
 
     private int getTalkBackgroundResource(Talk talk) {
