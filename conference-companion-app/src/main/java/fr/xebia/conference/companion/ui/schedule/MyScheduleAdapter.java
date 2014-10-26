@@ -42,6 +42,7 @@ import java.util.List;
 
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.core.utils.Compatibility;
 import fr.xebia.conference.companion.core.utils.TimeUtils;
 import fr.xebia.conference.companion.model.MyScheduleItem;
 import fr.xebia.conference.companion.model.Talk;
@@ -281,7 +282,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
             if (giveFeedbackButton != null) {
                 giveFeedbackButton.setVisibility(View.GONE);
             }
-            slotTitleView.setText(item.title);
+            slotTitleView.setText(Compatibility.getLocalizedTitle(mContext, item.title));
             slotTitleView.setTextColor(res.getColor(R.color.body_text_1));
             slotTitleView.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
             if (slotSubtitleView != null) {
