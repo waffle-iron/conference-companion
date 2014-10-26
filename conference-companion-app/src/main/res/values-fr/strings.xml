@@ -21,7 +21,7 @@
     <string name="initial_synchro">Synchro en cours</string>
     <string name="initial_synchro_conferences">Récupération des conférences</string>
     <string name="no_data">Pas de données</string>
-    <string name="schedule">Agenda</string>
+    <string name="schedule">Mon agenda</string>
     <string name="speakers">Speakers</string>
     <string name="schedule_format"><![CDATA[%1$s<br><font color="#696969"><small>%2$s</small></font>]]></string>
     <string name="speaker_format"><![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>

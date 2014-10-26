@@ -20,7 +20,7 @@
     <string name="initial_synchro">Synchronization running</string>
     <string name="initial_synchro_conferences">Conferences download</string>
     <string name="no_data">No data</string>
-    <string name="schedule">Schedule</string>
+    <string name="schedule">My schedule</string>
     <string name="speakers">Speakers</string>
     <string name="schedule_format"><![CDATA[%1$s<br><font color="#696969"><small>%2$s</small></font>]]></string>
     <string name="speaker_format"><![CDATA[%1$s %2$s<br><font color="#696969"><small>%3$s</small></font>]]></string>
@@ -62,7 +62,7 @@
     <string name="session_finished">Finished</string>
     <string name="session_now">Now</string>
     <string name="my_schedule_end_time">to <xliff:g id="endTime">%1$s</xliff:g></string>
-    <string name="my_schedule">My agenda</string>
+    <string name="my_schedule">My schedule</string>
     <string name="all_talks">All talks</string>
     <string name="all_days">All days</string>
     <string name="all_topics">All topics</string>
