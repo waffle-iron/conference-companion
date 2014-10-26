@@ -3,6 +3,7 @@ package fr.xebia.conference.companion.ui.conference;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import fr.xebia.conference.companion.R;
@@ -16,6 +17,8 @@ import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
 public class ConferenceChooserActivity extends BaseActivity {
 
+    public static final String EXTRA_SHOW_HOME = "fr.xebia.conference.companion.EXTRA_SHOW_HOME";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,7 @@ public class ConferenceChooserActivity extends BaseActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.conferences);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -63,6 +67,15 @@ public class ConferenceChooserActivity extends BaseActivity {
     protected void onStop() {
         BUS.unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

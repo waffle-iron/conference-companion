@@ -53,6 +53,7 @@ public class SynchroIntentService extends IntentService {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         Conference conference = Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", conferenceId).get();
         Transaction transaction = new Transaction();
+        boolean sendSynchroEvent = !intent.hasExtra(EXTRA_FROM_APP_CREATE);
         try {
             if (conferenceId == -1) {
                 BUS.post(new SynchroFinishedEvent(false, null));
@@ -65,12 +66,16 @@ public class SynchroIntentService extends IntentService {
                 Preferences.setSelectedConferenceEndTime(this, conference.getToUtcTime());
                 Preferences.setSelectedConferenceStartTime(this, conference.getFromUtcTime());
                 startService(new Intent(NotificationSchedulerIntentService.ACTION_SCHEDULE_ALL_NOTIFICATIONS, null, this, NotificationSchedulerIntentService.class));
-                BUS.post(new SynchroFinishedEvent(true, conference));
+                if (sendSynchroEvent) {
+                    BUS.post(new SynchroFinishedEvent(true, conference));
+                }
             }
         } catch (Exception e) {
             Timber.e(e, "Error synchronizing data");
             transaction.setSuccessful(false);
-            BUS.post(new SynchroFinishedEvent(false, null));
+            if (sendSynchroEvent) {
+                BUS.post(new SynchroFinishedEvent(false, null));
+            }
             // Retry in 1 hour
             long oneHourLater = System.currentTimeMillis() + 3_600 * 1000;
             ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC, oneHourLater, buildSynchroPendingIntent());

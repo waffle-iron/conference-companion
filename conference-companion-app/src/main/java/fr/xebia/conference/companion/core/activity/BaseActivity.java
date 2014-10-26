@@ -260,7 +260,9 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(BaseActivity.this, ConferenceChooserActivity.class));
+                        Intent intent = new Intent(BaseActivity.this, ConferenceChooserActivity.class);
+                        intent.putExtra(ConferenceChooserActivity.EXTRA_SHOW_HOME, true);
+                        startActivity(intent);
                     }
                 }, 300);
                 break;
