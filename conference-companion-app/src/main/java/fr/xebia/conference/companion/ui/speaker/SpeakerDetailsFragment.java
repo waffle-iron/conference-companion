@@ -34,7 +34,8 @@ import se.emilsjolander.sprinkles.Query;
 
 public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultHandler<Speaker>, ManyQuery.ResultHandler<Talk> {
 
-    public static final String EXTRA_SPEAKER_ID = "fr.xebia.devoxx.EXTRA_SPEAKER_ID";
+    public static final String EXTRA_SPEAKER_ID = "fr.xebia.conference.companion.EXTRA_SPEAKER_ID";
+    private static final String EXTRA_COLOR = "fr.xebia.conference.companion.EXTRA_COLOR";
 
     @InjectView(R.id.speaker_image) ImageView mSpeakerImage;
     @InjectView(R.id.speaker_name) TextView mSpeakerName;
@@ -46,6 +47,7 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
     @Icicle String mSpeakerId;
 
     private int mThemePrimaryColor;
+    private int mContextColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
         if (mSpeakerId == null) {
             mSpeakerId = getArguments().getString(EXTRA_SPEAKER_ID);
         }
-
+        mContextColor = getArguments().getInt(EXTRA_COLOR);
         int conferenceId = Preferences.getSelectedConference(getActivity());
         Query.one(Speaker.class, "SELECT * FROM Speakers WHERE _id=? AND conferenceId=?", mSpeakerId, conferenceId)
                 .getAsync(getLoaderManager(), this);
@@ -95,19 +97,20 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
     private void configureHeaders() {
         int underlineColor = getResources().getColor(R.color.list_dropdown_divider_color);
         int underlineHeight = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
-        mSpeakerBio.setTextColor(mThemePrimaryColor);
+        mSpeakerBio.setTextColor(mContextColor != 0 ? mContextColor : mThemePrimaryColor);
         mSpeakerBio.setUnderlineColor(underlineColor);
         mSpeakerBio.setUnderlineHeight(underlineHeight);
 
-        mSpeakerPresentations.setTextColor(mThemePrimaryColor);
+        mSpeakerPresentations.setTextColor(mContextColor != 0 ? mContextColor : mThemePrimaryColor);
         mSpeakerPresentations.setUnderlineColor(underlineColor);
         mSpeakerPresentations.setUnderlineHeight(underlineHeight);
     }
 
-    public static Fragment newInstance(String speakerId) {
+    public static Fragment newInstance(String speakerId, int contextColor) {
         Fragment fragment = new SpeakerDetailsFragment();
         Bundle arguments = new Bundle();
         arguments.putString(EXTRA_SPEAKER_ID, speakerId);
+        arguments.putInt(EXTRA_COLOR, contextColor);
         fragment.setArguments(arguments);
         return fragment;
     }
