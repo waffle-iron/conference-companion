@@ -84,6 +84,6 @@ public class TalkItemView extends FrameLayout {
 
     private int getItemBackgroundResource(Talk talk, boolean currentConferenceDevoxx) {
         return !currentConferenceDevoxx ? R.drawable.default_talk_template :
-                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 8, "drawable", getContext().getPackageName());
+                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
     }
 }
