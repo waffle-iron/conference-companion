@@ -49,6 +49,7 @@ import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.OneQuery;
 import se.emilsjolander.sprinkles.Query;
+import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -428,7 +429,12 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             }
         });
         if (mTalkRatingBar.getProgressDrawable() != null) {
-            mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
+            try {
+                mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
+            } catch (Exception e) {
+                // TODO Check what happen
+                Timber.e(e, "Error mutating rating bar");
+            }
         }
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +

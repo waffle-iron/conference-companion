@@ -21,6 +21,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.concurrent.TimeUnit;
 
 import fr.xebia.conference.companion.R;
+import timber.log.Timber;
 
 public class FeedbackActivity extends Activity {
 
@@ -53,7 +54,12 @@ public class FeedbackActivity extends Activity {
         });
         mTitle.setText(getIntent().getStringExtra(HomeListenerService.KEY_TALK_TITLE));
         if (mRatingBar.getProgressDrawable() != null) {
-            mRatingBar.getProgressDrawable().setColorFilter(getIntent().getIntExtra(HomeListenerService.KEY_TALK_COLOR, 0), PorterDuff.Mode.SRC_IN);
+            try {
+                mRatingBar.getProgressDrawable().setColorFilter(getIntent().getIntExtra(HomeListenerService.KEY_TALK_COLOR, 0), PorterDuff.Mode.SRC_IN);
+            } catch (Exception e) {
+                // TODO Check what happen
+                Timber.e(e, "Error mutating rating bar");
+            }
         }
         mDelayedConfirmationView.setListener(new DelayedConfirmationView.DelayedConfirmationListener() {
             @Override
