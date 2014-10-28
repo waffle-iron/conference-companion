@@ -52,7 +52,9 @@ public class FeedbackActivity extends Activity {
             }
         });
         mTitle.setText(getIntent().getStringExtra(HomeListenerService.KEY_TALK_TITLE));
-        mRatingBar.getProgressDrawable().setColorFilter(getIntent().getIntExtra(HomeListenerService.KEY_TALK_COLOR, 0), PorterDuff.Mode.SRC_IN);
+        if (mRatingBar.getProgressDrawable() != null) {
+            mRatingBar.getProgressDrawable().setColorFilter(getIntent().getIntExtra(HomeListenerService.KEY_TALK_COLOR, 0), PorterDuff.Mode.SRC_IN);
+        }
         mDelayedConfirmationView.setListener(new DelayedConfirmationView.DelayedConfirmationListener() {
             @Override
             public void onTimerFinished(View view) {

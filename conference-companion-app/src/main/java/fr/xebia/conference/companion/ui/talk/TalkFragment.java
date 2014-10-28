@@ -427,7 +427,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 });
             }
         });
-        mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
+        if (mTalkRatingBar.getProgressDrawable() != null) {
+            mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
+        }
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
                         ".conferenceId=?",
