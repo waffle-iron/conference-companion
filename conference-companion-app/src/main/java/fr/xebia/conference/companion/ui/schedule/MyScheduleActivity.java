@@ -38,6 +38,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
 
     private MySchedule mMySchedule;
     private boolean mStopped;
+    private boolean setDefaultPage = true;
     @Icicle int mSelectedPage;
 
     @Override
@@ -104,9 +105,10 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     @Override
     protected void onResume() {
         super.onResume();
-        if (mViewPager.getAdapter() != null) {
+        if (mViewPager.getAdapter() != null && setDefaultPage) {
             computSelectedPage();
             mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
+            setDefaultPage = false;
         }
     }
 
