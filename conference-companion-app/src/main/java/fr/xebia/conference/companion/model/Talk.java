@@ -361,7 +361,7 @@ public class Talk extends Model implements Parcelable {
     };
 
     public boolean isKeynote() {
-        return kind.equalsIgnoreCase(KEYNOTE);
+        return KEYNOTE.equalsIgnoreCase(kind) || KEYNOTE.equalsIgnoreCase(type);
     }
 
     public int getPosition() {

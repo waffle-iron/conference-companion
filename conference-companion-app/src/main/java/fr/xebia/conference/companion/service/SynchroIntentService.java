@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +21,6 @@ import java.util.TimeZone;
 import fr.xebia.conference.companion.bus.SynchroFinishedEvent;
 import fr.xebia.conference.companion.core.KouignAmanApplication;
 import fr.xebia.conference.companion.core.misc.Preferences;
-import fr.xebia.conference.companion.core.utils.Devoxx2014Hack;
 import fr.xebia.conference.companion.model.Conference;
 import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.SpeakerTalk;
@@ -43,6 +43,7 @@ public class SynchroIntentService extends IntentService {
     public static final String DEVOXX_CONF = "devoxx";
 
     private static final int DEVOXX_2014_CONF_ID = 14;
+    private static final List<String> DEVOXX_IGNORE_CONF = Arrays.asList("THS-0021", "DGQ-7731", "KIB-7840", "SBI-2741", "HDA-3721", "JEF-7232", "YPT-5862", "VCM-1344");
 
     public SynchroIntentService() {
         super(TAG);
@@ -102,12 +103,14 @@ public class SynchroIntentService extends IntentService {
         ModelList<Talk> talksToSave = new ModelList<>();
         int index = 0;
         for (Talk talkToSave : scheduledTalks) {
-            if (conferenceId == DEVOXX_2014_CONF_ID && talkToSave.isKeynote()) {
+            if (conferenceId == DEVOXX_2014_CONF_ID && (talkToSave.getTrack().isEmpty() || DEVOXX_IGNORE_CONF.contains(talkToSave.getId()))) {
                 continue;
             }
             Talk talkFromDb = talksInDbById.remove(talkToSave.getId());
             if (talkFromDb != null) {
-                talkToSave.setFavorite(talkFromDb.isFavorite());
+                talkToSave.setFavorite(talkFromDb.isFavorite() || talkToSave.isKeynote());
+            } else {
+                talkToSave.setFavorite(talkToSave.isKeynote());
             }
 
             String talkDetailsId = talkToSave.getDetails().getId();
@@ -117,6 +120,10 @@ public class SynchroIntentService extends IntentService {
             if (talkDetails != null) {
                 talkToSave.setSummary(talkDetails.getSummary());
                 talkToSave.setTrack(talkDetails.getTrack());
+            }
+
+            if (talkToSave.isKeynote()) {
+                talkToSave.setTrack("Keynote");
             }
 
             talkToSave.setPrettySpeakers(talkToSave.getSpeakers(), everySpeakers);
@@ -133,7 +140,8 @@ public class SynchroIntentService extends IntentService {
             }
         }
 
-        if (DEVOXX_2014_CONF_ID == conferenceId) {
+
+       /* if (DEVOXX_2014_CONF_ID == conferenceId) {
             Collection<Talk> missingTalks = Devoxx2014Hack.generateKeynotes(this);
             for (Talk talk : missingTalks) {
                 talk.setFavorite(talk.isKeynote());
@@ -142,7 +150,7 @@ public class SynchroIntentService extends IntentService {
                 talksInDbById.remove(talk.getId());
             }
             talksToSave.addAll(missingTalks);
-        }
+        }*/
 
         generateColorByTrack(talksToSave);
 
@@ -227,6 +235,7 @@ public class SynchroIntentService extends IntentService {
                 availableTracks.add(track);
             }
         }
+        availableTracks.add("");
         Collections.sort(availableTracks);
         for (String track : availableTracks) {
             colorByTrack.put(track, TrackColors.LIST.get(position));
