@@ -53,14 +53,18 @@ public class SynchroIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         Conference conference = Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", conferenceId).get();
-        Transaction transaction = new Transaction();
+        Transaction transaction = null;
         boolean sendSynchroEvent = !intent.hasExtra(EXTRA_FROM_APP_CREATE);
         try {
             if (conferenceId == -1) {
                 BUS.post(new SynchroFinishedEvent(false, null));
             } else {
-                synchroniseSpeakers(conferenceId, transaction);
-                synchroniseTalks(conference, transaction);
+                // Load data before starting transaction
+                List<Speaker> speakers = KouignAmanApplication.getConferenceApi().getSpeakers(conferenceId);
+                Map<String, Talk> talksFromWsById = loadTalks(conferenceId);
+                transaction = new Transaction();
+                synchroniseSpeakers(speakers, transaction);
+                synchroniseTalks(conference, talksFromWsById, transaction);
                 transaction.setSuccessful(true);
                 Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
                 Preferences.setSelectedConference(this, conference.getId());
@@ -72,8 +76,10 @@ public class SynchroIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e, "Error synchronizing data");
-            transaction.setSuccessful(false);
+            Timber.d(e, "Error synchronizing data");
+            if (transaction != null) {
+                transaction.setSuccessful(false);
+            }
             if (sendSynchroEvent) {
                 BUS.post(new SynchroFinishedEvent(false, null));
             }
@@ -81,7 +87,9 @@ public class SynchroIntentService extends IntentService {
             long oneHourLater = System.currentTimeMillis() + 3_600 * 1000;
             ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC, oneHourLater, buildSynchroPendingIntent());
         } finally {
-            transaction.finish();
+            if (transaction != null) {
+                transaction.finish();
+            }
         }
     }
 
@@ -92,9 +100,8 @@ public class SynchroIntentService extends IntentService {
         return PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void synchroniseTalks(Conference conference, Transaction transaction) {
+    private void synchroniseTalks(Conference conference, Map<String, Talk> talksFromWsById, Transaction transaction) {
         int conferenceId = conference.getId();
-        Map<String, Talk> talksFromWsById = loadTalks(conferenceId);
         Map<String, Talk> talksInDbById = loadTalksFromDb(conferenceId);
         List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getSchedule(conferenceId);
         HashMap<String, Speaker> everySpeakers = loadEverySpeakers();
@@ -109,6 +116,7 @@ public class SynchroIntentService extends IntentService {
             Talk talkFromDb = talksInDbById.remove(talkToSave.getId());
             if (talkFromDb != null) {
                 talkToSave.setFavorite(talkFromDb.isFavorite() || talkToSave.isKeynote());
+                talkToSave.setMemo(talkFromDb.getMemo());
             } else {
                 talkToSave.setFavorite(talkToSave.isKeynote());
             }
@@ -139,18 +147,6 @@ public class SynchroIntentService extends IntentService {
                 talksInDbById.put(talkToSave.getId(), talkToSave);
             }
         }
-
-
-       /* if (DEVOXX_2014_CONF_ID == conferenceId) {
-            Collection<Talk> missingTalks = Devoxx2014Hack.generateKeynotes(this);
-            for (Talk talk : missingTalks) {
-                talk.setFavorite(talk.isKeynote());
-                talk.setPrettySpeakers(new ArrayList<Speaker>(), new HashMap<String, Speaker>());
-                setConferenceUtcTime(conference, talk);
-                talksInDbById.remove(talk.getId());
-            }
-            talksToSave.addAll(missingTalks);
-        }*/
 
         generateColorByTrack(talksToSave);
 
@@ -252,8 +248,7 @@ public class SynchroIntentService extends IntentService {
         }
     }
 
-    private void synchroniseSpeakers(int conferenceId, Transaction transaction) {
-        List<Speaker> speakers = KouignAmanApplication.getConferenceApi().getSpeakers(conferenceId);
+    private void synchroniseSpeakers(List<Speaker> speakers, Transaction transaction) {
         List<Speaker> speakersToDelete = Query.many(Speaker.class, "SELECT * FROM Speakers").get().asList();
         ModelList<Speaker> speakersToSave = new ModelList<>();
 

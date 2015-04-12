@@ -5,7 +5,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:1.1.0'
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
@@ -70,7 +70,7 @@ android {
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'int', 'LOG_LEVEL', '-1'
             buildConfigField 'boolean', 'RELEASE_BUILD', 'LOG_LEVEL == -1'
-            runProguard false
+            minifyEnabled false
             proguardFile getDefaultProguardFile('proguard-android.txt')
 
             signingConfig signingConfigs.release
