@@ -22,14 +22,14 @@ repositories {
 }
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 21
+    buildToolsVersion "22.0.0"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 21
         versionCode 12
-        versionName "1.2.7"
+        versionName "1.2.8"
     }
 
     signingConfigs {
@@ -79,9 +79,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v13:20.0.0'
-    compile 'com.android.support:support-v4:20.0.0'
-    compile 'com.google.android.gms:play-services:6.1.11'
+    compile 'com.android.support:support-v13:22.0.0'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.google.android.gms:play-services:7.0.0'
     compile 'se.emilsjolander:stickylistheaders:2.3.0'
     compile 'de.greenrobot:eventbus:2.2.0'
     compile 'com.fluent.android:fluent-android-bundle:0.1.2'
