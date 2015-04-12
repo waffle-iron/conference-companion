@@ -3,8 +3,6 @@ package fr.xebia.conference.companion.ui;
 import android.app.ActionBar;
 import android.os.Bundle;
 
-import com.crashlytics.android.Crashlytics;
-
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
@@ -16,8 +14,6 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
-
         setContentView(R.layout.home_activity);
     }
 

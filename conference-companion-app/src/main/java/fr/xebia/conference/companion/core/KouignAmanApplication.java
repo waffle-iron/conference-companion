@@ -21,6 +21,7 @@ import fr.xebia.conference.companion.core.db.DbSchema;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.network.JacksonConverter;
 import fr.xebia.conference.companion.service.SynchroIntentService;
+import io.fabric.sdk.android.Fabric;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import se.emilsjolander.sprinkles.Migration;
@@ -36,6 +37,7 @@ public class KouignAmanApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

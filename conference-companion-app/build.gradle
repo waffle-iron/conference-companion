@@ -1,24 +1,24 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://download.crashlytics.com/maven' }
+        maven { url 'https://maven.fabric.io/public' }
 
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
+apply plugin: 'io.fabric'
 
 repositories {
     mavenCentral()
-    maven { url 'http://download.crashlytics.com/maven' }
     maven { url 'https://raw.githubusercontent.com/tguerin/maven-repository/master' }
     maven {
         url "https://repo.commonsware.com.s3.amazonaws.com"
     }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 android {
@@ -99,11 +99,13 @@ dependencies {
     compile 'joda-time:joda-time:2.4'
     compile 'com.github.frankiesardo:icepick:2.3.5'
     provided 'com.github.frankiesardo:icepick-processor:2.3.5'
-    compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'com.commonsware.cwac:anddown:0.2.0'
     compile 'com.jakewharton.timber:timber:2.3.0'
 
     project(':conference-companion-wear-app')
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.3@aar') {
+        transitive = true;
+    }
 }
 
 def xebiaStoreFile() {
