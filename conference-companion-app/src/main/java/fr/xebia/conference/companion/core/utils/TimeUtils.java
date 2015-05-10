@@ -1,11 +1,12 @@
 package fr.xebia.conference.companion.core.utils;
 
-import fr.xebia.conference.companion.ui.widget.UIUtils;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
+
+import fr.xebia.conference.companion.ui.widget.UIUtils;
 
 public class TimeUtils {
 
@@ -29,13 +30,13 @@ public class TimeUtils {
     }
 
     public static DateFormat buildTimeFormatter() {
-        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+        DateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
         timeFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         return timeFormatter;
     }
 
     public static DateFormat buildDayFormatter() {
-        DateFormat timeFormatter = new SimpleDateFormat("EEEE");
+        DateFormat timeFormatter = new SimpleDateFormat("EEEE", Locale.getDefault());
         timeFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         return timeFormatter;
     }

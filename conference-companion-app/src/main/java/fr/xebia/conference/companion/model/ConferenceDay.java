@@ -8,13 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fr.xebia.conference.companion.core.utils.Compatibility;
 
 public class ConferenceDay implements Parcelable {
 
-    private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("EEEE dd'.'");
+    private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("EEEE dd'.'", Locale.getDefault());
 
     public String title;
     public List<MyScheduleItem> myScheduleItems = new ArrayList<>();

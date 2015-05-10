@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class Schedule {
     private Map<String, Integer> colorForTrack = new HashMap<>();
     private List<String> availableTopics = new ArrayList<>();
     private List<String> availableTypes = new ArrayList<>();
-    private DateFormat dateFormatter = new SimpleDateFormat("EEEE");
+    private DateFormat dateFormatter = new SimpleDateFormat("EEEE", Locale.getDefault());
 
     public Schedule(List<Talk> talks) {
         this(talks, false);
