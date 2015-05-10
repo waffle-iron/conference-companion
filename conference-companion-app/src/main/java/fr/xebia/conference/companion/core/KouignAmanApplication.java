@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.Date;
@@ -37,6 +38,9 @@ public class KouignAmanApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        LeakCanary.install(this);
+
         Fabric.with(this, new Crashlytics());
 
         if (BuildConfig.DEBUG) {
@@ -99,11 +103,12 @@ public class KouignAmanApplication extends Application {
     /**
      * A tree which logs important information for crash reporting.
      */
-    private static class CrashReportingTree extends Timber.HollowTree {
+    private static class CrashReportingTree extends Timber.Tree {
         @Override
-        public void e(Throwable t, String message, Object... args) {
-            e(message, args);
-            Crashlytics.logException(t);
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (t != null) {
+                Crashlytics.logException(t);
+            }
         }
     }
 
