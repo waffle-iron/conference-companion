@@ -24,6 +24,7 @@ public class DrawerAdapter extends BaseAdapter {
     public static final int MENU_SPEAKERS = 2;
     public static final int MENU_CONFERENCES = 3;
     public static final int MENU_SETTINGS = 4;
+    public static final int MENU_QUESTIONS = 5;
     public static final int MENU_INVALID = -1;
     private final int mSelectedPosition;
 
