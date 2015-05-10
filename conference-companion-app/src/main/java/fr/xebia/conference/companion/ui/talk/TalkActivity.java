@@ -2,18 +2,17 @@ package fr.xebia.conference.companion.ui.talk;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.core.utils.Compatibility;
 import fr.xebia.conference.companion.model.Talk;
 
 public class TalkActivity extends BaseActivity {
@@ -40,14 +39,14 @@ public class TalkActivity extends BaseActivity {
 
         setContentView(R.layout.talk_activity);
         ButterKnife.inject(this);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("");
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, TalkFragment.newInstance(intent.getStringExtra(EXTRA_TALK_ID),
                             intent.getStringExtra(EXTRA_TALK_TITLE),
-                            intent.getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)))
+                            getIntent().getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)))
                     .commit();
         }
     }
@@ -57,6 +56,9 @@ public class TalkActivity extends BaseActivity {
         boolean hasSelectedConference = Preferences.hasSelectedConference(this);
         boolean devoxxConf = Preferences.isCurrentConferenceDevoxx(this);
         setTheme(hasSelectedConference && devoxxConf ? R.style.Theme_Devoxx_Companion_TalkDetails : R.style.Theme_Companion_TalkDetails);
+        if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
+            getWindow().setStatusBarColor(Compatibility.darker(getIntent().getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)));
+        }
     }
 
     @Override

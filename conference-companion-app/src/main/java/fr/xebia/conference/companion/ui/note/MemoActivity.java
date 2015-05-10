@@ -1,9 +1,9 @@
 package fr.xebia.conference.companion.ui.note;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,7 +42,7 @@ public class MemoActivity extends BaseActivity implements OneQuery.ResultHandler
 
         Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=?", talkId).getAsync(getLoaderManager(), this, null);
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setBackgroundDrawable(new ColorDrawable(intent.getIntExtra(TalkActivity.EXTRA_TALK_COLOR, 0)));

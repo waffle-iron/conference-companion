@@ -1,15 +1,19 @@
 package fr.xebia.conference.companion.ui.conference;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -22,8 +26,6 @@ import fr.xebia.conference.companion.service.ConferencesFetcherIntentService;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
-
-import java.util.List;
 
 import static fr.xebia.conference.companion.core.KouignAmanApplication.BUS;
 
@@ -107,9 +109,9 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
 
     @Override
     public void restoreActionBar() {
-        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        getActivity().getActionBar().setDisplayShowTitleEnabled(true);
-        getActivity().getActionBar().setTitle(R.string.speakers);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(R.string.speakers);
     }
 
     @Override

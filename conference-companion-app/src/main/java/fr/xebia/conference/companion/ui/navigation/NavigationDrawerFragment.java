@@ -1,18 +1,25 @@
 package fr.xebia.conference.companion.ui.navigation;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.*;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Log;
 import fr.xebia.conference.companion.core.misc.Preferences;
@@ -128,7 +135,7 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
@@ -137,7 +144,6 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         mDrawerToggle = new NavigationDrawerToggle(
                 getActivity(),
                 mDrawerLayout,
-                R.drawable.ic_navigation_drawer,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close
         );
@@ -226,15 +232,14 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayShowCustomEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
     }
 
-    private ActionBar getActionBar() {
-        return getActivity().getActionBar();
+    private ActionBar getSupportActionBar() {
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     @Override
@@ -272,9 +277,8 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
 
     final class NavigationDrawerToggle extends ActionBarDrawerToggle {
 
-        public NavigationDrawerToggle(Activity activity, DrawerLayout drawerLayout, int drawerImageRes, int openDrawerContentDescRes,
-                                      int closeDrawerContentDescRes) {
-            super(activity, drawerLayout, drawerImageRes, openDrawerContentDescRes, closeDrawerContentDescRes);
+        public NavigationDrawerToggle(Activity activity, DrawerLayout drawerLayout, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, openDrawerContentDescRes, closeDrawerContentDescRes);
         }
 
         @Override

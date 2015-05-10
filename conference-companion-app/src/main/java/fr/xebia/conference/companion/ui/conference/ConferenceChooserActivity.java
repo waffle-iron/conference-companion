@@ -1,8 +1,8 @@
 package fr.xebia.conference.companion.ui.conference;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -25,7 +25,7 @@ public class ConferenceChooserActivity extends BaseActivity {
         setContentView(R.layout.conference_chooser_activity);
         mDontCheckConference = true;
         getWindow().setBackgroundDrawableResource(android.R.color.white);
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.conferences);
         actionBar.setDisplayHomeAsUpEnabled(true);

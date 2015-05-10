@@ -20,12 +20,8 @@
         <attr name="actionBarOverlayTopOffset" format="dimension" />
         <attr name="actionBarInsetStart" format="dimension" />
         <attr name="spinnerBarInsetStart" format="dimension" />
-        <attr name="selectableItemBackgroundBorderless" format="dimension" />
         <attr name="popupItemBackground" format="dimension" />
         <attr name="photoItemForeground" format="dimension" />
-        <attr name="themePrimaryColor" format="color|reference" />
-        <attr name="themePrimaryColorLight" format="color|reference" />
-        <attr name="themePrimaryColorDark" format="color|reference" />
         <attr name="listDropdownForegroundColor" format="reference" />
         <attr name="myScheduleItemTouchOverlay" format="reference" />
         <attr name="drawerItemActivatedSelector" format="reference" />

@@ -9,7 +9,7 @@
     android:divider="@android:color/transparent"
     android:clickable="true"
     android:dividerHeight="0px"
-    android:cacheColorHint="?attr/themePrimaryColorDark"
-    android:background="?attr/themePrimaryColorDark"
+    android:cacheColorHint="?colorPrimaryDark"
+    android:background="?colorPrimaryDark"
     android:clipToPadding="false"
     tools:context="fr.pmu.sports.ui.navigation.NavigationDrawerFragment" />

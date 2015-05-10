@@ -1,10 +1,10 @@
 package fr.xebia.conference.companion.ui.speaker;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import fr.xebia.conference.companion.R;
@@ -20,7 +20,7 @@ public class SpeakerDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaker_details_activity);
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.speaker_details);

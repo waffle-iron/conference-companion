@@ -57,7 +57,7 @@
             android:gravity="top|left"
             android:padding="8dp"
             android:orientation="vertical"
-            android:background="?themePrimaryColor">
+            android:background="?colorPrimary">
 
             <!-- Session title -->
             <TextView

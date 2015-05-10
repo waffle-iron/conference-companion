@@ -1,7 +1,7 @@
 package fr.xebia.conference.companion.core.utils;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 
 import fr.xebia.conference.companion.R;
@@ -29,5 +29,16 @@ public class Compatibility {
             return "Night at Noxx";
         }
         return title;
+    }
+
+    public static boolean isCompatible(int versionCode) {
+        return Build.VERSION.SDK_INT >= versionCode;
+    }
+
+    public static int darker(int color){
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.7f;
+        return Color.HSVToColor(hsv);
     }
 }

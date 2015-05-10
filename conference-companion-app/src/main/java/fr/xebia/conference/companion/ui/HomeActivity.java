@@ -1,7 +1,7 @@
 package fr.xebia.conference.companion.ui;
 
-import android.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
@@ -36,7 +36,7 @@ public class HomeActivity extends BaseActivity {
     public void onNavigationDrawerToggle(boolean opened) {
         super.onNavigationDrawerToggle(opened);
         if (!opened) {
-            ActionBar actionBar = getActionBar();
+            ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
         }

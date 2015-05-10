@@ -79,7 +79,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
         mContext = context;
 
         TypedValue a = new TypedValue();
-        mContext.getTheme().resolveAttribute(R.attr.themePrimaryColor, a, true);
+        mContext.getTheme().resolveAttribute(R.attr.colorPrimary, a, true);
         mThemePrimaryColor = a.data;
 
         mContext.getTheme().resolveAttribute(R.attr.myScheduleItemTouchOverlay, a, true);

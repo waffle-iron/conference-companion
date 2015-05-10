@@ -1,12 +1,12 @@
 package fr.xebia.conference.companion.ui.schedule;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
@@ -79,7 +79,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
 
             }
         });
-        getActionBar().setTitle(R.string.my_schedule);
+        getSupportActionBar().setTitle(R.string.my_schedule);
         mDrawShadowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -116,9 +116,8 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     public void onNavigationDrawerToggle(boolean opened) {
         super.onNavigationDrawerToggle(opened);
         if (!opened) {
-            ActionBar actionBar = getActionBar();
+            ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             actionBar.setDisplayShowCustomEnabled(false);
             actionBar.setTitle(R.string.my_schedule);
         }

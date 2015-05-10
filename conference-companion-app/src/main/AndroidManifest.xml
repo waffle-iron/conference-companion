@@ -70,12 +70,14 @@
             android:parentActivityName=".ui.talk.TalkActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.TalkActivity"/>
+                android:value=".ui.talk.TalkActivity"/>
         </activity>
 
         <activity android:name=".ui.settings.SettingsActivity"/>
 
         <activity android:name=".ui.conference.ConferenceChooserActivity"/>
+
+        <activity android:name=".ui.question.QuestionsActivity"/>
 
         <service android:name=".service.SynchroIntentService"/>
         <service android:name=".service.ConferencesFetcherIntentService"/>

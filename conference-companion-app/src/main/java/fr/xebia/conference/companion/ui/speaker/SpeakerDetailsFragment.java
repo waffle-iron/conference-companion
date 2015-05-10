@@ -83,7 +83,7 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
         super.onActivityCreated(savedInstanceState);
         Activity activity = getActivity();
         TypedValue a = new TypedValue();
-        activity.getTheme().resolveAttribute(R.attr.themePrimaryColor, a, true);
+        activity.getTheme().resolveAttribute(R.attr.colorPrimary, a, true);
         mThemePrimaryColor = a.data;
         configureHeaders();
     }

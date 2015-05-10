@@ -1,9 +1,10 @@
 package fr.xebia.conference.companion.ui.schedule;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,7 +127,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     }
 
     private void configureActionBarSpinner() {
-        ActionBar actionBar = getActivity().getActionBar();
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         View spinnerContainer = LayoutInflater.from(actionBar.getThemedContext()).inflate(R.layout.actionbar_spinner, null);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);

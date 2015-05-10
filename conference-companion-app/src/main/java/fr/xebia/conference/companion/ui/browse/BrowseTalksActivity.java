@@ -1,13 +1,14 @@
 package fr.xebia.conference.companion.ui.browse;
 
 import android.os.Bundle;
+
+import java.util.ArrayList;
+
 import butterknife.InjectView;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
 import fr.xebia.conference.companion.core.activity.BaseActivity.OnActionBarAutoShowOrHideListener;
 import fr.xebia.conference.companion.ui.widget.DrawShadowFrameLayout;
-
-import java.util.ArrayList;
 
 public class BrowseTalksActivity extends BaseActivity implements OnActionBarAutoShowOrHideListener {
 
@@ -22,8 +23,8 @@ public class BrowseTalksActivity extends BaseActivity implements OnActionBarAuto
         setContentView(R.layout.browse_talks_activity);
 
         String title = getIntent().getStringExtra(EXTRA_TITLE);
-        getActionBar().setTitle(title);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getFragmentManager().findFragmentByTag(BrowseTalksFragment.TAG) == null) {
             ArrayList<String> availableTalksIds = getIntent().getStringArrayListExtra(EXTRA_AVAILABLE_TALKS);

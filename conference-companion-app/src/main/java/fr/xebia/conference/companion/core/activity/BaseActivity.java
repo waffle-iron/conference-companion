@@ -1,13 +1,12 @@
 package fr.xebia.conference.companion.core.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +21,7 @@ import butterknife.InjectView;
 import butterknife.Optional;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.misc.Preferences;
+import fr.xebia.conference.companion.core.utils.Compatibility;
 import fr.xebia.conference.companion.ui.HomeActivity;
 import fr.xebia.conference.companion.ui.conference.ConferenceChooserActivity;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
@@ -31,7 +31,7 @@ import fr.xebia.conference.companion.ui.settings.SettingsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerActivity;
 import timber.log.Timber;
 
-public class BaseActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class BaseActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     public static final String HOME_FRAG_TAG = "HOME";
     private static final int HEADER_HIDE_ANIM_DURATION = 300;
@@ -55,13 +55,16 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectTheme();
-        getActionBar().setIcon(R.drawable.ic_app_no_bg);
     }
 
     protected void selectTheme() {
         boolean hasSelectedConference = Preferences.hasSelectedConference(this);
         boolean devoxxConf = Preferences.isCurrentConferenceDevoxx(this);
         setTheme(hasSelectedConference && devoxxConf ? R.style.Theme_Devoxx : R.style.AppTheme);
+        if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
+            getWindow().setStatusBarColor(hasSelectedConference && devoxxConf ? getResources().getColor(R.color.devoxx_theme_primary_dark) :
+                    getResources().getColor(R.color.default_theme_primary_dark));
+        }
     }
 
     @Override
@@ -177,9 +180,9 @@ public class BaseActivity extends Activity implements NavigationDrawerFragment.N
 
         mActionBarShown = show;
         if (mActionBarShown) {
-            getActionBar().show();
+            getSupportActionBar().show();
         } else {
-            getActionBar().hide();
+            getSupportActionBar().hide();
         }
         onActionBarAutoShowOrHide(show);
     }
