@@ -21,7 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import fr.xebia.conference.companion.R;
-import fr.xebia.conference.companion.core.misc.Log;
 import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.Conference;
 import icepick.Icepick;
@@ -174,7 +173,6 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         try {
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
-            Log.e(TAG, e);
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
     }

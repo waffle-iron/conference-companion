@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -37,6 +35,7 @@ import fr.xebia.conference.companion.model.Speaker;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.model.Vote;
 import fr.xebia.conference.companion.ui.note.MemoActivity;
+import fr.xebia.conference.companion.ui.question.QuestionsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.conference.companion.ui.widget.CheckableFrameLayout;
 import fr.xebia.conference.companion.ui.widget.ObservableScrollView;
@@ -158,7 +157,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_note:
                 if (mTalk != null) {
@@ -181,6 +179,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                         Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
                     }
                 }
+            case R.id.action_ask:
+                startActivity(new Intent(getActivity(), QuestionsActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

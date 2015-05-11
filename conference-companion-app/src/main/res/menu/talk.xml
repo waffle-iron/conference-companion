@@ -3,6 +3,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_ask"
+        android:title="@string/action_ask"
+        android:icon="@drawable/ic_action_ask"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_send"
         android:title="@string/action_send"
         android:icon="@drawable/ic_action_send"

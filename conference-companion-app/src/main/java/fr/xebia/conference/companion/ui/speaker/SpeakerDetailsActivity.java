@@ -1,7 +1,9 @@
 package fr.xebia.conference.companion.ui.speaker;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
+import fr.xebia.conference.companion.core.utils.Compatibility;
 
 public class SpeakerDetailsActivity extends BaseActivity {
 
@@ -35,6 +38,14 @@ public class SpeakerDetailsActivity extends BaseActivity {
             getFragmentManager().beginTransaction()
                     .replace(R.id.main_content, SpeakerDetailsFragment.newInstance(intent.getStringExtra(EXTRA_SPEAKER_ID), contextColor))
                     .commit();
+        }
+    }
+
+    @Override
+    protected void selectTheme() {
+        super.selectTheme();
+        if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
+            getWindow().setStatusBarColor(Compatibility.darker(getIntent().getIntExtra(EXTRA_COLOR, Color.BLACK)));
         }
     }
 

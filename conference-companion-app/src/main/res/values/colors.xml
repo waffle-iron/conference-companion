@@ -20,6 +20,7 @@
     <color name="track_web">#ff27384d</color>
     <color name="schedule_header_bg">#fff3f3f3</color>
     <color name="text_view_selector">#ffe9e9e9</color>
+    <color name="questions_status_bar">#ff214a66</color>
 
     <color name="body_text_1">#de000000</color>
     <color name="body_text_2">#8a000000</color>

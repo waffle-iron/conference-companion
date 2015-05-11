@@ -79,6 +79,7 @@
     <string name="scheduled_talk_notification_ticker">1 présentation va bientôt commencer.</string>
     <string name="my_rating">Ma note</string>
     <string name="feedback_notification">Donnez votre avis</string>
+    <string name="action_ask">Posez une question</string>
     <plurals name="available_talks">
         <item quantity="zero">%1$d présentation disponible</item>
         <item quantity="one">%1$d présentation disponible</item>
