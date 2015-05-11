@@ -62,9 +62,10 @@ public class SynchroIntentService extends IntentService {
                 // Load data before starting transaction
                 List<Speaker> speakers = KouignAmanApplication.getConferenceApi().getSpeakers(conferenceId);
                 Map<String, Talk> talksFromWsById = loadTalks(conferenceId);
+                List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getSchedule(conferenceId);
                 transaction = new Transaction();
                 synchroniseSpeakers(speakers, transaction);
-                synchroniseTalks(conference, talksFromWsById, transaction);
+                synchroniseTalks(conference, scheduledTalks, talksFromWsById, transaction);
                 transaction.setSuccessful(true);
                 Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
                 Preferences.setSelectedConference(this, conference.getId());
@@ -100,10 +101,9 @@ public class SynchroIntentService extends IntentService {
         return PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void synchroniseTalks(Conference conference, Map<String, Talk> talksFromWsById, Transaction transaction) {
+    private void synchroniseTalks(Conference conference, List<Talk> scheduledTalks, Map<String, Talk> talksFromWsById, Transaction transaction) {
         int conferenceId = conference.getId();
         Map<String, Talk> talksInDbById = loadTalksFromDb(conferenceId);
-        List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getSchedule(conferenceId);
         HashMap<String, Speaker> everySpeakers = loadEverySpeakers();
 
         // Save talks keeping favorite info and retrieving date/time from
