@@ -58,12 +58,14 @@ android {
             debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
+            buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
             signingConfig signingConfigs.debug
         }
 
         release {
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
+            buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
             minifyEnabled false
             proguardFile getDefaultProguardFile('proguard-android.txt')
 

@@ -17,6 +17,7 @@ import java.util.UUID;
 import de.greenrobot.event.EventBus;
 import fr.xebia.conference.companion.BuildConfig;
 import fr.xebia.conference.companion.api.ConferenceApi;
+import fr.xebia.conference.companion.api.VoteApi;
 import fr.xebia.conference.companion.bus.SyncEvent;
 import fr.xebia.conference.companion.core.db.DbSchema;
 import fr.xebia.conference.companion.core.misc.Preferences;
@@ -32,6 +33,7 @@ import timber.log.Timber;
 public class KouignAmanApplication extends Application {
 
     private static ConferenceApi sConferenceApi;
+    private static VoteApi sVoteApi;
 
     public static final EventBus BUS = EventBus.getDefault();
 
@@ -58,6 +60,8 @@ public class KouignAmanApplication extends Application {
         RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setClient(new OkClient(okHttpClient)).setConverter(new JacksonConverter());
 
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
+
+        sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.VOTE_URL).build().create(VoteApi.class);
 
         Sprinkles sprinkles = Sprinkles.init(applicationContext, "conferences.db", 0);
 
@@ -122,4 +126,10 @@ public class KouignAmanApplication extends Application {
     public static ConferenceApi getConferenceApi() {
         return sConferenceApi;
     }
+
+    public static VoteApi getVoteApi() {
+        return sVoteApi;
+    }
+
+
 }

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import fr.xebia.conference.companion.core.KouignAmanApplication;
-import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.model.Rating;
 import fr.xebia.conference.companion.model.Talk;
 import fr.xebia.conference.companion.model.Vote;
@@ -52,7 +51,7 @@ public class SendRatingIntentService extends IntentService {
         String talkId = intent.getStringExtra(EXTRA_TALK_ID);
         Vote vote = Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", talkId, conferenceId).get();
         try {
-            Response response = KouignAmanApplication.getConferenceApi().sendRating(conferenceId, buildRating(vote));
+            Response response = KouignAmanApplication.getVoteApi().sendRating(buildRating(vote));
             if (response == null || response.getStatus() != 201) {
                 rescheduleSendRating(vote);
             }
@@ -68,7 +67,7 @@ public class SendRatingIntentService extends IntentService {
     }
 
     private Rating buildRating(Vote vote) {
-        return new Rating(Preferences.getGeneratedDeviceId(getBaseContext()), vote.getConferenceId(),
-                vote.getNote(), vote.getTalkId());
+        // TODO use user id
+        return new Rating(10L, vote.getNote(), vote.getTalkId());
     }
 }

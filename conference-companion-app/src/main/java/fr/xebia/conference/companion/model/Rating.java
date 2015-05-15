@@ -2,15 +2,13 @@ package fr.xebia.conference.companion.model;
 
 public class Rating {
 
-    public final String deviceId;
-    public final int conferenceId;
+    public final long user;
     public final int rating;
-    public final String presentationId;
+    public final String talkId;
 
-    public Rating(String deviceId, int conferenceId, int rating, String presentationId) {
-        this.deviceId = deviceId;
-        this.conferenceId = conferenceId;
+    public Rating(long user, int rating, String talkId) {
+        this.user = user;
         this.rating = rating;
-        this.presentationId = presentationId;
+        this.talkId = talkId;
     }
 }

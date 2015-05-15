@@ -420,13 +420,17 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 if ((mVote != null && (int) rating == mVote.getNote()) || !fromUser) {
                     return;
                 }
-                Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
-                vote.saveAsync(new Model.OnSavedCallback() {
-                    @Override
-                    public void onSaved() {
-                        getActivity().startService(buildSendRatingIntent(getActivity(), mTalk));
-                    }
-                });
+                if(rating==0){
+                    mTalkRatingBar.setRating(1);
+                } else {
+                    Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
+                    vote.saveAsync(new Model.OnSavedCallback() {
+                        @Override
+                        public void onSaved() {
+                            getActivity().startService(buildSendRatingIntent(getActivity(), mTalk));
+                        }
+                    });
+                }
             }
         });
         if (mTalkRatingBar.getProgressDrawable() != null) {
