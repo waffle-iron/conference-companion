@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.Date;
 import java.util.Timer;
@@ -43,7 +46,8 @@ public class KouignAmanApplication extends Application {
 
         LeakCanary.install(this);
 
-        Fabric.with(this, new Crashlytics());
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
+        Fabric.with(this, new Crashlytics(), new TwitterCore(authConfig), new TweetUi());
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
