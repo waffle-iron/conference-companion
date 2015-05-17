@@ -90,4 +90,6 @@
     <string name="scan_qr_code">Scanner QR code</string>
     <string name="scan_qr_code_required">Vous devez scanner votre QR code pour noter une session</string>
     <string name="not_able_to_rate">Vous devez scanner votre QR code pour noter une session</string>
+    <string name="input_qr_code">Saisir QR code</string>
+    <string name="input_qr_code_title">Saisie QR code</string>
 </resources>

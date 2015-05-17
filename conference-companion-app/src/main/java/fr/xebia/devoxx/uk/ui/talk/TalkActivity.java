@@ -16,9 +16,9 @@ import fr.xebia.devoxx.uk.model.Talk;
 
 public class TalkActivity extends BaseActivity {
 
-    public static final String EXTRA_TALK_ID = "fr.xebia.devoxx.EXTRA_TALK_ID";
-    public static final String EXTRA_TALK_TITLE = "fr.xebia.devoxx.EXTRA_TALK_TITLE";
-    public static final String EXTRA_TALK_COLOR = "fr.xebia.devoxx.EXTRA_TALK_COLOR";
+    public static final String EXTRA_TALK_ID = "fr.xebia.devoxx.uk.EXTRA_TALK_ID";
+    public static final String EXTRA_TALK_TITLE = "fr.xebia.devoxx.uk.EXTRA_TALK_TITLE";
+    public static final String EXTRA_TALK_COLOR = "fr.xebia.devoxx.uk.EXTRA_TALK_COLOR";
 
     public static Intent buildIntentFromTalk(Context context, Talk talk) {
         Intent intent = new Intent(context, TalkActivity.class);

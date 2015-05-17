@@ -1,12 +1,15 @@
 package fr.xebia.devoxx.uk.ui.talk;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -61,9 +65,9 @@ import static fr.xebia.devoxx.uk.service.SendRatingIntentService.buildSendRating
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
 
-    private static final String EXTRA_TALK_ID = "fr.xebia.devoxx.EXTRA_TALK_ID";
-    private static final String EXTRA_TALK_TITLE = "fr.xebia.devoxx.EXTRA_TALK_TITLE";
-    private static final String EXTRA_TALK_COLOR = "fr.xebia.devoxx.EXTRA_TALK_COLOR";
+    private static final String EXTRA_TALK_ID = "fr.xebia.devoxx.uk.EXTRA_TALK_ID";
+    private static final String EXTRA_TALK_TITLE = "fr.xebia.devoxx.uk.EXTRA_TALK_TITLE";
+    private static final String EXTRA_TALK_COLOR = "fr.xebia.devoxx.uk.EXTRA_TALK_COLOR";
 
     private static final float PHOTO_ASPECT_RATIO = 1.8f;
     private static final float GAP_FILL_DISTANCE_MULTIPLIER = 1.5f;
@@ -201,9 +205,39 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             case R.id.action_scan_qr_code:
                 startScanQrCodeActivity();
                 return true;
+            case R.id.action_input_qr_code:
+                inputQrCode();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void inputQrCode() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.input_qr_code_title);
+
+        final EditText input = new EditText(getActivity());
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Preferences.setUserScanIdForVote(getActivity(), input.getText().toString());
+                refreshRatingBarState();
+                Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), R.string.not_able_to_rate, Toast.LENGTH_LONG).show();
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     private void startScanQrCodeActivity() {

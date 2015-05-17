@@ -83,6 +83,7 @@
     <string name="timeline">Timeline</string>
     <string name="scan_qr_code">Scan QR code</string>
     <string name="input_qr_code">Enter QR code manually</string>
+    <string name="input_qr_code_title">Enter QR code</string>
     <string name="scan_qr_code_required">You need to scan your QR code to vote</string>
     <string name="able_to_rate">Now you\'ll be able to rate a session when It\'s over</string>
     <string name="not_able_to_rate">You need to scan your QR code to rate a session</string>
