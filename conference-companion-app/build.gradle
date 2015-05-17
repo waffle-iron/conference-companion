@@ -26,10 +26,11 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
+        applicationId "fr.xebia.devoxx.uk"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 13
-        versionName "1.2.8"
+        versionCode 1
+        versionName "0.1"
     }
 
     signingConfigs {
