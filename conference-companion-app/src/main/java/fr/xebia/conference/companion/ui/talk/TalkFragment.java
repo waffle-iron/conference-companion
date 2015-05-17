@@ -454,8 +454,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private int getTalkBackgroundResource(Talk talk) {
-        return !Preferences.isCurrentConferenceDevoxx(getActivity()) ? R.drawable.default_talk_template :
-                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getActivity().getPackageName());
+        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getActivity().getPackageName());
     }
 
     public void refreshRatingBarState() {

@@ -67,7 +67,6 @@ public class SynchroIntentService extends IntentService {
                 synchroniseSpeakers(speakers, transaction);
                 synchroniseTalks(conference, scheduledTalks, talksFromWsById, transaction);
                 transaction.setSuccessful(true);
-                Preferences.setCurrentConferenceDevoxx(getApplicationContext(), conference.getName().toLowerCase().contains(DEVOXX_CONF));
                 Preferences.setSelectedConference(this, conference.getId());
                 Preferences.setSelectedConferenceEndTime(this, conference.getToUtcTime());
                 Preferences.setSelectedConferenceStartTime(this, conference.getFromUtcTime());

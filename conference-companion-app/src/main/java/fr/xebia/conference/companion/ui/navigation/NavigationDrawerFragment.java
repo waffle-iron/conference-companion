@@ -2,7 +2,6 @@ package fr.xebia.conference.companion.ui.navigation;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,26 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import fr.xebia.conference.companion.R;
-import fr.xebia.conference.companion.core.misc.Preferences;
-import fr.xebia.conference.companion.model.Conference;
 import icepick.Icepick;
 import icepick.Icicle;
-import se.emilsjolander.sprinkles.OneQuery;
-import se.emilsjolander.sprinkles.Query;
-
-import static android.view.LayoutInflater.from;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements OneQuery.ResultHandler<Conference> {
-
-    private static final String TAG = "NavigationDrawerFragment";
+public class NavigationDrawerFragment extends Fragment{
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -55,9 +46,8 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
 
     private DrawerAdapter mAdapter;
 
-    @Icicle int mLastSelection = 2;
+    @Icicle int mLastSelection = 1;
     private boolean mDrawerOpen;
-    private TextView mHeader;
 
     public NavigationDrawerFragment() {
     }
@@ -90,17 +80,9 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
                 selectItem(position);
             }
         });
-        addHeader(getActivity());
         mAdapter = new DrawerAdapter(getActivity());
         mDrawerListView.setAdapter(mAdapter);
-        Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", Preferences.getSelectedConference(getActivity()))
-                .getAsync(getLoaderManager(), this);
         return mDrawerListView;
-    }
-
-    private void addHeader(Context context) {
-        mHeader = (TextView) from(context).inflate(R.layout.navigation_header, mDrawerListView, false);
-        mDrawerListView.addHeaderView(mHeader);
     }
 
     public boolean isDrawerOpen() {
@@ -162,8 +144,8 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null && position != mLastSelection && position > 0) {
-            mCallbacks.onNavigationDrawerItemSelected(position - mDrawerListView.getHeaderViewsCount());
+        if (mCallbacks != null && position != mLastSelection && position >= 0) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 
@@ -233,19 +215,11 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayShowCustomEnabled(false);
-        actionBar.setTitle(R.string.app_name);
+        actionBar.setTitle(Html.fromHtml(getString(R.string.action_bar_default_title)));
     }
 
     private ActionBar getSupportActionBar() {
         return ((AppCompatActivity) getActivity()).getSupportActionBar();
-    }
-
-    @Override
-    public boolean handleResult(Conference conference) {
-        if (conference != null && mHeader != null) {
-            mHeader.setText(conference.getName());
-        }
-        return false;
     }
 
     @Override
@@ -255,7 +229,7 @@ public class NavigationDrawerFragment extends Fragment implements OneQuery.Resul
     }
 
     public void setSelection(int selection) {
-        mLastSelection = selection + 1; // Don't forget the header offset
+        mLastSelection = selection;
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(mLastSelection, true);
         }

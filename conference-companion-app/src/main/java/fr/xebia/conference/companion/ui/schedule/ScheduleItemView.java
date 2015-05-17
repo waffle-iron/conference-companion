@@ -52,12 +52,12 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
                 MeasureSpec.makeMeasureSpec((int) (widthSize / 1.7f), widthMode) : widthMeasureSpec);
     }
 
-    public void bind(Talk talk, boolean currentConferenceDevoxx, boolean conferenceEnded) {
+    public void bind(Talk talk, boolean conferenceEnded) {
         setBackgroundColor(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setColorFilter(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setBackgroundColor(talk.getColor());
         Picasso.with(getContext())
-                .load(getItemBackgroundResource(talk, currentConferenceDevoxx))
+                .load(getItemBackgroundResource(talk))
                 .fit()
                 .centerCrop()
                 .config(Bitmap.Config.RGB_565)
@@ -77,9 +77,8 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
         mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
     }
 
-    private int getItemBackgroundResource(Talk talk, boolean currentConferenceDevoxx) {
-        return !currentConferenceDevoxx ? R.drawable.default_template :
-                getResources().getIdentifier("devoxx_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
+    private int getItemBackgroundResource(Talk talk) {
+        return getResources().getIdentifier("devoxx_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
     }
 
     @Override

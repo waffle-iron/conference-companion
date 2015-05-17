@@ -62,14 +62,6 @@ public class Preferences {
         getAppPreferences(context).edit().putString(GENERATED_DEVICE_ID, generatedDeviceId).apply();
     }
 
-    public static boolean isCurrentConferenceDevoxx(Context context) {
-        return getAppPreferences(context).getBoolean(CURRENT_CONFERENCE_DEVOXX, false);
-    }
-
-    public static void setCurrentConferenceDevoxx(Context context, boolean currentConferenceDevoxx) {
-        getAppPreferences(context).edit().putBoolean(CURRENT_CONFERENCE_DEVOXX, currentConferenceDevoxx).apply();
-    }
-
     public static boolean isTalkAlreadyNotified(Context context, Talk talk) {
         return getAppPreferences(context).getBoolean(String.format("notification_%d_%s", talk.getConferenceId(), talk.getId()), false);
     }

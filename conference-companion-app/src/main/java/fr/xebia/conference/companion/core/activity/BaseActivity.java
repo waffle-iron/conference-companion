@@ -59,12 +59,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
     }
 
     protected void selectTheme() {
-        boolean hasSelectedConference = Preferences.hasSelectedConference(this);
-        boolean devoxxConf = Preferences.isCurrentConferenceDevoxx(this);
-        setTheme(hasSelectedConference && devoxxConf ? R.style.Theme_Devoxx : R.style.AppTheme);
+        setTheme(R.style.AppTheme);
         if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
-            getWindow().setStatusBarColor(hasSelectedConference && devoxxConf ? getResources().getColor(R.color.devoxx_theme_primary_dark) :
-                    getResources().getColor(R.color.default_theme_primary_dark));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.default_theme_primary_dark));
         }
     }
 

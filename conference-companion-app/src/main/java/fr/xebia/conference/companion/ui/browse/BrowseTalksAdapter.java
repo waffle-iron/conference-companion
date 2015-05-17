@@ -19,17 +19,15 @@ import fr.xebia.conference.companion.ui.widget.CollectionViewCallbacks;
 public class BrowseTalksAdapter extends BaseAdapter<List<Talk>> implements CollectionViewCallbacks {
 
     private final boolean conferenceEnded;
-    private final boolean currentConferenceDevoxx;
 
     public BrowseTalksAdapter(Context context, int viewResId, List<Talk> data) {
         super(context, viewResId, data);
         conferenceEnded = System.currentTimeMillis() > Preferences.getSelectedConferenceEndTime(getContext());
-        currentConferenceDevoxx = Preferences.isCurrentConferenceDevoxx(context);
     }
 
     @Override
     protected void bindView(final int position, View view) {
-        ((TalkItemView) view).bind(getItem(position), currentConferenceDevoxx, conferenceEnded);
+        ((TalkItemView) view).bind(getItem(position), conferenceEnded);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

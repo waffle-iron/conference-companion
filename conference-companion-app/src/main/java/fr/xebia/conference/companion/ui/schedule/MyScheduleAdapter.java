@@ -41,7 +41,6 @@ import java.util.Date;
 import java.util.List;
 
 import fr.xebia.conference.companion.R;
-import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.utils.Compatibility;
 import fr.xebia.conference.companion.core.utils.TimeUtils;
 import fr.xebia.conference.companion.model.MyScheduleItem;
@@ -362,8 +361,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
     }
 
     private int getTalkBackgroundResource(Talk talk) {
-        return !Preferences.isCurrentConferenceDevoxx(mContext) ? R.drawable.default_talk_template :
-                mContext.getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", mContext.getPackageName());
+        return mContext.getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", mContext.getPackageName());
     }
 
     @Override

@@ -242,8 +242,7 @@ public class NotificationSchedulerIntentService extends IntentService {
     }
 
     private int getTalkBackgroundResource(Talk talk) {
-        return !Preferences.isCurrentConferenceDevoxx(this) ? R.drawable.default_talk_template :
-                getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", this.getPackageName());
+        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", this.getPackageName());
     }
 
     private void scheduleNotification(Talk talk) {

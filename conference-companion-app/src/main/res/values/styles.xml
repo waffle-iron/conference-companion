@@ -33,22 +33,6 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
-    <style name="Theme.Devoxx" parent="AppTheme">
-        <item name="colorPrimary">@color/devoxx_theme_primary</item>
-        <item name="colorAccent">@color/devoxx_theme_primary_light</item>
-        <item name="colorPrimaryDark">@color/devoxx_theme_primary_dark</item>
-        <item name="android:actionBarStyle">@style/DevoxxActionBar</item>
-        <item name="listDropdownForegroundColor">@color/devoxx_list_dropdown_foreground_color</item>
-        <item name="myScheduleItemTouchOverlay">@drawable/devoxx_my_schedule_item_touchoverlay
-        </item>
-        <item name="drawerItemActivatedSelector">@drawable/devoxx_drawer_item_activated_selector
-        </item>
-    </style>
-
-    <style name="Theme.Devoxx.Companion.TalkDetails" parent="Theme.Devoxx">
-        <item name="actionBarStyle">@style/TransparentActionBar</item>
-    </style>
-
     <!-- Talk Details -->
     <style name="Theme.Companion.TalkDetails" parent="AppTheme">
         <item name="actionBarStyle">@style/TransparentActionBar</item>
@@ -73,10 +57,6 @@
     <style name="DefaultActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/actionbar_bg</item>
         <item name="android:icon">@drawable/ic_app_no_bg</item>
-    </style>
-
-    <style name="DevoxxActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/devoxx_actionbar_bg</item>
     </style>
 
     <style name="DropDownNav" parent="Widget.AppCompat.Spinner">

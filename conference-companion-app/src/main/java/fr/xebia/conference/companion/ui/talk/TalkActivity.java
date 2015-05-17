@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import butterknife.ButterKnife;
 import fr.xebia.conference.companion.R;
 import fr.xebia.conference.companion.core.activity.BaseActivity;
-import fr.xebia.conference.companion.core.misc.Preferences;
 import fr.xebia.conference.companion.core.utils.Compatibility;
 import fr.xebia.conference.companion.model.Talk;
 
@@ -53,9 +52,7 @@ public class TalkActivity extends BaseActivity {
 
     @Override
     protected void selectTheme() {
-        boolean hasSelectedConference = Preferences.hasSelectedConference(this);
-        boolean devoxxConf = Preferences.isCurrentConferenceDevoxx(this);
-        setTheme(hasSelectedConference && devoxxConf ? R.style.Theme_Devoxx_Companion_TalkDetails : R.style.Theme_Companion_TalkDetails);
+        setTheme(R.style.Theme_Companion_TalkDetails);
         if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
             getWindow().setStatusBarColor(Compatibility.darker(getIntent().getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)));
         }
