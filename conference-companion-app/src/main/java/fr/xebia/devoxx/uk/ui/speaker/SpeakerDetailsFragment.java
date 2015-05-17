@@ -34,8 +34,8 @@ import se.emilsjolander.sprinkles.Query;
 
 public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultHandler<Speaker>, ManyQuery.ResultHandler<Talk> {
 
-    public static final String EXTRA_SPEAKER_ID = "fr.xebia.conference.companion.EXTRA_SPEAKER_ID";
-    private static final String EXTRA_COLOR = "fr.xebia.conference.companion.EXTRA_COLOR";
+    public static final String EXTRA_SPEAKER_ID = "fr.xebia.devoxx.uk.EXTRA_SPEAKER_ID";
+    private static final String EXTRA_COLOR = "fr.xebia.devoxx.uk.EXTRA_COLOR";
 
     @InjectView(R.id.speaker_image) ImageView mSpeakerImage;
     @InjectView(R.id.speaker_name) TextView mSpeakerName;

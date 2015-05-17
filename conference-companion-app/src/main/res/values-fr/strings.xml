@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="retry">Réessayer</string>
-    <string name="conferences">Conférences</string>
-    <string name="conferences_fetched">Liste des conférences à jour</string>
+    <string name="conferences">Synchronisation</string>
     <string name="synchro_failed">La synchonisation des données a échoué</string>
     <string name="action_bar_note">Notes</string>
     <string name="action_note">Edit note</string>

@@ -33,7 +33,7 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
     private static final int DEFAULT_GROUP_ID = 0;
     private static final int PAST_GROUP_ID = 1;
 
-    public static String ARG_AVAILABLE_TALKS = "fr.xebia.conference.companion.ARG_AVAILABLE_TALKS";
+    public static String ARG_AVAILABLE_TALKS = "fr.xebia.devoxx.uk.ARG_AVAILABLE_TALKS";
 
     @InjectView(R.id.empty_id) TextView mEmptyText;
     @InjectView(R.id.talks_grid) CollectionView mTalksGrid;

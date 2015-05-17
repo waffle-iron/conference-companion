@@ -12,8 +12,8 @@ import fr.xebia.devoxx.uk.ui.widget.DrawShadowFrameLayout;
 
 public class BrowseTalksActivity extends BaseActivity implements OnActionBarAutoShowOrHideListener {
 
-    public static final String EXTRA_TITLE = "fr.xebia.conference.companion.EXTRA_TITLE";
-    public static String EXTRA_AVAILABLE_TALKS = "fr.xebia.conference.companion.EXTRA_AVAILABLE_TALKS";
+    public static final String EXTRA_TITLE = "fr.xebia.devoxx.uk.EXTRA_TITLE";
+    public static String EXTRA_AVAILABLE_TALKS = "fr.xebia.devoxx.uk.EXTRA_AVAILABLE_TALKS";
 
     @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
 

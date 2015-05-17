@@ -13,7 +13,7 @@ public class SynchroFragment extends Fragment {
 
     public static final String TAG = "SynchroFragment";
 
-    public static final String ARG_CONFERENCE_ID = "fr.xebia.conference.companion.EXTRA_CONFERENCE_ID";
+    public static final String ARG_CONFERENCE_ID = "fr.xebia.devoxx.uk.EXTRA_CONFERENCE_ID";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

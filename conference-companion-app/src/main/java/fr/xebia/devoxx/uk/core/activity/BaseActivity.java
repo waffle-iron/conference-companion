@@ -257,16 +257,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
                     }
                 }, 300);
                 break;
-            case DrawerAdapter.MENU_CONFERENCES:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(BaseActivity.this, ConferenceChooserActivity.class);
-                        intent.putExtra(ConferenceChooserActivity.EXTRA_SHOW_HOME, true);
-                        startActivity(intent);
-                    }
-                }, 300);
-                break;
             case DrawerAdapter.MENU_TIMELINE:
                 handler.postDelayed(new Runnable() {
                     @Override

@@ -3,6 +3,7 @@ package fr.xebia.devoxx.uk.ui.conference;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ import static fr.xebia.devoxx.uk.core.KouignAmanApplication.BUS;
 
 public class ConferenceChooserActivity extends BaseActivity {
 
-    public static final String EXTRA_SHOW_HOME = "fr.xebia.conference.companion.EXTRA_SHOW_HOME";
+    public static final String EXTRA_SHOW_HOME = "fr.xebia.devoxx.uk.EXTRA_SHOW_HOME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,8 @@ public class ConferenceChooserActivity extends BaseActivity {
         getWindow().setBackgroundDrawableResource(android.R.color.white);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.conferences);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(Html.fromHtml(getString(R.string.action_bar_default_title)));
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()

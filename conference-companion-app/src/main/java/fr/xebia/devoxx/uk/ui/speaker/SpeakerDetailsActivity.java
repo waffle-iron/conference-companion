@@ -15,8 +15,8 @@ import fr.xebia.devoxx.uk.core.utils.Compatibility;
 
 public class SpeakerDetailsActivity extends BaseActivity {
 
-    public static final String EXTRA_SPEAKER_ID = "fr.xebia.conference.companion.EXTRA_SPEAKER_ID";
-    public static final String EXTRA_COLOR = "fr.xebia.conference.companion.EXTRA_COLOR";
+    public static final String EXTRA_SPEAKER_ID = "fr.xebia.devoxx.uk.EXTRA_SPEAKER_ID";
+    public static final String EXTRA_COLOR = "fr.xebia.devoxx.uk.EXTRA_COLOR";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

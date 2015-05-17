@@ -1,7 +1,6 @@
 <resources  xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="retry">Retry</string>
-    <string name="conferences">Conferences</string>
-    <string name="conferences_fetched">Conferences up to date</string>
+    <string name="conferences">Synchronisation</string>
     <string name="synchro_failed">Data synchronisation failed</string>
     <string name="action_bar_note">Notes</string>
     <string name="action_note">Edit note</string>

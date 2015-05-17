@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,13 +36,8 @@ public class SynchroIntentService extends IntentService {
 
     private static final String TAG = "SynchroIntentService";
 
-    public static final String EXTRA_CONFERENCE_ID = "fr.xebia.conference.companion.EXTRA_CONFERENCE_ID";
-    public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.conference.companion.EXTRA_FROM_APP_CREATE";
-
-    public static final String DEVOXX_CONF = "devoxx";
-
-    private static final int DEVOXX_2014_CONF_ID = 14;
-    private static final List<String> DEVOXX_IGNORE_CONF = Arrays.asList("THS-0021", "DGQ-7731", "KIB-7840", "SBI-2741", "HDA-3721", "JEF-7232", "YPT-5862", "VCM-1344");
+    public static final String EXTRA_CONFERENCE_ID = "fr.xebia.devoxx.uk.EXTRA_CONFERENCE_ID";
+    public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.devoxx.uk.EXTRA_FROM_APP_CREATE";
 
     public SynchroIntentService() {
         super(TAG);
@@ -109,9 +103,6 @@ public class SynchroIntentService extends IntentService {
         ModelList<Talk> talksToSave = new ModelList<>();
         int index = 0;
         for (Talk talkToSave : scheduledTalks) {
-            if (conferenceId == DEVOXX_2014_CONF_ID && (talkToSave.getTrack().isEmpty() || DEVOXX_IGNORE_CONF.contains(talkToSave.getId()))) {
-                continue;
-            }
             Talk talkFromDb = talksInDbById.remove(talkToSave.getId());
             if (talkFromDb != null) {
                 talkToSave.setFavorite(talkFromDb.isFavorite() || talkToSave.isKeynote());

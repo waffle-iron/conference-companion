@@ -28,7 +28,7 @@ public class HomeListenerService extends WearableListenerService {
 
     private static final String TAG = "HomeListenerService";
 
-    public final static String ACTION_DISMISS = "fr.xebia.conference.companion.wear.ACTION_DISMISS";
+    public final static String ACTION_DISMISS = "fr.xebia.devoxx.uk.wear.ACTION_DISMISS";
 
     public static final String PATH_FEEDBACK = "/companion/feedback/";
     public static final String PATH_RATING = "/companion/rating/";
