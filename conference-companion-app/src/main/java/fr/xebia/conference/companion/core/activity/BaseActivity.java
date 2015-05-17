@@ -26,10 +26,10 @@ import fr.xebia.conference.companion.ui.HomeActivity;
 import fr.xebia.conference.companion.ui.conference.ConferenceChooserActivity;
 import fr.xebia.conference.companion.ui.navigation.DrawerAdapter;
 import fr.xebia.conference.companion.ui.navigation.NavigationDrawerFragment;
-import fr.xebia.conference.companion.ui.question.QuestionsActivity;
 import fr.xebia.conference.companion.ui.schedule.MyScheduleActivity;
 import fr.xebia.conference.companion.ui.settings.SettingsActivity;
 import fr.xebia.conference.companion.ui.speaker.SpeakerActivity;
+import fr.xebia.conference.companion.ui.timeline.TimelineActivity;
 import timber.log.Timber;
 
 public class BaseActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -270,20 +270,20 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
                     }
                 }, 300);
                 break;
+            case DrawerAdapter.MENU_TIMELINE:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(BaseActivity.this, TimelineActivity.class));
+                        finish();
+                    }
+                }, 300);
+                break;
             case DrawerAdapter.MENU_SETTINGS:
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         startActivity(new Intent(BaseActivity.this, SettingsActivity.class));
-                        finish();
-                    }
-                }, 300);
-                break;
-            case DrawerAdapter.MENU_QUESTIONS:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(BaseActivity.this, QuestionsActivity.class));
                         finish();
                     }
                 }, 300);

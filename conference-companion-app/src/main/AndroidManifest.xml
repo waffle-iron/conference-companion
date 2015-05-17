@@ -79,6 +79,8 @@
 
         <activity android:name=".ui.question.QuestionsActivity"/>
 
+        <activity android:name=".ui.timeline.TimelineActivity"/>
+
         <service android:name=".service.SynchroIntentService"/>
         <service android:name=".service.ConferencesFetcherIntentService"/>
         <service android:name=".service.NotificationSchedulerIntentService">

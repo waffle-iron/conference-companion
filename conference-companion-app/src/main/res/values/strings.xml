@@ -79,6 +79,8 @@
     <string name="my_rating">My rating</string>
     <string name="feedback_notification">Give your feedback</string>
     <string name="action_ask">Ask a question</string>
+    <string name="timeline_empty">No timeline</string>
+    <string name="timeline">Timeline</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>

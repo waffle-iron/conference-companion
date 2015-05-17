@@ -36,4 +36,5 @@
     <color name="list_dropdown_divider_color">#92a3a3a3</color>
 
     <color name="my_schedule_conflict">#db4437</color>
+    <color name="divider_gray">#ffc7c7c7</color>
 </resources>

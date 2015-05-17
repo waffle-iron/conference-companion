@@ -23,8 +23,8 @@ public class DrawerAdapter extends BaseAdapter {
     public static final int MENU_TALKS = 1;
     public static final int MENU_SPEAKERS = 2;
     public static final int MENU_CONFERENCES = 3;
-    public static final int MENU_SETTINGS = 4;
-    public static final int MENU_QUESTIONS = 5;
+    public static final int MENU_TIMELINE = 4;
+    public static final int MENU_SETTINGS = 5;
     public static final int MENU_INVALID = -1;
     private final int mSelectedPosition;
 
@@ -41,6 +41,7 @@ public class DrawerAdapter extends BaseAdapter {
         mItems.add(new DrawerItem(R.drawable.ic_talk, R.string.talks));
         mItems.add(new DrawerItem(R.drawable.ic_speaker, R.string.speakers));
         mItems.add(new DrawerItem(R.drawable.ic_conference, R.string.conferences));
+        mItems.add(new DrawerItem(R.drawable.ic_twitter, R.string.timeline));
         mItems.add(new DrawerItem(R.drawable.ic_drawer_settings, R.string.settings));
     }
 
