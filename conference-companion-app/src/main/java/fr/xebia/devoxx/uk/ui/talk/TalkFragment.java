@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -66,6 +67,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     private static final float PHOTO_ASPECT_RATIO = 1.8f;
     private static final float GAP_FILL_DISTANCE_MULTIPLIER = 1.5f;
+    private static final int SCAN_QR_CODE_REQUEST = 1000;
 
     @InjectView(R.id.scroll_view) ObservableScrollView mScrollView;
 
@@ -84,6 +86,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
     @InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
     @InjectView(R.id.talk_rating_bar) RatingBar mTalkRatingBar;
+    @InjectView(R.id.talk_rating_alert) TextView mTalkRatingAlert;
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
@@ -139,6 +142,19 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SCAN_QR_CODE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                Preferences.setUserScanIdForVote(getActivity(), data.getStringExtra("SCAN_RESULT"));
+                Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.not_able_to_rate, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         refreshRatingBarState();
@@ -182,8 +198,23 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             case R.id.action_ask:
                 startActivity(new Intent(getActivity(), QuestionsActivity.class));
                 return true;
+            case R.id.action_scan_qr_code:
+                startScanQrCodeActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void startScanQrCodeActivity() {
+        try {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+            startActivityForResult(intent, SCAN_QR_CODE_REQUEST);
+        } catch (Exception e) {
+            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+            startActivity(marketIntent);
         }
     }
 
@@ -205,25 +236,32 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mTitle.setText(mExtraTalkTitle);
         mTalkHeaderBackground.setBackgroundColor(mExtraTalkColor);
         getTalk();
-        Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
-                (), new OneQuery
-                .ResultHandler<Vote>() {
-            @Override
-            public boolean handleResult(final Vote vote) {
-                mVote = vote;
-                if (vote == null || getView() == null) {
+        if (Preferences.hasUserScanIdForVote(getActivity())) {
+            Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
+                    (), new OneQuery
+                    .ResultHandler<Vote>() {
+                @Override
+                public boolean handleResult(final Vote vote) {
+                    mVote = vote;
+                    if (vote == null || getView() == null) {
+                        return true;
+                    }
+
+                    mTalkRatingBar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTalkRatingBar.setRating(vote.getNote());
+                        }
+                    });
                     return true;
                 }
+            }, null);
+        }
+    }
 
-                mTalkRatingBar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTalkRatingBar.setRating(vote.getNote());
-                    }
-                });
-                return true;
-            }
-        }, null);
+    @OnClick(R.id.talk_rating_alert)
+    public void onRatingAlertClicked() {
+        startScanQrCodeActivity();
     }
 
     private void getTalk() {
@@ -420,7 +458,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 if ((mVote != null && (int) rating == mVote.getNote()) || !fromUser) {
                     return;
                 }
-                if(rating==0){
+                if (rating == 0) {
                     mTalkRatingBar.setRating(1);
                 } else {
                     Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
@@ -463,10 +501,16 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
         long now = System.currentTimeMillis();
         boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
-        if (now > mTalk.getToUtcTime() - 10 * 60 * 1000 && !conferenceEnded) {
-            mTalkRating.setVisibility(VISIBLE);
+        //  if (now > mTalk.getToUtcTime() - 10 * 60 * 1000 && !conferenceEnded) {
+        mTalkRating.setVisibility(VISIBLE);
+        if (Preferences.hasUserScanIdForVote(getActivity())) {
             mTalkRatingBar.setVisibility(VISIBLE);
+            mTalkRatingAlert.setVisibility(GONE);
+        } else {
+            mTalkRatingBar.setVisibility(GONE);
+            mTalkRatingAlert.setVisibility(VISIBLE);
         }
+        //  }
         mTalkRatingBar.setIsIndicator(conferenceEnded);
     }
 

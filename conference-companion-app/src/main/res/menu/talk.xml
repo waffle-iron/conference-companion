@@ -7,14 +7,26 @@
         android:title="@string/action_ask"
         android:icon="@drawable/ic_action_ask"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_send"
-        android:title="@string/action_send"
-        android:icon="@drawable/ic_action_send"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_note"
         android:title="@string/action_note"
         android:icon="@drawable/ic_action_edit"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_send"
+        android:title="@string/action_send"
+        android:icon="@drawable/ic_action_send"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_scan_qr_code"
+        android:title="@string/scan_qr_code"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_input_qr_code"
+        android:title="@string/input_qr_code"
+        app:showAsAction="never" />
 </menu>

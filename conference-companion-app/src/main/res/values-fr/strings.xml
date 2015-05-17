@@ -84,4 +84,10 @@
         <item quantity="one">%1$d présentation disponible</item>
         <item quantity="other">%1$d présentations disponibles</item>
     </plurals>
+    <string name="able_to_rate">Maintenant vous pouvez noter une session quand elle est terminée</string>
+    <string name="timeline">Timeline</string>
+    <string name="timeline_empty">Pas de timeline</string>
+    <string name="scan_qr_code">Scanner QR code</string>
+    <string name="scan_qr_code_required">Vous devez scanner votre QR code pour noter une session</string>
+    <string name="not_able_to_rate">Vous devez scanner votre QR code pour noter une session</string>
 </resources>

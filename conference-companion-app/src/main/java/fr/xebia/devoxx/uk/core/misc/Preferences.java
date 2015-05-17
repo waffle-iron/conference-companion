@@ -9,10 +9,10 @@ public class Preferences {
 
     private static final String APP_PREFS = "ApplicationPreferences";
     private static final String CURRENT_CONFERENCE = "SynchroOver";
-    private static final String CURRENT_CONFERENCE_DEVOXX = "DevoxxConference";
     private static final String CURRENT_CONFERENCE_END_TIME = "CurrentConferenceEndTime";
     private static final String CURRENT_CONFERENCE_START_TIME = "CurrentConferenceStartTime";
     private static final String GENERATED_DEVICE_ID = "GeneratedDeviceId";
+    private static final String USER_SCAN_ID = "userScanId";
 
     private Preferences() {
 
@@ -36,6 +36,18 @@ public class Preferences {
 
     public static void setSelectedConferenceEndTime(Context context, long conferenceEndTime) {
         getAppPreferences(context).edit().putLong(CURRENT_CONFERENCE_END_TIME, conferenceEndTime).apply();
+    }
+
+    public static boolean hasUserScanIdForVote(Context context) {
+        return getUserScanIdForVote(context) != null;
+    }
+
+    public static String getUserScanIdForVote(Context context) {
+        return getAppPreferences(context).getString(USER_SCAN_ID, null);
+    }
+
+    public static void setUserScanIdForVote(Context context, String userScanId) {
+        getAppPreferences(context).edit().putString(USER_SCAN_ID, userScanId).apply();
     }
 
     public static long getSelectedConferenceStartTime(Context context) {
