@@ -1,112 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="fr.xebia.devoxx.uk">
+    package="fr.xebia.devoxx.uk" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:allowBackup="true"
-        android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher"
         android:name=".core.KouignAmanApplication"
-        android:theme="@style/AppTheme">
-
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.HomeActivity"
             android:icon="@drawable/ic_launcher"
-            android:launchMode="singleTop"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- NFC  -->
+            <!-- NFC -->
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.ACTION_TAG_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.ACTION_TAG_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.ACTION_TECH_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.ACTION_TECH_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.talk.TalkActivity"
-            android:theme="@style/Theme.Companion.TalkDetails"
-            android:parentActivityName=".ui.HomeActivity">
+            android:parentActivityName=".ui.HomeActivity"
+            android:theme="@style/Theme.Companion.TalkDetails" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity"/>
+                android:value=".ui.HomeActivity" />
         </activity>
-
-        <activity android:name=".ui.schedule.MyScheduleActivity"/>
-
+        <activity android:name=".ui.schedule.MyScheduleActivity" />
         <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"
-            android:parentActivityName=".ui.speaker.SpeakerActivity">
+            android:parentActivityName=".ui.speaker.SpeakerActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.speaker.SpeakerActivity"/>
+                android:value=".ui.speaker.SpeakerActivity" />
         </activity>
-
         <activity
             android:name=".ui.browse.BrowseTalksActivity"
-            android:parentActivityName=".ui.schedule.MyScheduleActivity">
+            android:parentActivityName=".ui.schedule.MyScheduleActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.schedule.MyScheduleActivity"/>
+                android:value=".ui.schedule.MyScheduleActivity" />
         </activity>
-
-        <activity android:name=".ui.speaker.SpeakerActivity"/>
-
+        <activity android:name=".ui.speaker.SpeakerActivity" />
         <activity
             android:name=".ui.note.MemoActivity"
-            android:parentActivityName=".ui.talk.TalkActivity">
+            android:parentActivityName=".ui.talk.TalkActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.talk.TalkActivity"/>
+                android:value=".ui.talk.TalkActivity" />
         </activity>
+        <activity android:name=".ui.settings.SettingsActivity" />
+        <activity android:name=".ui.conference.ConferenceChooserActivity" />
+        <activity android:name=".ui.question.QuestionsActivity" />
+        <activity android:name=".ui.timeline.TimelineActivity" />
 
-        <activity android:name=".ui.settings.SettingsActivity"/>
-
-        <activity android:name=".ui.conference.ConferenceChooserActivity"/>
-
-        <activity android:name=".ui.question.QuestionsActivity"/>
-
-        <activity android:name=".ui.timeline.TimelineActivity"/>
-
-        <service android:name=".service.SynchroIntentService"/>
-        <service android:name=".service.ConferencesFetcherIntentService"/>
-        <service android:name=".service.NotificationSchedulerIntentService">
+        <service android:name=".service.SynchroIntentService" />
+        <service android:name=".service.ConferencesFetcherIntentService" />
+        <service android:name=".service.NotificationSchedulerIntentService" >
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SCHEDULE_NOTIFICATION"/>
+                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SCHEDULE_NOTIFICATION" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SEND_NOTIFICATION"/>
+                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SEND_NOTIFICATION" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SEND_FEEDBACK_NOTIFICATION"/>
+                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SEND_FEEDBACK_NOTIFICATION" />
             </intent-filter>
         </service>
-
-        <service android:name=".service.SendRatingIntentService">
+        <service android:name=".service.SendRatingIntentService" >
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SEND_RATING"/>
+                <action android:name="fr.xebia.devoxx.uk.service.ACTION_SEND_RATING" />
             </intent-filter>
         </service>
-
         <service android:name=".service.WearListenerService" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.uk.service.ACTION_NOTIFICATION_DISMISSAL"/>
+                <action android:name="fr.xebia.devoxx.uk.service.ACTION_NOTIFICATION_DISMISSAL" />
             </intent-filter>
         </service>
 
@@ -116,6 +108,11 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b" />
+
+        <activity
+            android:name=".ui.plan.PlanActivity"
+            android:label="@string/title_activity_plan" >
+        </activity>
     </application>
 
 </manifest>

@@ -87,10 +87,15 @@
     <string name="scan_qr_code_required">You need to scan your QR code to vote</string>
     <string name="able_to_rate">Now you\'ll be able to rate a session when It\'s over</string>
     <string name="not_able_to_rate">You need to scan your QR code to rate a session</string>
+    <string name="floor_plan">Floor plan</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>
         <item quantity="one">%1$d talk available</item>
         <item quantity="other">%1$d talks available</item>
     </plurals>
+    <string name="title_activity_plan">PlanActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -26,6 +26,7 @@ import fr.xebia.devoxx.uk.ui.HomeActivity;
 import fr.xebia.devoxx.uk.ui.conference.ConferenceChooserActivity;
 import fr.xebia.devoxx.uk.ui.navigation.DrawerAdapter;
 import fr.xebia.devoxx.uk.ui.navigation.NavigationDrawerFragment;
+import fr.xebia.devoxx.uk.ui.plan.PlanActivity;
 import fr.xebia.devoxx.uk.ui.schedule.MyScheduleActivity;
 import fr.xebia.devoxx.uk.ui.settings.SettingsActivity;
 import fr.xebia.devoxx.uk.ui.speaker.SpeakerActivity;
@@ -253,6 +254,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
                     @Override
                     public void run() {
                         startActivity(new Intent(BaseActivity.this, SpeakerActivity.class));
+                        finish();
+                    }
+                }, 300);
+                break;
+            case DrawerAdapter.MENU_FLOOR_PLAN:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(BaseActivity.this, PlanActivity.class));
                         finish();
                     }
                 }, 300);
