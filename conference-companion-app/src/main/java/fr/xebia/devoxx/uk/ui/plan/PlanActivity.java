@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.devoxx.uk.R;
 import fr.xebia.devoxx.uk.core.activity.BaseActivity;
+import fr.xebia.devoxx.uk.ui.navigation.DrawerAdapter;
 
 public class PlanActivity extends BaseActivity {
 
@@ -43,5 +44,20 @@ public class PlanActivity extends BaseActivity {
         };
         viewPager.setAdapter(adapter);
         circlePageIndicator.setViewPager(viewPager);
+    }
+
+    @Override
+    protected int getSelfNavDrawerItem() {
+        return DrawerAdapter.MENU_FLOOR_PLAN;
+    }
+
+    @Override
+    public void onNavigationDrawerToggle(boolean opened) {
+        super.onNavigationDrawerToggle(opened);
+        if (!opened) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(R.string.floor_plan);
+        }
     }
 }

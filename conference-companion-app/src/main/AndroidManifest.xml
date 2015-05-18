@@ -110,8 +110,7 @@
             android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b" />
 
         <activity
-            android:name=".ui.plan.PlanActivity"
-            android:label="@string/title_activity_plan" >
+            android:name=".ui.plan.PlanActivity">
         </activity>
     </application>
 
