@@ -34,7 +34,10 @@ public class PlanActivity extends BaseActivity {
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return PlanFragment.newInstance("http://images4.fanpop.com/image/photos/16100000/Cute-Kitten-kittens-16123158-1280-800.jpg");
+                return PlanFragment.newInstance(position == 0 ?
+                        "http://www.devoxx.co.uk/wp-content/uploads/2015/04/Day-1-flooplan.jpg" :
+                        "http://www.devoxx.co.uk/wp-content/uploads/2015/04/Days-23-Floorplan.jpg"
+                );
             }
 
             @Override

@@ -33,7 +33,7 @@ public class PlanFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
-        Picasso.with(getActivity()).load(getArguments().getString(ARG_IMAGE_URL)).fit().centerInside().into(planImageView);
+        Picasso.with(getActivity()).load(getArguments().getString(ARG_IMAGE_URL)).rotate(90).into(planImageView);
     }
 
     public static PlanFragment newInstance(String imageUrl) {
