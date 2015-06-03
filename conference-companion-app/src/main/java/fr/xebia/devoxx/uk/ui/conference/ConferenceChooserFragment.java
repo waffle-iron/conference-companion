@@ -15,6 +15,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import fr.xebia.devoxx.uk.BuildConfig;
 import fr.xebia.devoxx.uk.R;
 import fr.xebia.devoxx.uk.bus.ConferenceFetchedEvent;
 import fr.xebia.devoxx.uk.bus.ConferenceSelectedEvent;
@@ -31,6 +32,7 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
 
 
     public static final String TAG = "ConferenceChooserFragment";
+    public static final int DEVOXX_UK_CONFERENCE_ID = 16;
 
     @InjectView(R.id.progress_container) ViewGroup mProgressContainer;
 
@@ -65,7 +67,7 @@ public class ConferenceChooserFragment extends Fragment implements ManyQuery.Res
             mErrorContainer.setVisibility(View.GONE);
             getActivity().startService(new Intent(getActivity(), ConferencesFetcherIntentService.class));
         } else {
-            BUS.post(new ConferenceSelectedEvent(mConferences.get(0).getId()));
+            BUS.post(new ConferenceSelectedEvent(BuildConfig.DEVOXX_UK_CONFERENCE_ID));
         }
     }
 

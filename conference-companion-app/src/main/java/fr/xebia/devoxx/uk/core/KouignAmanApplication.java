@@ -47,6 +47,10 @@ public class KouignAmanApplication extends Application {
 
         LeakCanary.install(this);
 
+        if(Preferences.getSelectedConference(this) != BuildConfig.DEVOXX_UK_CONFERENCE_ID) {
+            Preferences.removeSelectedConference(this);
+        }
+
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
         Fabric.with(this, new Crashlytics(), new TwitterCore(authConfig), new TweetUi());
 

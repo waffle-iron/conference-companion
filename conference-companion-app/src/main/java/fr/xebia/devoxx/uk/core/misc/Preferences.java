@@ -89,4 +89,8 @@ public class Preferences {
     public static void flagTalkFeedbackAsNotified(Context context, Talk talk) {
         getAppPreferences(context).edit().putBoolean(String.format("notification_feedback_%d_%s", talk.getConferenceId(), talk.getId()), true).apply();
     }
+
+    public static void removeSelectedConference(Context context) {
+        getAppPreferences(context).edit().remove(CURRENT_CONFERENCE).apply();
+    }
 }

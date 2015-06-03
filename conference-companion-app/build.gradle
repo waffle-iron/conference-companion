@@ -60,6 +60,7 @@ android {
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
+            buildConfigField 'int', 'DEVOXX_UK_CONFERENCE_ID', '16'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             signingConfig signingConfigs.debug
@@ -69,6 +70,7 @@ android {
             buildConfigField 'String', 'BACKEND_URL', '"http://backend.mobile.xebia.io/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
+            buildConfigField 'int', 'DEVOXX_UK_CONFERENCE_ID', '16'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             minifyEnabled false
