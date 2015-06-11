@@ -22,7 +22,7 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="fr.xebia.devoxx.uk.ui.plan.PlanActivity">
+        tools:context="fr.xebia.devoxx.pl.ui.plan.PlanActivity">
 
         <com.viewpagerindicator.CirclePageIndicator
             android:id="@+id/view_pager_indicator"
@@ -45,6 +45,6 @@
     android:layout_width="@dimen/navigation_drawer_width"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:name="fr.xebia.devoxx.uk.ui.navigation.NavigationDrawerFragment" />
+    android:name="fr.xebia.devoxx.pl.ui.navigation.NavigationDrawerFragment" />
 
 </android.support.v4.widget.DrawerLayout>

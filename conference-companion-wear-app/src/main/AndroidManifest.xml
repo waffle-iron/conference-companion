@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="fr.xebia.devoxx.uk"
+<manifest package="fr.xebia.devoxx.pl"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-feature android:name="android.hardware.type.watch"/>
@@ -31,7 +31,7 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.uk.wear.ACTION_DISMISS"/>
+                <action android:name="fr.xebia.devoxx.pl.wear.ACTION_DISMISS"/>
             </intent-filter>
         </service>
 

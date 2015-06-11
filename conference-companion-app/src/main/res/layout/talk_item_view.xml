@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<fr.xebia.devoxx.uk.ui.browse.TalkItemView
+<fr.xebia.devoxx.pl.ui.browse.TalkItemView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="300dp"
@@ -93,4 +93,4 @@
         android:src="@drawable/indicator_in_schedule"
         android:contentDescription="@null"/>
 
-</fr.xebia.devoxx.uk.ui.browse.TalkItemView>
+</fr.xebia.devoxx.pl.ui.browse.TalkItemView>

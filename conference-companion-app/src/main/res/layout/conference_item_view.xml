@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<fr.xebia.devoxx.uk.ui.conference.ConferenceItemView
+<fr.xebia.devoxx.pl.ui.conference.ConferenceItemView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

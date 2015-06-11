@@ -28,7 +28,7 @@
                 android:textSize="17sp"
                 android:textStyle="bold"/>
 
-        <fr.xebia.devoxx.uk.ui.widget.UnderlinedTextView
+        <fr.xebia.devoxx.pl.ui.widget.UnderlinedTextView
                 android:id="@+id/speaker_bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"/>
 
-        <fr.xebia.devoxx.uk.ui.widget.UnderlinedTextView
+        <fr.xebia.devoxx.pl.ui.widget.UnderlinedTextView
                 android:id="@+id/speaker_presentations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
