@@ -33,7 +33,11 @@ public class PlanFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
-        Picasso.with(getActivity()).load(getArguments().getString(ARG_IMAGE_URL)).rotate(90).into(planImageView);
+        String url = getArguments().getString(ARG_IMAGE_URL);
+        Picasso.with(getActivity()).load(url).
+                placeholder(url.contains("Day-1") ? R.drawable.wednesday_plan : R.drawable.thursday_friday_plan).
+                rotate(90).
+                into(planImageView);
     }
 
     public static PlanFragment newInstance(String imageUrl) {
