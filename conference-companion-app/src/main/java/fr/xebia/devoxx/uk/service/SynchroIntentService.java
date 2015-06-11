@@ -55,11 +55,10 @@ public class SynchroIntentService extends IntentService {
             } else {
                 // Load data before starting transaction
                 List<Speaker> speakers = KouignAmanApplication.getConferenceApi().getSpeakers(conferenceId);
-                Map<String, Talk> talksFromWsById = loadTalks(conferenceId);
                 List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getSchedule(conferenceId);
                 transaction = new Transaction();
                 synchroniseSpeakers(speakers, transaction);
-                synchroniseTalks(conference, scheduledTalks, talksFromWsById, transaction);
+                synchroniseTalks(conference, scheduledTalks, transaction);
                 transaction.setSuccessful(true);
                 Preferences.setSelectedConference(this, conference.getId());
                 Preferences.setSelectedConferenceEndTime(this, conference.getToUtcTime());
@@ -94,7 +93,7 @@ public class SynchroIntentService extends IntentService {
         return PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void synchroniseTalks(Conference conference, List<Talk> scheduledTalks, Map<String, Talk> talksFromWsById, Transaction transaction) {
+    private void synchroniseTalks(Conference conference, List<Talk> scheduledTalks, Transaction transaction) {
         int conferenceId = conference.getId();
         Map<String, Talk> talksInDbById = loadTalksFromDb(conferenceId);
         HashMap<String, Speaker> everySpeakers = loadEverySpeakers();
@@ -111,14 +110,7 @@ public class SynchroIntentService extends IntentService {
                 talkToSave.setFavorite(talkToSave.isKeynote());
             }
 
-            String talkDetailsId = talkToSave.getDetails().getId();
-            talkToSave.setTalkDetailsId(talkDetailsId);
-
-            Talk talkDetails = talksFromWsById.remove(talkDetailsId == null ? talkToSave.getId() : talkDetailsId);
-            if (talkDetails != null) {
-                talkToSave.setSummary(talkDetails.getSummary());
-                talkToSave.setTrack(talkDetails.getTrack());
-            }
+            talkToSave.setTalkDetailsId(talkToSave.getId());
 
             if (talkToSave.isKeynote()) {
                 talkToSave.setTrack("Keynote");
@@ -129,13 +121,8 @@ public class SynchroIntentService extends IntentService {
             setConferenceUtcTime(conference, talkToSave);
 
             talkToSave.setPosition(index++);
-            if (talkDetails != null || talkToSave.isBreak()) {
-                talksToSave.add(talkToSave);
-            } else {
-                // Avoid adding weird presentation (i.e no intialized)
-                // So put back to the map for later deletion
-                talksInDbById.put(talkToSave.getId(), talkToSave);
-            }
+
+            talksToSave.add(talkToSave);
         }
 
         generateColorByTrack(talksToSave);
@@ -168,18 +155,11 @@ public class SynchroIntentService extends IntentService {
     }
 
     private void setConferenceUtcTime(Conference conference, Talk talkToSave) {
-        DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+        DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
         DateTime jodaStartTime = new DateTime(talkToSave.getFromTime(), apiTimeZone);
         DateTime jodaEndTime = new DateTime(talkToSave.getToTime(), apiTimeZone);
 
         DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
-        if (conference.getName().toLowerCase().contains("uk")) {
-            // Devoxx UK is a specific case
-            DateTimeZone ukTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
-            talkToSave.getFromTime().setTime(jodaStartTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
-            talkToSave.getToTime().setTime(jodaEndTime.withZone(ukTimeZone).withZoneRetainFields(apiTimeZone).getMillis());
-        }
-
         talkToSave.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
         talkToSave.setToUtcTime(jodaEndTime.withZone(utcTimeZone).getMillis());
     }
@@ -191,15 +171,6 @@ public class SynchroIntentService extends IntentService {
             speakersMap.put(speaker.getId(), speaker);
         }
         return speakersMap;
-    }
-
-    private Map<String, Talk> loadTalks(int conferenceId) {
-        List<Talk> scheduledTalks = KouignAmanApplication.getConferenceApi().getTalks(conferenceId);
-        Map<String, Talk> scheduledTalksById = new HashMap<>();
-        for (Talk talk : scheduledTalks) {
-            scheduledTalksById.put(talk.getId(), talk);
-        }
-        return scheduledTalksById;
     }
 
     private Map<String, Talk> loadTalksFromDb(int conferenceId) {
@@ -217,7 +188,7 @@ public class SynchroIntentService extends IntentService {
         List<String> availableTracks = new ArrayList<>();
         for (Talk talk : talks) {
             String track = talk.getTrack();
-            if (!availableTracks.contains(track)) {
+            if (!TextUtils.isEmpty(track) && !availableTracks.contains(track)) {
                 availableTracks.add(track);
             }
         }

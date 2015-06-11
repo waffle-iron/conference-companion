@@ -133,7 +133,7 @@ public class HomeListenerService extends WearableListenerService {
         PendingIntent showCardIntent = showCardIntent(talkId, talkRoom, talkTitle, talkSpeakers, talkColor, notificationId);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(getString(R.string.rate_this_presentation))
                 .setDeleteIntent(deleteIntent)
                 .setContentText(talkTitle)

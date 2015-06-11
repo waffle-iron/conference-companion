@@ -35,8 +35,8 @@ public class Talk extends Model implements Parcelable {
 
     @JsonProperty @Column("_id") @Key private String id;
     @JsonProperty @Column("conferenceId") private int conferenceId;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris") @Column("fromTime") private Date fromTime;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris") @Column("toTime") private Date toTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Europe/London") @Column("fromTime") private Date fromTime;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Europe/London") @Column("toTime") private Date toTime;
     @Column("fromUtcTime") private long fromUtcTime;
     @Column("toUtcTime") private long toUtcTime;
     @JsonProperty private LinkedHashSet<Speaker> speakers;
@@ -49,7 +49,6 @@ public class Talk extends Model implements Parcelable {
     @JsonProperty @Column("title") private String title;
     @JsonProperty @Column("summary") private String summary;
     @JsonProperty @Column("favorite") private boolean favorite;
-    @JsonProperty("presentation") private Talk details;
 
     @Column("talkDetailsId") private String talkDetailsId;
     @Column("color") private int color;
@@ -255,10 +254,6 @@ public class Talk extends Model implements Parcelable {
     }
 
 
-    public Talk getDetails() {
-        return details;
-    }
-
     public void setPrettySpeakers(Collection<Speaker> speakers, HashMap<String, Speaker> speakersMap) {
         StringBuilder prettySpeakers = new StringBuilder();
         int position = 0;
@@ -308,7 +303,6 @@ public class Talk extends Model implements Parcelable {
         title = in.readString();
         summary = in.readString();
         favorite = in.readByte() != 0x00;
-        details = (Talk) in.readValue(Talk.class.getClassLoader());
         talkDetailsId = in.readString();
         color = in.readInt();
         memo = in.readString();
@@ -339,7 +333,6 @@ public class Talk extends Model implements Parcelable {
         dest.writeString(title);
         dest.writeString(summary);
         dest.writeByte((byte) (favorite ? 0x01 : 0x00));
-        dest.writeValue(details);
         dest.writeString(talkDetailsId);
         dest.writeInt(color);
         dest.writeString(memo);

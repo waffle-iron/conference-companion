@@ -21,8 +21,8 @@ public class Conference extends Model {
     @JsonProperty @Column("location") private String location;
     @JsonProperty @Column("backgroundUrl") private String backgroundUrl;
     @JsonProperty @Column("logoUrl") private String logoUrl;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/Paris") @Column("fromDate") private Date from;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/Paris") @Column("toDate") private Date to;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/London") @Column("fromDate") private Date from;
+    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/London") @Column("toDate") private Date to;
     @Column("fromUtcTime") private long fromUtcTime;
     @Column("toUtcTime") private long toUtcTime;
     @JsonProperty @Column("enabled") private boolean enabled;
