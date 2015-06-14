@@ -88,6 +88,7 @@
     <string name="able_to_rate">Now you\'ll be able to rate a session when It\'s over</string>
     <string name="not_able_to_rate">You need to scan your QR code to rate a session</string>
     <string name="floor_plan">Floor plan</string>
+    <string name="error_loading_conference">Failed to load conference</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>

@@ -14,6 +14,8 @@ import fr.xebia.devoxx.uk.model.Vote;
 import retrofit.client.Response;
 import se.emilsjolander.sprinkles.Query;
 
+import static fr.xebia.devoxx.uk.core.misc.Preferences.getUserScanIdForVote;
+
 public class SendRatingIntentService extends IntentService {
 
     public static final String ACTION_SEND_RATING = "fr.xebia.devoxx.uk.service.ACTION_SEND_RATING";
@@ -52,7 +54,7 @@ public class SendRatingIntentService extends IntentService {
         Vote vote = Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", talkId, conferenceId).get();
         try {
             Response response = KouignAmanApplication.getVoteApi().sendRating(buildRating(vote));
-            if (response == null || response.getStatus() != 201) {
+            if (response == null || (response.getStatus() != 201 && response.getStatus() != 409)) {
                 rescheduleSendRating(vote);
             }
         } catch (Exception e) {
@@ -67,7 +69,6 @@ public class SendRatingIntentService extends IntentService {
     }
 
     private Rating buildRating(Vote vote) {
-        // TODO use user id
-        return new Rating(10L, vote.getNote(), vote.getTalkId());
+        return new Rating(Long.valueOf(getUserScanIdForVote(this)), vote.getNote(), vote.getTalkId());
     }
 }
