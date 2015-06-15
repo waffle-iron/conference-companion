@@ -61,7 +61,7 @@ import static android.view.View.VISIBLE;
 import static fr.xebia.devoxx.uk.core.KouignAmanApplication.BUS;
 import static fr.xebia.devoxx.uk.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
 import static fr.xebia.devoxx.uk.service.SendRatingIntentService.buildSendRatingIntent;
-import static fr.xebia.devoxx.uk.ui.question.QuestionsActivity.EXTRA_ROOM;
+import static fr.xebia.devoxx.uk.ui.question.QuestionsActivity.EXTRA_PRESENTATION;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -202,8 +202,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 }
             case R.id.action_ask:
                 Intent intent = new Intent(getActivity(), QuestionsActivity.class);
-                String room = mTalk.getRoom();
-                intent.putExtra(EXTRA_ROOM, room == null ? "" : room);
+                intent.putExtra(EXTRA_PRESENTATION, mTalk.getId());
                 startActivity(intent);
                 return true;
             case R.id.action_scan_qr_code:

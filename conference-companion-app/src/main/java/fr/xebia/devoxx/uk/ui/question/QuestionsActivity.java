@@ -18,7 +18,7 @@ import fr.xebia.devoxx.uk.core.utils.Compatibility;
 
 public class QuestionsActivity extends Activity {
 
-    public static final String EXTRA_ROOM = "fr.xebia.devoxx.uk.EXTRA_ROOM";
+    public static final String EXTRA_PRESENTATION = "fr.xebia.devoxx.uk.EXTRA_PRESENTATION";
 
     @InjectView(R.id.questions_webview) WebView questionsWebview;
     @InjectView(R.id.questions_progress) ProgressBar progressBar;
@@ -52,7 +52,7 @@ public class QuestionsActivity extends Activity {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
                 questionsWebview.setVisibility(View.VISIBLE);
-                questionsWebview.loadUrl(String.format(ROOM_SELECTION_SCRIPT, getIntent().getStringExtra(EXTRA_ROOM).trim().toUpperCase()));
+                questionsWebview.loadUrl(String.format(ROOM_SELECTION_SCRIPT, getIntent().getStringExtra(EXTRA_PRESENTATION).trim().toUpperCase()));
             }
 
             @Override

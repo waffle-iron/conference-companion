@@ -29,8 +29,8 @@ android {
         applicationId "fr.xebia.devoxx.uk"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.0.3"
+        versionCode 8
+        versionName "1.0.4"
     }
 
     signingConfigs {
@@ -59,7 +59,7 @@ android {
             debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu:3000/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
+            buildConfigField 'String', 'VOTE_URL', '"http://api.vote.devoxx.co.uk"'
             buildConfigField 'int', 'DEVOXX_UK_CONFERENCE_ID', '16'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
@@ -69,7 +69,7 @@ android {
         release {
             buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu:3000/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
+            buildConfigField 'String', 'VOTE_URL', '"http://api.vote.devoxx.co.uk"'
             buildConfigField 'int', 'DEVOXX_UK_CONFERENCE_ID', '16'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
