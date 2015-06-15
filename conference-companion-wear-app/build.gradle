@@ -20,8 +20,8 @@ android {
         applicationId "fr.xebia.devoxx.uk"
         minSdkVersion 20
         targetSdkVersion 22
-        versionCode 4
-        versionName "1.0"
+        versionCode 5
+        versionName "1.0.1"
     }
 
     compileOptions {

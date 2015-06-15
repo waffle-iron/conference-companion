@@ -89,6 +89,7 @@
     <string name="not_able_to_rate">You need to scan your QR code to rate a session</string>
     <string name="floor_plan">Floor plan</string>
     <string name="error_loading_conference">Failed to load conference</string>
+    <string name="too_early_to_vote">Too early to vote for this presentation</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>
