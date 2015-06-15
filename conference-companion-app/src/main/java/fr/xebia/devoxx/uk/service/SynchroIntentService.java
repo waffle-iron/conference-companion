@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.DurationFieldType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +68,12 @@ public class SynchroIntentService extends IntentService {
         Conference conference;
         try {
             conference = new ObjectMapper().readValue(DEVOXX_UK_CONFERENCE, Conference.class);
+            DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
+            DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
+            DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
+            conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
+            conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
         } catch (IOException e) {
             BUS.post(new SynchroFinishedEvent(false, null));
             return;
