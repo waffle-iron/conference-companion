@@ -544,6 +544,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         if (mTalk == null) {
             return;
         }
+        mTalkRating.setVisibility(VISIBLE);
         if (Preferences.hasUserScanIdForVote(getActivity())) {
             mTalkRatingBar.setVisibility(VISIBLE);
             mTalkRatingAlert.setVisibility(GONE);
