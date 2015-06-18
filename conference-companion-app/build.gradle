@@ -29,8 +29,8 @@ android {
         applicationId "fr.xebia.devoxx.pl"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 3
-        versionName "0.3"
+        versionCode 9
+        versionName "1.0.5"
     }
 
     signingConfigs {
@@ -57,7 +57,7 @@ android {
     buildTypes {
         debug {
             debuggable true
-            buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu:3000/api/v1"'
+            buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
             buildConfigField 'int', 'DEVOXX_PL_CONFERENCE_ID', '17'
@@ -67,7 +67,7 @@ android {
         }
 
         release {
-            buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu:3000/api/v1"'
+            buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
             buildConfigField 'int', 'DEVOXX_PL_CONFERENCE_ID', '17'

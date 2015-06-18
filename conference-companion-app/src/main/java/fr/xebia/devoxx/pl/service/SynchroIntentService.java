@@ -6,9 +6,13 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.DurationFieldType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,6 +43,21 @@ public class SynchroIntentService extends IntentService {
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.devoxx.pl.EXTRA_CONFERENCE_ID";
     public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.devoxx.pl.EXTRA_FROM_APP_CREATE";
 
+    public static final String DEVOXX_UK_CONFERENCE = "{\n" +
+            "\"id\": 16,\n" +
+            "\"backgroundUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-background.png\",\n" +
+            "\"logoUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-logo.png\",\n" +
+            "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\",\n" +
+            "\"from\": \"2015-06-17\",\n" +
+            "\"name\": \"DevoxxUK 2015\",\n" +
+            "\"description\": \"DevoxxUK 2015\",\n" +
+            "\"location\": \"London - Business Design Centre\",\n" +
+            "\"baseUrl\": \"http://cfp.devoxx.co.uk/api/conferences/DevoxxUK2015\",\n" +
+            "\"timezone\": \"Europe/London\",\n" +
+            "\"enabled\": true,\n" +
+            "\"to\": \"2015-06-19\"\n" +
+            "}";
+
     public SynchroIntentService() {
         super(TAG);
     }
@@ -46,7 +65,19 @@ public class SynchroIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
-        Conference conference = Query.one(Conference.class, "SELECT * FROM Conferences WHERE _id=?", conferenceId).get();
+        Conference conference;
+        try {
+            conference = new ObjectMapper().readValue(DEVOXX_UK_CONFERENCE, Conference.class);
+            DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
+            DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
+            DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
+            conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
+            conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
+        } catch (IOException e) {
+            BUS.post(new SynchroFinishedEvent(false, null));
+            return;
+        }
         Transaction transaction = null;
         boolean sendSynchroEvent = !intent.hasExtra(EXTRA_FROM_APP_CREATE);
         try {

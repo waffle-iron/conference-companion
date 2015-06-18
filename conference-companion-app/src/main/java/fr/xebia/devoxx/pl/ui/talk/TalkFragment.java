@@ -496,6 +496,13 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 if ((mVote != null && (int) rating == mVote.getNote()) || !fromUser) {
                     return;
                 }
+                long now = System.currentTimeMillis();
+                boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
+                if (!(now > mTalk.getToUtcTime() - 20 * 60 * 1000 && !conferenceEnded)) {
+                    Toast.makeText(getActivity(), R.string.too_early_to_vote, Toast.LENGTH_LONG).show();
+                    mTalkRatingBar.setRating(0);
+                    return;
+                }
                 if (rating == 0) {
                     mTalkRatingBar.setRating(1);
                 } else {
@@ -537,9 +544,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         if (mTalk == null) {
             return;
         }
-        long now = System.currentTimeMillis();
-        boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
-        //  if (now > mTalk.getToUtcTime() - 10 * 60 * 1000 && !conferenceEnded) {
         mTalkRating.setVisibility(VISIBLE);
         if (Preferences.hasUserScanIdForVote(getActivity())) {
             mTalkRatingBar.setVisibility(VISIBLE);
@@ -548,8 +552,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             mTalkRatingBar.setVisibility(GONE);
             mTalkRatingAlert.setVisibility(VISIBLE);
         }
-        //  }
-        mTalkRatingBar.setIsIndicator(conferenceEnded);
     }
 
     @Override

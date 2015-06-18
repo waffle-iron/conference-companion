@@ -1,11 +1,9 @@
 package fr.xebia.devoxx.pl.ui.conference;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import fr.xebia.devoxx.pl.R;
 import fr.xebia.devoxx.pl.bus.ConferenceSelectedEvent;
@@ -33,41 +31,10 @@ public class ConferenceChooserActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new ConferenceChooserFragment(), ConferenceChooserFragment.TAG)
+                    .replace(R.id.container, SynchroFragment.newInstance(BuildConfig.DEVOXX_UK_CONFERENCE_ID), SynchroFragment.TAG)
+                    .addToBackStack("synchro")
                     .commit();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        BUS.register(this);
-    }
-
-    public void onEventMainThread(ConferenceSelectedEvent conferenceSelectedEvent) {
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, SynchroFragment.newInstance(conferenceSelectedEvent.conferenceId), SynchroFragment.TAG)
-                .addToBackStack("synchro")
-                .commit();
-    }
-
-    public void onEventMainThread(SynchroFinishedEvent synchroFinishedEvent) {
-        if (synchroFinishedEvent.success) {
-            Intent homeIntent = new Intent(this, HomeActivity.class);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(homeIntent);
-            finish();
-        } else {
-            Toast.makeText(this, R.string.synchro_failed, Toast.LENGTH_LONG).show();
-            getFragmentManager().popBackStack();
-        }
-
-    }
-
-    @Override
-    protected void onStop() {
-        BUS.unregister(this);
-        super.onStop();
     }
 
     @Override

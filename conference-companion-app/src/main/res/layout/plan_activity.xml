@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.DrawerLayout android:id="@+id/drawer_layout"
+                                        xmlns:android="http://schemas.android.com/apk/res/android"
                                         xmlns:tools="http://schemas.android.com/tools"
-                                        android:id="@+id/drawer_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         tools:context=".HomeActivity">
 
 
-<FrameLayout
-    android:id="@+id/main_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="?actionBarSize"
-    android:clickable="true" >
-
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/view_pager"
+    <FrameLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="fr.xebia.devoxx.pl.ui.plan.PlanActivity">
+        android:layout_marginTop="?actionBarSize"
+        android:clickable="true">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="fr.xebia.devoxx.uk.ui.plan.PlanActivity"/>
 
         <com.viewpagerindicator.CirclePageIndicator
             android:id="@+id/view_pager_indicator"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"/>
 
-    </android.support.v4.view.ViewPager>
+    </FrameLayout>
 
 </FrameLayout>
 
