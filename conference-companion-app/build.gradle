@@ -58,8 +58,8 @@ android {
         debug {
             debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu/api/v1"'
-            buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
+            buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/m8gasnkt/ask"'
+            buildConfigField 'String', 'VOTE_URL', '"https://dxr-voting-2015.herokuapp.com/dpl15"'
             buildConfigField 'int', 'DEVOXX_PL_CONFERENCE_ID', '17'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
@@ -68,8 +68,8 @@ android {
 
         release {
             buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu/api/v1"'
-            buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/cmnxxfl0/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://limitless-mesa-1116.herokuapp.com/duk15"'
+            buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/m8gasnkt/ask"'
+            buildConfigField 'String', 'VOTE_URL', '"https://dxr-voting-2015.herokuapp.com/dpl15"'
             buildConfigField 'int', 'DEVOXX_PL_CONFERENCE_ID', '17'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""

@@ -14,7 +14,7 @@ import fr.xebia.devoxx.pl.model.Vote;
 import retrofit.client.Response;
 import se.emilsjolander.sprinkles.Query;
 
-import static fr.xebia.devoxx.uk.core.misc.Preferences.getUserScanIdForVote;
+import static fr.xebia.devoxx.pl.core.misc.Preferences.getUserScanIdForVote;
 
 public class SendRatingIntentService extends IntentService {
 

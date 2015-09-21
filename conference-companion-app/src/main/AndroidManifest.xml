@@ -109,10 +109,6 @@
             android:name="io.fabric.ApiKey"
             android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b" />
 
-        <activity
-            android:name=".ui.plan.PlanActivity"
-            android:screenOrientation="portrait">
-        </activity>
     </application>
 
 </manifest>

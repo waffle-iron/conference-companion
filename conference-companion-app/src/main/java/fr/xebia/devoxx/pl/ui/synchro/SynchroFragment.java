@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import fr.xebia.devoxx.pl.R;
-import fr.xebia.devoxx.pl.service.SynchroIntentService;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -18,7 +16,7 @@ import fr.xebia.devoxx.pl.bus.SynchroFinishedEvent;
 import fr.xebia.devoxx.pl.service.SynchroIntentService;
 import fr.xebia.devoxx.pl.ui.HomeActivity;
 
-import static fr.xebia.devoxx.uk.core.KouignAmanApplication.BUS;
+import static fr.xebia.devoxx.pl.core.KouignAmanApplication.BUS;
 
 public class SynchroFragment extends Fragment {
 

@@ -43,19 +43,19 @@ public class SynchroIntentService extends IntentService {
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.devoxx.pl.EXTRA_CONFERENCE_ID";
     public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.devoxx.pl.EXTRA_FROM_APP_CREATE";
 
-    public static final String DEVOXX_UK_CONFERENCE = "{\n" +
-            "\"id\": 16,\n" +
+    public static final String DEVOXX_PL_CONFERENCE = "{\n" +
+            "\"id\": 17,\n" +
             "\"backgroundUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-background.png\",\n" +
             "\"logoUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-logo.png\",\n" +
             "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\",\n" +
-            "\"from\": \"2015-06-17\",\n" +
-            "\"name\": \"DevoxxUK 2015\",\n" +
-            "\"description\": \"DevoxxUK 2015\",\n" +
-            "\"location\": \"London - Business Design Centre\",\n" +
-            "\"baseUrl\": \"http://cfp.devoxx.co.uk/api/conferences/DevoxxUK2015\",\n" +
-            "\"timezone\": \"Europe/London\",\n" +
+            "\"from\": \"2015-06-22\",\n" +
+            "\"name\": \"DevoxxPL 2015\",\n" +
+            "\"description\": \"DevoxxPL 2015\",\n" +
+            "\"location\": \"ICE Krakow Congress Centre\",\n" +
+            "\"baseUrl\": \"http://cfp.devoxx.pl/api/conferences/DevoxxPL2015\",\n" +
+            "\"timezone\": \"Europe/Paris\",\n" +
             "\"enabled\": true,\n" +
-            "\"to\": \"2015-06-19\"\n" +
+            "\"to\": \"2015-06-25\"\n" +
             "}";
 
     public SynchroIntentService() {
@@ -67,9 +67,9 @@ public class SynchroIntentService extends IntentService {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         Conference conference;
         try {
-            conference = new ObjectMapper().readValue(DEVOXX_UK_CONFERENCE, Conference.class);
+            conference = new ObjectMapper().readValue(DEVOXX_PL_CONFERENCE, Conference.class);
             DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
-            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/London"));
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
             DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
             DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
             conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());

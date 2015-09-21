@@ -5,18 +5,12 @@ import android.support.v7.app.ActionBar;
 import android.text.Html;
 import android.view.MenuItem;
 
+import fr.xebia.devoxx.pl.BuildConfig;
 import fr.xebia.devoxx.pl.R;
-import fr.xebia.devoxx.pl.bus.ConferenceSelectedEvent;
-import fr.xebia.devoxx.pl.bus.SynchroFinishedEvent;
 import fr.xebia.devoxx.pl.core.activity.BaseActivity;
-import fr.xebia.devoxx.pl.ui.HomeActivity;
 import fr.xebia.devoxx.pl.ui.synchro.SynchroFragment;
 
-import static fr.xebia.devoxx.pl.core.KouignAmanApplication.BUS;
-
 public class ConferenceChooserActivity extends BaseActivity {
-
-    public static final String EXTRA_SHOW_HOME = "fr.xebia.devoxx.pl.EXTRA_SHOW_HOME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +25,7 @@ public class ConferenceChooserActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, SynchroFragment.newInstance(BuildConfig.DEVOXX_UK_CONFERENCE_ID), SynchroFragment.TAG)
+                    .replace(R.id.container, SynchroFragment.newInstance(BuildConfig.DEVOXX_PL_CONFERENCE_ID), SynchroFragment.TAG)
                     .addToBackStack("synchro")
                     .commit();
         }
