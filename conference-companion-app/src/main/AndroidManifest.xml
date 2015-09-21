@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.xebia.devoxx.pl" >
+    package="fr.xebia.devoxx.be" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".core.KouignAmanApplication"
+        android:name="fr.xebia.devoxx.be.core.KouignAmanApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.HomeActivity"
+            android:name="fr.xebia.devoxx.be.ui.HomeActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:launchMode="singleTop" >
@@ -40,65 +40,65 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.talk.TalkActivity"
-            android:parentActivityName=".ui.HomeActivity"
+            android:name="fr.xebia.devoxx.be.ui.talk.TalkActivity"
+            android:parentActivityName="fr.xebia.devoxx.be.ui.HomeActivity"
             android:theme="@style/Theme.Companion.TalkDetails" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
+                android:value="fr.xebia.devoxx.be.ui.HomeActivity" />
         </activity>
-        <activity android:name=".ui.schedule.MyScheduleActivity" />
+        <activity android:name="fr.xebia.devoxx.be.ui.schedule.MyScheduleActivity" />
         <activity
-            android:name=".ui.speaker.SpeakerDetailsActivity"
-            android:parentActivityName=".ui.speaker.SpeakerActivity" >
+            android:name="fr.xebia.devoxx.be.ui.speaker.SpeakerDetailsActivity"
+            android:parentActivityName="fr.xebia.devoxx.be.ui.speaker.SpeakerActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.speaker.SpeakerActivity" />
+                android:value="fr.xebia.devoxx.be.ui.speaker.SpeakerActivity" />
         </activity>
         <activity
-            android:name=".ui.browse.BrowseTalksActivity"
-            android:parentActivityName=".ui.schedule.MyScheduleActivity" >
+            android:name="fr.xebia.devoxx.be.ui.browse.BrowseTalksActivity"
+            android:parentActivityName="fr.xebia.devoxx.be.ui.schedule.MyScheduleActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.schedule.MyScheduleActivity" />
+                android:value="fr.xebia.devoxx.be.ui.schedule.MyScheduleActivity" />
         </activity>
-        <activity android:name=".ui.speaker.SpeakerActivity" />
+        <activity android:name="fr.xebia.devoxx.be.ui.speaker.SpeakerActivity" />
         <activity
-            android:name=".ui.note.MemoActivity"
-            android:parentActivityName=".ui.talk.TalkActivity" >
+            android:name="fr.xebia.devoxx.be.ui.note.MemoActivity"
+            android:parentActivityName="fr.xebia.devoxx.be.ui.talk.TalkActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.talk.TalkActivity" />
+                android:value="fr.xebia.devoxx.be.ui.talk.TalkActivity" />
         </activity>
-        <activity android:name=".ui.settings.SettingsActivity" />
-        <activity android:name=".ui.conference.ConferenceChooserActivity" />
-        <activity android:name=".ui.question.QuestionsActivity" />
-        <activity android:name=".ui.timeline.TimelineActivity" />
+        <activity android:name="fr.xebia.devoxx.be.ui.settings.SettingsActivity" />
+        <activity android:name="fr.xebia.devoxx.be.ui.conference.ConferenceChooserActivity" />
+        <activity android:name="fr.xebia.devoxx.be.ui.question.QuestionsActivity" />
+        <activity android:name="fr.xebia.devoxx.be.ui.timeline.TimelineActivity" />
 
-        <service android:name=".service.SynchroIntentService" />
-        <service android:name=".service.ConferencesFetcherIntentService" />
-        <service android:name=".service.NotificationSchedulerIntentService" >
+        <service android:name="fr.xebia.devoxx.be.service.SynchroIntentService" />
+        <service android:name="fr.xebia.devoxx.be.service.ConferencesFetcherIntentService" />
+        <service android:name="fr.xebia.devoxx.be.service.NotificationSchedulerIntentService" >
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SCHEDULE_NOTIFICATION" />
+                <action android:name="fr.xebia.devoxx.be.service.ACTION_SCHEDULE_NOTIFICATION" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SEND_NOTIFICATION" />
+                <action android:name="fr.xebia.devoxx.be.service.ACTION_SEND_NOTIFICATION" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SEND_FEEDBACK_NOTIFICATION" />
-            </intent-filter>
-        </service>
-        <service android:name=".service.SendRatingIntentService" >
-            <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SEND_RATING" />
+                <action android:name="fr.xebia.devoxx.be.service.ACTION_SEND_FEEDBACK_NOTIFICATION" />
             </intent-filter>
         </service>
-        <service android:name=".service.WearListenerService" >
+        <service android:name="fr.xebia.devoxx.be.service.SendRatingIntentService" >
+            <intent-filter>
+                <action android:name="fr.xebia.devoxx.be.service.ACTION_SEND_RATING" />
+            </intent-filter>
+        </service>
+        <service android:name="fr.xebia.devoxx.be.service.WearListenerService" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_NOTIFICATION_DISMISSAL" />
+                <action android:name="fr.xebia.devoxx.be.service.ACTION_NOTIFICATION_DISMISSAL" />
             </intent-filter>
         </service>
 

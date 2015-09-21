@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<fr.xebia.devoxx.pl.ui.talk.track.TrackItemView
+<fr.xebia.devoxx.be.ui.talk.track.TrackItemView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -27,4 +27,4 @@
             android:lineSpacingExtra="4dp"
             tools:text="Karma and Protractor, test your AngularJS application"/>
 
-</fr.xebia.devoxx.pl.ui.talk.track.TrackItemView>
+</fr.xebia.devoxx.be.ui.talk.track.TrackItemView>
