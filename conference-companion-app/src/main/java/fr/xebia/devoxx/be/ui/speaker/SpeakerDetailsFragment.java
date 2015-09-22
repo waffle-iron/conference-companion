@@ -128,7 +128,7 @@ public class SpeakerDetailsFragment extends Fragment implements OneQuery.ResultH
                 .transform(new CircleTransform())
                 .centerCrop()
                 .into(mSpeakerImage);
-        mSpeakerBioContent.setText(speaker.getBio());
+        mSpeakerBioContent.setText(Html.fromHtml(speaker.getBio()));
 
         String company = speaker.getCompany();
         final String tweetHandle = speaker.getTweetHandle();
