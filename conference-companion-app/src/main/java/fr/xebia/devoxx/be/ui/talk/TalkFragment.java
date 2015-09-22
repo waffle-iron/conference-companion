@@ -1,15 +1,11 @@
 package fr.xebia.devoxx.be.ui.talk;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,9 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +34,6 @@ import fr.xebia.devoxx.be.model.Speaker;
 import fr.xebia.devoxx.be.model.Talk;
 import fr.xebia.devoxx.be.model.Vote;
 import fr.xebia.devoxx.be.ui.note.MemoActivity;
-import fr.xebia.devoxx.be.ui.question.QuestionsActivity;
 import fr.xebia.devoxx.be.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.devoxx.be.ui.widget.CheckableFrameLayout;
 import fr.xebia.devoxx.be.ui.widget.ObservableScrollView;
@@ -53,15 +46,12 @@ import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.OneQuery;
 import se.emilsjolander.sprinkles.Query;
-import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static fr.xebia.devoxx.be.core.KouignAmanApplication.BUS;
 import static fr.xebia.devoxx.be.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
-import static fr.xebia.devoxx.be.service.SendRatingIntentService.buildSendRatingIntent;
-import static fr.xebia.devoxx.be.ui.question.QuestionsActivity.EXTRA_ROOM;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -89,9 +79,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.track_memo_value) TextView mMemoContent;
     @InjectView(R.id.speakers) UnderlinedTextView mSpeakers;
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
-    @InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
-    @InjectView(R.id.talk_rating_bar) RatingBar mTalkRatingBar;
-    @InjectView(R.id.talk_rating_alert) TextView mTalkRatingAlert;
+    //@InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
+    //@InjectView(R.id.talk_rating_bar) RatingBar mTalkRatingBar;
+    //@InjectView(R.id.talk_rating_alert) TextView mTalkRatingAlert;
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
@@ -162,7 +152,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @Override
     public void onResume() {
         super.onResume();
-        refreshRatingBarState();
+        //refreshRatingBarState();
     }
 
     @Override
@@ -200,6 +190,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                         Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
                     }
                 }
+            /*
             case R.id.action_ask:
                 Intent intent = new Intent(getActivity(), QuestionsActivity.class);
                 String room = mTalk.getRoom();
@@ -209,14 +200,17 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             case R.id.action_scan_qr_code:
                 startScanQrCodeActivity();
                 return true;
+
             case R.id.action_input_qr_code:
                 inputQrCode();
                 return true;
+                */
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /*
     private void inputQrCode() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.input_qr_code_title);
@@ -243,6 +237,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         builder.show();
     }
+    */
 
     private void startScanQrCodeActivity() {
         try {
@@ -274,7 +269,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mTitle.setText(mExtraTalkTitle);
         mTalkHeaderBackground.setBackgroundColor(mExtraTalkColor);
         getTalk();
-        if (Preferences.hasUserScanIdForVote(getActivity())) {
+        /*if (Preferences.hasUserScanIdForVote(getActivity())) {
             Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
                     (), new OneQuery
                     .ResultHandler<Vote>() {
@@ -294,13 +289,15 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                     return true;
                 }
             }, null);
-        }
+        }*/
     }
 
+    /*
     @OnClick(R.id.talk_rating_alert)
     public void onRatingAlertClicked() {
         startScanQrCodeActivity();
     }
+    */
 
     private void getTalk() {
         Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
@@ -326,9 +323,11 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         mMemo.setUnderlineHeight(underlineHeight);
         mMemo.setTextColor(mExtraTalkColor);
 
+        /*
         mTalkRating.setUnderlineColor(dividerColor);
         mTalkRating.setUnderlineHeight(underlineHeight);
         mTalkRating.setTextColor(mExtraTalkColor);
+        */
     }
 
     private void setupCustomScrolling() {
@@ -489,7 +488,10 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         bindMemo();
 
+        /*
+
         refreshRatingBarState();
+
         mTalkRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -524,6 +526,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 Timber.e(e, "Error mutating rating bar");
             }
         }
+        */
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
                         ".conferenceId=?",
@@ -540,6 +543,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getActivity().getPackageName());
     }
 
+    /*
     public void refreshRatingBarState() {
         if (mTalk == null) {
             return;
@@ -553,6 +557,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             mTalkRatingAlert.setVisibility(VISIBLE);
         }
     }
+    */
 
     @Override
     public boolean handleResult(CursorList<Speaker> speakers) {
