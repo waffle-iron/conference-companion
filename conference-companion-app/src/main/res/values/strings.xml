@@ -13,8 +13,8 @@
     <string name="authors">Authors</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="app_name">Devoxx PL 15</string>
-    <string name="action_bar_default_title" translatable="false"><![CDATA[Devox<font color="#f5af33">x</font> PL]]></string>
+    <string name="app_name">XebiCon\'15</string>
+    <string name="action_bar_default_title" translatable="false">XebiCon\'15</string>
     <string name="scan_nfc_hint">Scan your NFC tag</string>
     <string name="twitter_account">Twitter</string>
     <string name="initial_synchro">Synchronization running</string>

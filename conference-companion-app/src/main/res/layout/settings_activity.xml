@@ -10,7 +10,7 @@
     tools:context=".HomeActivity">
 
 
-    <fr.xebia.devoxx.pl.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <fr.xebia.xebicon.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/container"
         android:paddingTop="?android:actionBarSize"
@@ -31,6 +31,6 @@
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:name="fr.xebia.devoxx.pl.ui.navigation.NavigationDrawerFragment" />
+        android:name="fr.xebia.xebicon.ui.navigation.NavigationDrawerFragment" />
 
 </android.support.v4.widget.DrawerLayout>

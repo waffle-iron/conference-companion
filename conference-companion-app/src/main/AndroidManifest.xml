@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.xebia.devoxx.pl" >
+    package="fr.xebia.xebicon" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".core.KouignAmanApplication"
+        android:name=".core.XebiConApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -79,18 +79,18 @@
         <service android:name=".service.ConferencesFetcherIntentService" />
         <service android:name=".service.NotificationSchedulerIntentService" >
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SCHEDULE_NOTIFICATION" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SCHEDULE_NOTIFICATION" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SEND_NOTIFICATION" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_NOTIFICATION" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SEND_FEEDBACK_NOTIFICATION" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_FEEDBACK_NOTIFICATION" />
             </intent-filter>
         </service>
         <service android:name=".service.SendRatingIntentService" >
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_SEND_RATING" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_RATING" />
             </intent-filter>
         </service>
         <service android:name=".service.WearListenerService" >
@@ -98,7 +98,7 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.devoxx.pl.service.ACTION_NOTIFICATION_DISMISSAL" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_NOTIFICATION_DISMISSAL" />
             </intent-filter>
         </service>
 

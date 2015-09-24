@@ -26,7 +26,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "fr.xebia.devoxx.pl"
+        applicationId "fr.xebia.xebicon"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 9
@@ -57,20 +57,20 @@ android {
     buildTypes {
         debug {
             debuggable true
-            buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu/api/v1"'
+            buildConfigField 'String', 'BACKEND_URL', '"http://www.xebicon.fr/api"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/m8gasnkt/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://dxr-voting-2015.herokuapp.com/dpl15"'
-            buildConfigField 'int', 'DEVOXX_PL_CONFERENCE_ID', '17'
+            buildConfigField 'int', 'XEBICON_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             signingConfig signingConfigs.debug
         }
 
         release {
-            buildConfigField 'String', 'BACKEND_URL', '"http://tguerin-back.eu/api/v1"'
+            buildConfigField 'String', 'BACKEND_URL', '"http://www.xebicon.fr/api"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/m8gasnkt/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://dxr-voting-2015.herokuapp.com/dpl15"'
-            buildConfigField 'int', 'DEVOXX_PL_CONFERENCE_ID', '17'
+            buildConfigField 'int', 'XEBICON_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             minifyEnabled false

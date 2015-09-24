@@ -8,5 +8,4 @@
           android:padding="10dp"
           android:textSize="14sp"
           android:drawablePadding="10dp"
-          android:gravity="center_vertical"
-          android:textColor="@android:color/white"/>
+          android:gravity="center_vertical"/>

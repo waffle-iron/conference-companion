@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fr.xebia.devoxx.pl.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.xebicon.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="?android:actionBarSize"
     android:layout_width="match_parent"
@@ -19,4 +19,4 @@
         <requestFocus />
 
     </EditText>
-</fr.xebia.devoxx.pl.ui.widget.DrawShadowFrameLayout>
+</fr.xebia.xebicon.ui.widget.DrawShadowFrameLayout>

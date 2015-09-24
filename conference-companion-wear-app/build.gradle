@@ -17,7 +17,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "fr.xebia.devoxx.pl"
+        applicationId "fr.xebia.xebicon"
         minSdkVersion 20
         targetSdkVersion 22
         versionCode 9
