@@ -1,113 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.xebia.xebicon" >
+<manifest package="fr.xebia.xebicon"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".core.XebiConApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".ui.SplashscreenActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
         <activity
             android:name=".ui.HomeActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:launchMode="singleTop" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:launchMode="singleTop">
 
             <!-- NFC -->
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.ACTION_TAG_DISCOVERED" />
+                <action android:name="android.nfc.action.ACTION_TAG_DISCOVERED"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.ACTION_TECH_DISCOVERED" />
+                <action android:name="android.nfc.action.ACTION_TECH_DISCOVERED"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.talk.TalkActivity"
             android:parentActivityName=".ui.HomeActivity"
-            android:theme="@style/Theme.Companion.TalkDetails" >
+            android:theme="@style/Theme.Companion.TalkDetails">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.HomeActivity" />
+                android:value=".ui.HomeActivity"/>
         </activity>
-        <activity android:name=".ui.schedule.MyScheduleActivity" />
+        <activity android:name=".ui.schedule.MyScheduleActivity"/>
         <activity
             android:name=".ui.speaker.SpeakerDetailsActivity"
-            android:parentActivityName=".ui.speaker.SpeakerActivity" >
+            android:parentActivityName=".ui.speaker.SpeakerActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.speaker.SpeakerActivity" />
+                android:value=".ui.speaker.SpeakerActivity"/>
         </activity>
         <activity
             android:name=".ui.browse.BrowseTalksActivity"
-            android:parentActivityName=".ui.schedule.MyScheduleActivity" >
+            android:parentActivityName=".ui.schedule.MyScheduleActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.schedule.MyScheduleActivity" />
+                android:value=".ui.schedule.MyScheduleActivity"/>
         </activity>
-        <activity android:name=".ui.speaker.SpeakerActivity" />
+        <activity android:name=".ui.speaker.SpeakerActivity"/>
         <activity
             android:name=".ui.note.MemoActivity"
-            android:parentActivityName=".ui.talk.TalkActivity" >
+            android:parentActivityName=".ui.talk.TalkActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.talk.TalkActivity" />
+                android:value=".ui.talk.TalkActivity"/>
         </activity>
-        <activity android:name=".ui.settings.SettingsActivity" />
-        <activity android:name=".ui.conference.ConferenceChooserActivity" />
-        <activity android:name=".ui.question.QuestionsActivity" />
-        <activity android:name=".ui.timeline.TimelineActivity" />
+        <activity android:name=".ui.settings.SettingsActivity"/>
+        <activity android:name=".ui.conference.ConferenceChooserActivity"/>
+        <activity android:name=".ui.question.QuestionsActivity"/>
+        <activity android:name=".ui.timeline.TimelineActivity"/>
 
-        <service android:name=".service.SynchroIntentService" />
-        <service android:name=".service.ConferencesFetcherIntentService" />
-        <service android:name=".service.NotificationSchedulerIntentService" >
+        <service android:name=".service.SynchroIntentService"/>
+        <service android:name=".service.ConferencesFetcherIntentService"/>
+        <service android:name=".service.NotificationSchedulerIntentService">
             <intent-filter>
-                <action android:name="fr.xebia.xebicon.service.ACTION_SCHEDULE_NOTIFICATION" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SCHEDULE_NOTIFICATION"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_NOTIFICATION" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_NOTIFICATION"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_FEEDBACK_NOTIFICATION" />
-            </intent-filter>
-        </service>
-        <service android:name=".service.SendRatingIntentService" >
-            <intent-filter>
-                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_RATING" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_FEEDBACK_NOTIFICATION"/>
             </intent-filter>
         </service>
-        <service android:name=".service.WearListenerService" >
+        <service android:name=".service.SendRatingIntentService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_SEND_RATING"/>
+            </intent-filter>
+        </service>
+        <service android:name=".service.WearListenerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="fr.xebia.xebicon.service.ACTION_NOTIFICATION_DISMISSAL" />
+                <action android:name="fr.xebia.xebicon.service.ACTION_NOTIFICATION_DISMISSAL"/>
             </intent-filter>
         </service>
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b" />
+            android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b"/>
 
     </application>
 
