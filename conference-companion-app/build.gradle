@@ -5,7 +5,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.android.tools.build:gradle:1.3.0'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
@@ -22,13 +22,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "fr.xebia.xebicon"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 9
         versionName "1.0.5"
     }
@@ -82,10 +82,10 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v13:22.1.1'
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
-    compile 'com.google.android.gms:play-services-wearable:7.3.0'
+    compile 'com.android.support:support-v13:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.google.android.gms:play-services-wearable:8.1.0'
     compile 'se.emilsjolander:stickylistheaders:2.3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.fluent.android:fluent-android-bundle:0.1.2'
