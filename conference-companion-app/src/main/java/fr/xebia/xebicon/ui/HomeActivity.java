@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar;
 
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
-import fr.xebia.xebicon.ui.navigation.DrawerAdapter;
 import fr.xebia.xebicon.ui.schedule.ScheduleFragment;
 
 
@@ -24,21 +23,6 @@ public class HomeActivity extends BaseActivity {
             getFragmentManager().beginTransaction()
                     .replace(R.id.main_container, new ScheduleFragment(), HOME_FRAG_TAG)
                     .commit();
-        }
-    }
-
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_TALKS;
-    }
-
-    @Override
-    public void onNavigationDrawerToggle(boolean opened) {
-        super.onNavigationDrawerToggle(opened);
-        if (!opened) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
         }
     }
 

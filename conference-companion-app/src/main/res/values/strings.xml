@@ -90,6 +90,11 @@
     <string name="floor_plan">Floor plan</string>
     <string name="error_loading_conference">Failed to load conference</string>
     <string name="too_early_to_vote">Too early to vote for this presentation</string>
+    <string name="nav_schedule">My Schedule</string>
+    <string name="nav_talks">Talks</string>
+    <string name="nav_speakers">Speakers</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_timeline">Timeline</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>

@@ -12,7 +12,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
-import fr.xebia.xebicon.ui.navigation.DrawerAdapter;
 
 public class TimelineActivity extends BaseActivity {
 
@@ -33,20 +32,5 @@ public class TimelineActivity extends BaseActivity {
                 .build();
         listView.setAdapter(new TweetTimelineListAdapter(this, searchTimeline));
         listView.setEmptyView(emptyView);
-    }
-
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_TIMELINE;
-    }
-
-    @Override
-    public void onNavigationDrawerToggle(boolean opened) {
-        super.onNavigationDrawerToggle(opened);
-        if (!opened) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(R.string.timeline);
-        }
     }
 }

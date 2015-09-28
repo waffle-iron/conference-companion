@@ -5,9 +5,12 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -24,23 +27,26 @@ import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.core.utils.Compatibility;
 import fr.xebia.xebicon.ui.HomeActivity;
 import fr.xebia.xebicon.ui.conference.ConferenceChooserActivity;
-import fr.xebia.xebicon.ui.navigation.DrawerAdapter;
-import fr.xebia.xebicon.ui.navigation.NavigationDrawerFragment;
 import fr.xebia.xebicon.ui.schedule.MyScheduleActivity;
 import fr.xebia.xebicon.ui.settings.SettingsActivity;
 import fr.xebia.xebicon.ui.speaker.SpeakerActivity;
 import fr.xebia.xebicon.ui.timeline.TimelineActivity;
 import timber.log.Timber;
 
-public class BaseActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String HOME_FRAG_TAG = "HOME";
+    private static final String NAV_ITEM_ID = "NAV_ITEM_ID";
+
     private static final int HEADER_HIDE_ANIM_DURATION = 300;
     private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
     private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
-    protected NavigationDrawerFragment mNavigationDrawerFragment;
-    protected boolean mDontCheckConference = false;
+
     @InjectView(R.id.main_content) @Optional View mMainContent;
+    @InjectView(R.id.nav_view) @Optional NavigationView navigationView;
+    @InjectView(R.id.drawer_layout) @Optional DrawerLayout mDrawerLayout;
+
+    protected boolean mDontCheckConference = false;
     private boolean mActionBarAutoHideEnabled = false;
     private int mActionBarAutoHideSensivity = 0;
     private int mActionBarAutoHideMinY = 0;
@@ -51,6 +57,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
 
     private Handler handler = new Handler();
     private boolean mMainContentScrolling;
+
+    private int currentNavId;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +78,37 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         ButterKnife.inject(this);
+
+        currentNavId = getIntent().getIntExtra(NAV_ITEM_ID, R.id.nav_talks);
+
+        if (navigationView != null){
+            navigationView.getMenu().findItem(currentNavId).setCheckable(true);
+            navigationView.setCheckedItem(currentNavId);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+
+                    if (mActionBarAutoHideEnabled) {
+                        autoShowOrHideActionBar(true);
+                    }
+                }
+            };
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+            mDrawerToggle.syncState();
+        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         boolean hasSelectedConference = Preferences.hasSelectedConference(this);
         if (!hasSelectedConference && !mDontCheckConference) {
             startActivity(new Intent(this, ConferenceChooserActivity.class));
             finish();
         } else {
-            mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-
-            if (mNavigationDrawerFragment != null) {
-                // Set up the drawer.
-                mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-                mNavigationDrawerFragment.setSelection(getSelfNavDrawerItem());
-            }
-
             if (mMainContent != null) {
                 mMainContent.setAlpha(0);
                 mMainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION).setStartDelay(200);
@@ -89,15 +116,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
                 Timber.w("No view with ID main_content to fade in.");
             }
         }
-    }
 
-    /**
-     * Returns the navigation drawer item that corresponds to this Activity. Subclasses
-     * of BaseActivity override this to indicate what nav drawer item corresponds to them
-     * Return NAVDRAWER_ITEM_INVALID to mean that this Activity should not have a Nav Drawer.
-     */
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_INVALID;
     }
 
     @Override
@@ -223,72 +242,58 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        if (getSelfNavDrawerItem() == position) {
-            return;
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        if (currentNavId == menuItem.getItemId()) {
+            return false;
         }
 
-        switch (position) {
-            case DrawerAdapter.MENU_MY_AGENDA:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(BaseActivity.this, MyScheduleActivity.class));
-                        finish();
-                    }
-                }, 300);
+        switch (menuItem.getItemId()){
+            case R.id.nav_myschedule:
+                goTo(new Intent(BaseActivity.this, MyScheduleActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
                 break;
 
-            case DrawerAdapter.MENU_TALKS:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(BaseActivity.this, HomeActivity.class));
-                        finish();
-                    }
-                }, 300);
+            case R.id.nav_talks:
+                goTo(new Intent(BaseActivity.this, HomeActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
                 break;
-            case DrawerAdapter.MENU_SPEAKERS:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(BaseActivity.this, SpeakerActivity.class));
-                        finish();
-                    }
-                }, 300);
+
+            case R.id.nav_speakers:
+                goTo(new Intent(BaseActivity.this, SpeakerActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
                 break;
-            case DrawerAdapter.MENU_TIMELINE:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(BaseActivity.this, TimelineActivity.class));
-                        finish();
-                    }
-                }, 300);
+
+            case R.id.nav_timeline:
+                goTo(new Intent(BaseActivity.this, TimelineActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
                 break;
-            case DrawerAdapter.MENU_SETTINGS:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(BaseActivity.this, SettingsActivity.class));
-                        finish();
-                    }
-                }, 300);
+
+            case R.id.nav_settings:
+                goTo(new Intent(BaseActivity.this, SettingsActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
                 break;
+
         }
+
+        mDrawerLayout.closeDrawers();
 
         // fade out the main content
         View mainContent = findViewById(R.id.main_content);
         if (mainContent != null) {
             mainContent.animate().alpha(0).setDuration(MAIN_CONTENT_FADEOUT_DURATION);
         }
+
+        return true;
     }
 
-    @Override
-    public void onNavigationDrawerToggle(boolean opened) {
-        if (mActionBarAutoHideEnabled && opened) {
-            autoShowOrHideActionBar(true);
-        }
+    private void goTo(final Intent intent) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(intent);
+                finish();
+            }
+        }, 300);
     }
 
     public boolean isMainContentScrolling() {
@@ -318,5 +323,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationDrawerF
             return false;
         }
         return (floatingWindowFlag.data != 0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (navigationView != null && mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -19,7 +19,6 @@ import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.model.MySchedule;
 import fr.xebia.xebicon.model.Schedule;
 import fr.xebia.xebicon.model.Talk;
-import fr.xebia.xebicon.ui.navigation.DrawerAdapter;
 import fr.xebia.xebicon.ui.widget.DrawShadowFrameLayout;
 import fr.xebia.xebicon.ui.widget.UIUtils;
 import icepick.Icepick;
@@ -110,22 +109,6 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
             mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
             setDefaultPage = false;
         }
-    }
-
-    @Override
-    public void onNavigationDrawerToggle(boolean opened) {
-        super.onNavigationDrawerToggle(opened);
-        if (!opened) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayShowCustomEnabled(false);
-            actionBar.setTitle(R.string.my_schedule);
-        }
-    }
-
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_MY_AGENDA;
     }
 
     @Override
