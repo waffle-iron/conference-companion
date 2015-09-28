@@ -3,6 +3,7 @@ package fr.xebia.xebicon.ui.schedule;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -32,7 +33,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     private static final long DAY_MILLIS = 24 * 60 * 60 * 1000;
 
     @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
-    @InjectView(R.id.pager_strip) PagerTabStrip mPagerStrip;
+    @InjectView(R.id.tab_layout) TabLayout mPagerStrip;
     @InjectView(R.id.view_pager) ViewPager mViewPager;
 
     private MySchedule mMySchedule;
@@ -61,7 +62,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mPagerStrip.setDrawFullUnderline(true);
+
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -139,6 +140,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     private void setAdapter() {
         mViewPager.setAdapter(new MySchedulePagerAdapter(mMySchedule, getFragmentManager()));
         mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
+        mPagerStrip.setupWithViewPager(mViewPager);
     }
 
     public static class MySchedulePagerAdapter extends FragmentPagerAdapter {
