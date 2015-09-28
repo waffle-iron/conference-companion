@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.bus.SynchroFinishedEvent;
+import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.service.SynchroIntentService;
 
 import static fr.xebia.xebicon.core.XebiConApplication.BUS;
@@ -24,9 +25,13 @@ public class SplashscreenActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        Intent intent = new Intent(this, SynchroIntentService.class);
-        intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, BuildConfig.XEBICON_CONFERENCE_ID);
-        startService(intent);
+        if (!Preferences.hasSelectedConference(this)){
+            Intent intent = new Intent(this, SynchroIntentService.class);
+            intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, BuildConfig.XEBICON_CONFERENCE_ID);
+            startService(intent);
+        } else {
+            gotToHome();
+        }
 
     }
 
