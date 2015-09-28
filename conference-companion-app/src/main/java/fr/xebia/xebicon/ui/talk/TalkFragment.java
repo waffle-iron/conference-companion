@@ -1,15 +1,11 @@
 package fr.xebia.xebicon.ui.talk;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -40,7 +35,6 @@ import fr.xebia.xebicon.model.Speaker;
 import fr.xebia.xebicon.model.Talk;
 import fr.xebia.xebicon.model.Vote;
 import fr.xebia.xebicon.ui.note.MemoActivity;
-import fr.xebia.xebicon.ui.question.QuestionsActivity;
 import fr.xebia.xebicon.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.xebicon.ui.widget.CheckableFrameLayout;
 import fr.xebia.xebicon.ui.widget.ObservableScrollView;
@@ -61,7 +55,6 @@ import static android.view.View.VISIBLE;
 import static fr.xebia.xebicon.core.XebiConApplication.BUS;
 import static fr.xebia.xebicon.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
 import static fr.xebia.xebicon.service.SendRatingIntentService.buildSendRatingIntent;
-import static fr.xebia.xebicon.ui.question.QuestionsActivity.EXTRA_ROOM;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -72,7 +65,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     private static final float PHOTO_ASPECT_RATIO = 1.8f;
     private static final float GAP_FILL_DISTANCE_MULTIPLIER = 1.5f;
-    private static final int SCAN_QR_CODE_REQUEST = 1000;
 
     @InjectView(R.id.scroll_view) ObservableScrollView mScrollView;
 
@@ -147,19 +139,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SCAN_QR_CODE_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-                Preferences.setUserScanIdForVote(getActivity(), data.getStringExtra("SCAN_RESULT"));
-                Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.not_able_to_rate, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         refreshRatingBarState();
@@ -200,59 +179,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                         Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
                     }
                 }
-            case R.id.action_ask:
-                Intent intent = new Intent(getActivity(), QuestionsActivity.class);
-                String room = mTalk.getRoom();
-                intent.putExtra(EXTRA_ROOM, room == null ? "" : room);
-                startActivity(intent);
-                return true;
-            case R.id.action_scan_qr_code:
-                startScanQrCodeActivity();
-                return true;
-            case R.id.action_input_qr_code:
-                inputQrCode();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void inputQrCode() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.input_qr_code_title);
-
-        final EditText input = new EditText(getActivity());
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
-
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Preferences.setUserScanIdForVote(getActivity(), input.getText().toString());
-                refreshRatingBarState();
-                Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
-            }
-        });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), R.string.not_able_to_rate, Toast.LENGTH_LONG).show();
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
-
-    private void startScanQrCodeActivity() {
-        try {
-            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-            startActivityForResult(intent, SCAN_QR_CODE_REQUEST);
-        } catch (Exception e) {
-            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
-            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-            startActivity(marketIntent);
         }
     }
 
@@ -295,11 +223,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 }
             }, null);
         }
-    }
-
-    @OnClick(R.id.talk_rating_alert)
-    public void onRatingAlertClicked() {
-        startScanQrCodeActivity();
     }
 
     private void getTalk() {
