@@ -95,4 +95,10 @@
     <string name="floor_plan">Plan</string>
     <string name="error_loading_conference">Impossible de charger la conférence</string>
     <string name="too_early_to_vote">Trop tôt pour voter pour cette présentation</string>
+    <string name="nav_schedule">Mon agenda</string>
+    <string name="nav_settings">Paramètres</string>
+    <string name="nav_speakers">Speakers</string>
+    <string name="nav_talks">Présentations</string>
+    <string name="nav_timeline">Timeline</string>
+    <string name="vote_for_talk">Donner votre avis</string>
 </resources>
