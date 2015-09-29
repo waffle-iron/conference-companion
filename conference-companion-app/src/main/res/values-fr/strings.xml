@@ -35,7 +35,7 @@
     <string name="xebia">Xebia</string>
     <string name="talk">Présentation</string>
     <string name="talk_details">Détails présentation</string>
-    <string name="track">Sujets</string>
+    <string name="track">Sujet(s)</string>
     <string name="speaker_details">Détails speaker</string>
     <string name="speaker_bio">Bio</string>
     <string name="error_loading_votes">La mise à jour des votes a échoué</string>
@@ -99,4 +99,21 @@
     <string name="nav_speakers">Speakers</string>
     <string name="nav_talks">Présentations</string>
     <string name="nav_timeline">Timeline</string>
+    <string name="vote_for_talk">Donner votre avis</string>
+    <string name="session_rating_label">Notez l\'ensemble de cette session</string>
+    <string name="session_feedback_notgreat">Rien d\'impressionnant</string>
+    <string name="session_feedback_great">Génial</string>
+    <string name="session_feedback_relevance">Quelle était la pertinence de cette session par rapport à vos projets ?</string>
+    <string name="session_feedback_notrel">Sans intérêt</string>
+    <string name="session_feedback_rel">Pertinent</string>
+    <string name="session_feedback_content">Le contenu était :</string>
+    <string name="session_feedback_basic">Trop basique</string>
+    <string name="session_feedback_advanced">Trop avancé</string>
+    <string name="session_feedback_speaker_quality">Qualité des speakers :</string>
+    <string name="session_feedback_poor">Médiocre</string>
+    <string name="session_feedback_outstanding">Exceptionnelle</string>
+    <string name="session_feedback_other">Vous souhaitez préciser autre chose que nous devrions savoir ?</string>
+    <string name="session_feedback_tell_us">Dites nous !</string>
+    <string name="session_feedback_submitlink">Envoyer l\'avis</string>
+    <string name="rating_title">Avis sur la session</string>
 </resources>

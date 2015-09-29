@@ -77,6 +77,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.talk.TalkActivity"/>
         </activity>
+
+        <activity android:name=".ui.rating.RatingActivity"
+                  android:parentActivityName=".ui.browse.BrowseTalksActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.browse.BrowseTalksActivity"/>
+        </activity>
         <activity android:name=".ui.settings.SettingsActivity"/>
         <activity android:name=".ui.conference.ConferenceChooserActivity"/>
         <activity android:name=".ui.question.QuestionsActivity"/>

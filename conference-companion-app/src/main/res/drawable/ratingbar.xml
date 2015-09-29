@@ -14,14 +14,8 @@
   limitations under the License.
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="true"
-        android:state_window_focused="true"
-        android:drawable="@drawable/ratingbar_star_on_focused" />
-
-    <item android:state_selected="true"
-        android:state_window_focused="true"
-        android:drawable="@drawable/ratingbar_star_on_focused" />
-
-    <item android:drawable="@drawable/ratingbar_star_on_default" />
-</selector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background" android:drawable="@drawable/ratingbar_star_empty" />
+    <item android:id="@android:id/secondaryProgress" android:drawable="@drawable/ratingbar_star_empty" />
+    <item android:id="@android:id/progress" android:drawable="@drawable/ratingbar_star_filled" />
+</layer-list>

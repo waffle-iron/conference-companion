@@ -3,7 +3,6 @@ package fr.xebia.xebicon.ui.talk;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -16,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +34,7 @@ import fr.xebia.xebicon.model.Speaker;
 import fr.xebia.xebicon.model.Talk;
 import fr.xebia.xebicon.model.Vote;
 import fr.xebia.xebicon.ui.note.MemoActivity;
+import fr.xebia.xebicon.ui.rating.RatingActivity;
 import fr.xebia.xebicon.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.xebicon.ui.widget.CheckableFrameLayout;
 import fr.xebia.xebicon.ui.widget.ObservableScrollView;
@@ -47,14 +47,12 @@ import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.OneQuery;
 import se.emilsjolander.sprinkles.Query;
-import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static fr.xebia.xebicon.core.XebiConApplication.BUS;
 import static fr.xebia.xebicon.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
-import static fr.xebia.xebicon.service.SendRatingIntentService.buildSendRatingIntent;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -82,8 +80,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.speakers) UnderlinedTextView mSpeakers;
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
     @InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
-    @InjectView(R.id.talk_rating_bar) RatingBar mTalkRatingBar;
-    @InjectView(R.id.talk_rating_alert) TextView mTalkRatingAlert;
+    @InjectView(R.id.talk_vote) Button mTalkVote;
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
@@ -201,8 +198,18 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
         mTitle.setText(mExtraTalkTitle);
         mTalkHeaderBackground.setBackgroundColor(mExtraTalkColor);
+
+        mTalkVote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), RatingActivity.class)
+                        .putExtra(EXTRA_TALK_ID, mTalk.getId())
+                        .putExtra(EXTRA_TALK_TITLE, mTalk.getTitle()));
+            }
+        });
         getTalk();
-        if (Preferences.hasUserScanIdForVote(getActivity())) {
+
+/*        if (Preferences.hasUserScanIdForVote(getActivity())) {
             Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
                     (), new OneQuery
                     .ResultHandler<Vote>() {
@@ -223,6 +230,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 }
             }, null);
         }
+
+    */
     }
 
     private void getTalk() {
@@ -406,14 +415,14 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
 
 
-        mTrackContent.setText(talk.getTrack());
+        mTrackContent.setText(talk.getTrack().replace(",", ", "));
 
         mTalkPhoto.setImageResource(getTalkBackgroundResource(talk));
 
         bindMemo();
 
         refreshRatingBarState();
-        mTalkRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        /*mTalkRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 if ((mVote != null && (int) rating == mVote.getNote()) || !fromUser) {
@@ -423,11 +432,11 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
                 if (!(now > mTalk.getToUtcTime() - 20 * 60 * 1000 && !conferenceEnded)) {
                     Toast.makeText(getActivity(), R.string.too_early_to_vote, Toast.LENGTH_LONG).show();
-                    mTalkRatingBar.setRating(0);
+                    //mTalkRatingBar.setRating(0);
                     return;
                 }
                 if (rating == 0) {
-                    mTalkRatingBar.setRating(1);
+                    //mTalkRatingBar.setRating(1);
                 } else {
                     Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
                     vote.saveAsync(new Model.OnSavedCallback() {
@@ -439,6 +448,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 }
             }
         });
+
         if (mTalkRatingBar.getProgressDrawable() != null) {
             try {
                 mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
@@ -447,6 +457,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 Timber.e(e, "Error mutating rating bar");
             }
         }
+        */
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
                         ".conferenceId=?",
@@ -469,11 +480,11 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         }
         mTalkRating.setVisibility(VISIBLE);
         if (Preferences.hasUserScanIdForVote(getActivity())) {
-            mTalkRatingBar.setVisibility(VISIBLE);
-            mTalkRatingAlert.setVisibility(GONE);
+            //mTalkRatingBar.setVisibility(VISIBLE);
+            //mTalkRatingAlert.setVisibility(GONE);
         } else {
-            mTalkRatingBar.setVisibility(GONE);
-            mTalkRatingAlert.setVisibility(VISIBLE);
+            //mTalkRatingBar.setVisibility(GONE);
+            //mTalkRatingAlert.setVisibility(VISIBLE);
         }
     }
 

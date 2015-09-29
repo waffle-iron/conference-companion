@@ -95,10 +95,27 @@
     <string name="nav_speakers">Speakers</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_timeline">Timeline</string>
+    <string name="vote_for_talk">Submit Feedback</string>
 
     <plurals name="available_talks">
         <item quantity="zero">%1$d talk available</item>
         <item quantity="one">%1$d talk available</item>
         <item quantity="other">%1$d talks available</item>
     </plurals>
+    <string name="session_feedback_advanced">Too advanced</string>
+    <string name="session_feedback_basic">Too basic</string>
+    <string name="session_feedback_content">The content was :</string>
+    <string name="session_feedback_great">Awesome</string>
+    <string name="session_feedback_notgreat">Not so awesome</string>
+    <string name="session_feedback_notrel">Not relevant</string>
+    <string name="session_feedback_other">Anything else we should know ?</string>
+    <string name="session_feedback_outstanding">Outstanding</string>
+    <string name="session_feedback_poor">Poor</string>
+    <string name="session_feedback_rel">Relevant</string>
+    <string name="session_feedback_relevance">How relevant was this session to your projects ?</string>
+    <string name="session_feedback_speaker_quality">Speakers quality :</string>
+    <string name="session_feedback_submitlink">Submit feedback</string>
+    <string name="session_feedback_tell_us">Tell us!</string>
+    <string name="session_rating_label">Rate this session overall :</string>
+    <string name="rating_title">Session Feedback</string>
 </resources>

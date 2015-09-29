@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fr.xebia.xebicon.ui.widget.DrawShadowFrameLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    app:shadowDrawable="@drawable/header_shadow"
+    app:shadowTopOffset="?android:actionBarSize"/>

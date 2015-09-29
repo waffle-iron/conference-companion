@@ -37,45 +37,11 @@
             android:paddingBottom="10dp">
 
             <fr.xebia.xebicon.ui.widget.UnderlinedTextView
-                android:id="@+id/talk_rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:textSize="16sp"
-                android:paddingLeft="5dp"
-                android:layout_marginLeft="72dp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:text="@string/my_rating" />
-
-            <RatingBar
-                android:id="@+id/talk_rating_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginLeft="72dp"
-                style="@style/talkRatingBar"
-                android:numStars="5"
-                android:stepSize="1" />
-
-            <TextView
-                android:id="@+id/talk_rating_alert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="72dp"
-                android:text="@string/scan_qr_code_required"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
-
-            <fr.xebia.xebicon.ui.widget.UnderlinedTextView
                 android:id="@+id/track_memo_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:paddingLeft="5dp"
                 android:layout_marginLeft="72dp"
                 android:textStyle="bold"
@@ -96,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:paddingLeft="5dp"
                 android:layout_marginLeft="72dp"
                 android:textStyle="bold"
@@ -118,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:paddingLeft="5dp"
                 android:layout_marginLeft="72dp"
                 android:textStyle="bold"
@@ -142,7 +108,7 @@
                 android:layout_gravity="start"
                 android:paddingLeft="5dp"
                 android:layout_marginLeft="72dp"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="@string/speakers" />
 
@@ -152,6 +118,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="vertical" />
+
+            <fr.xebia.xebicon.ui.widget.UnderlinedTextView
+                android:id="@+id/talk_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:textSize="18sp"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="72dp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:text="@string/my_rating" />
+
+            <Button
+                android:id="@+id/talk_vote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="72dp"
+                android:text="@string/vote_for_talk"/>
+
         </LinearLayout>
 
         <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->
