@@ -118,4 +118,5 @@
     <string name="session_feedback_tell_us">Tell us!</string>
     <string name="session_rating_label">Rate this session overall :</string>
     <string name="rating_title">Session Feedback</string>
+    <string name="rate_is_mandatory">Rate is mandatory</string>
 </resources>

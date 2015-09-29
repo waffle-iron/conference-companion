@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -95,6 +96,13 @@ public class RatingFragment extends Fragment {
     @OnClick(R.id.submit_feedback_button)
     public void onSubmitClick() {
         int rating = (int) mSessionRatingFeedbackBar.getRating();
+
+        if (rating == 0){
+
+            Toast.makeText(getActivity(), R.string.rate_is_mandatory, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int q1Answer = mQ1FeedbackBar.getProgress();
         int q2Answer = mQ2FeedbackBar.getProgress();
         int q3Answer = mQ3FeedbackBar.getProgress();

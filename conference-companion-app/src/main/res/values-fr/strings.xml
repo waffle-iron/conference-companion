@@ -116,4 +116,5 @@
     <string name="session_feedback_tell_us">Dites nous !</string>
     <string name="session_feedback_submitlink">Envoyer l\'avis</string>
     <string name="rating_title">Avis sur la session</string>
+    <string name="rate_is_mandatory">La note globale est obligatoire</string>
 </resources>
