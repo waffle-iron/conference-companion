@@ -34,7 +34,7 @@
         android:layout_alignRight="@+id/schedule_speakers"
         android:textColor="@android:color/white"
         android:gravity="center_vertical"
-        android:lines="3"
+        android:lines="5"
         android:ellipsize="end"
         android:padding="4dp"
         tools:text="Karma and Protractor, test your AngularJS application" />
