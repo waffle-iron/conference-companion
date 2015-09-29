@@ -38,6 +38,9 @@
         <item name="actionBarStyle">@style/TransparentActionBar</item>
     </style>
 
+    <style name="Theme.Companion.TalkRating" parent="AppTheme">
+    </style>
+
     <style name="HeaderBar"/>
 
     <style name="Widget.Companion.HeaderBar.Spinner.Base" parent="android:Widget.Holo.Light.Spinner">

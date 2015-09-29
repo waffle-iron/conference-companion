@@ -80,6 +80,7 @@
         </activity>
 
         <activity android:name=".ui.rating.RatingActivity"
+                  android:theme="@style/Theme.Companion.TalkRating"
                   android:parentActivityName=".ui.browse.BrowseTalksActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

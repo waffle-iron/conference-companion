@@ -10,6 +10,11 @@ import fr.xebia.xebicon.ui.talk.TalkActivity;
 public class RatingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (shouldBeFloatingWindow()) {
+            setupFloatingWindow();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
 
@@ -26,5 +31,10 @@ public class RatingActivity extends BaseActivity {
                                     getIntent().getStringExtra(TalkActivity.EXTRA_TALK_TITLE)))
                     .commit();
         }
+    }
+
+    @Override
+    protected void selectTheme() {
+        setTheme(R.style.Theme_Companion_TalkRating);
     }
 }
