@@ -107,7 +107,7 @@ public class WearListenerService extends WearableListenerService {
             @Override
             public void run() {
                 int conferenceId = Preferences.getSelectedConference(WearListenerService.this);
-                new Vote(rating, talkId, conferenceId).save();
+                //new Vote(rating, talkId, conferenceId).save();
                 Intent dismissalIntent = new Intent(ACTION_NOTIFICATION_DISMISSAL);
                 dismissalIntent.putExtra(NotificationSchedulerIntentService.EXTRA_TALK_ID, talkId);
                 startService(dismissalIntent);

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
+import com.parse.Parse;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -20,6 +21,7 @@ import java.util.UUID;
 import de.greenrobot.event.EventBus;
 import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.api.ConferenceApi;
+import fr.xebia.xebicon.api.ParseVoteApi;
 import fr.xebia.xebicon.api.VoteApi;
 import fr.xebia.xebicon.bus.SyncEvent;
 import fr.xebia.xebicon.core.db.DbSchema;
@@ -47,11 +49,11 @@ public class XebiConApplication extends Application {
 
         LeakCanary.install(this);
 
-        if(Preferences.getSelectedConference(this) != BuildConfig.XEBICON_CONFERENCE_ID) {
+        if (Preferences.getSelectedConference(this) != BuildConfig.XEBICON_CONFERENCE_ID) {
             Preferences.removeSelectedConference(this);
         }
 
-        TwitterAuthConfig authConfig =  new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
         Fabric.with(this, new Crashlytics(), new TwitterCore(authConfig), new TweetUi());
 
         if (BuildConfig.DEBUG) {
@@ -70,9 +72,9 @@ public class XebiConApplication extends Application {
 
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
 
-        sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.VOTE_URL).build().create(VoteApi.class);
+        sVoteApi = new ParseVoteApi(this);
 
-        Sprinkles sprinkles = Sprinkles.init(applicationContext, "conferences.db", 0);
+        Sprinkles sprinkles = Sprinkles.init(applicationContext, "xebicon.db", 0);
 
         sprinkles.addMigration(new Migration() {
             @Override
@@ -105,12 +107,14 @@ public class XebiConApplication extends Application {
         // TODO temporary hack to send sync event
         new Timer(true).scheduleAtFixedRate(new SendSyncEventTask(), new Date(), 5_000);
 
-        if (Preferences.hasSelectedConference(this)) {
-            Intent intent = new Intent(this, SynchroIntentService.class);
-            intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(this));
-            intent.putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, true);
-            startService(intent);
-        }
+        Intent intent = new Intent(this, SynchroIntentService.class);
+        intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(this));
+        intent.putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, true);
+        startService(intent);
+
+        Parse.enableLocalDatastore(this);
+        Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
+        Parse.initialize(this, "YnJe5DSzkk3HsQwndbBXElz7Qv8LF8V7lJzbegIf", "9ujmZP7SXJtgdYvYv0XHh9owP8ZmdMfuzQl90Qtr");
     }
 
     /**

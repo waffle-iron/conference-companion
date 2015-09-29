@@ -207,31 +207,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                         .putExtra(EXTRA_TALK_TITLE, mTalk.getTitle()));
             }
         });
+
         getTalk();
 
-/*        if (Preferences.hasUserScanIdForVote(getActivity())) {
-            Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
-                    (), new OneQuery
-                    .ResultHandler<Vote>() {
-                @Override
-                public boolean handleResult(final Vote vote) {
-                    mVote = vote;
-                    if (vote == null || getView() == null) {
-                        return true;
-                    }
-
-                    mTalkRatingBar.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mTalkRatingBar.setRating(vote.getNote());
-                        }
-                    });
-                    return true;
-                }
-            }, null);
-        }
-
-    */
     }
 
     private void getTalk() {

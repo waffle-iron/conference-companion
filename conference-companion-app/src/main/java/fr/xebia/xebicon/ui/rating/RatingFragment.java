@@ -14,10 +14,15 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.R;
+import fr.xebia.xebicon.model.Vote;
+import se.emilsjolander.sprinkles.OneQuery;
+import se.emilsjolander.sprinkles.Query;
 
 import static com.fluent.android.bundle.FluentBundle.newFluentBundle;
 import static com.fluent.android.bundle.FragmentArgsSetter.setFragmentArguments;
+import static fr.xebia.xebicon.core.XebiConApplication.getVoteApi;
 
 public class RatingFragment extends Fragment {
 
@@ -30,6 +35,9 @@ public class RatingFragment extends Fragment {
     @InjectView(R.id.rating_bar_1) NumberRatingBar mQ1FeedbackBar;
     @InjectView(R.id.rating_bar_2) NumberRatingBar mQ2FeedbackBar;
     @InjectView(R.id.rating_bar_3) NumberRatingBar mQ3FeedbackBar;
+
+    private Vote mVote;
+
     private String talkId;
     private String talkTitle;
 
@@ -60,6 +68,30 @@ public class RatingFragment extends Fragment {
         mSessionTitle.setText(talkTitle);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", talkId, BuildConfig.XEBICON_CONFERENCE_ID)
+                .getAsync(getLoaderManager(), new OneQuery.ResultHandler<Vote>() {
+                    @Override
+                    public boolean handleResult(final Vote vote) {
+                        mVote = vote;
+                        if (vote == null || getView() == null) {
+                            return true;
+                        }
+
+                        mSessionRatingFeedbackBar.setRating(vote.getRate());
+                        mQ1FeedbackBar.setProgress(vote.getRevelent());
+                        mQ2FeedbackBar.setProgress(vote.getContent());
+                        mQ3FeedbackBar.setProgress(vote.getSpeakers());
+                        mComments.setText(vote.getComment());
+
+                        return true;
+                    }
+                }, null);
+    }
+
     @OnClick(R.id.submit_feedback_button)
     public void onSubmitClick() {
         int rating = (int) mSessionRatingFeedbackBar.getRating();
@@ -82,17 +114,16 @@ public class RatingFragment extends Fragment {
 
         Log.i("SubmitFeedback", answers);
 
-        /*ContentValues values = new ContentValues();
-        values.put(ScheduleContract.Feedback.SESSION_ID, sessionId);
-        values.put(ScheduleContract.Feedback.UPDATED, System.currentTimeMillis());
-        values.put(ScheduleContract.Feedback.SESSION_RATING, rating);
-        values.put(ScheduleContract.Feedback.ANSWER_RELEVANCE, q1Answer);
-        values.put(ScheduleContract.Feedback.ANSWER_CONTENT, q2Answer);
-        values.put(ScheduleContract.Feedback.ANSWER_SPEAKER, q3Answer);
-        values.put(ScheduleContract.Feedback.COMMENTS, comments);
+        Vote vote = new Vote(talkId, BuildConfig.XEBICON_CONFERENCE_ID,
+                rating,
+                q1Answer,
+                q2Answer,
+                q3Answer,
+                comments);
+        vote.save();
 
-        Uri uri = context.getContentResolver()
-                .insert(ScheduleContract.Feedback.buildFeedbackUri(sessionId), values);
-        LOGD(TAG, null == uri ? "No feedback was saved" : uri.toString());*/
+        getVoteApi().sendRating(vote);
+
+        getActivity().finish();
     }
 }

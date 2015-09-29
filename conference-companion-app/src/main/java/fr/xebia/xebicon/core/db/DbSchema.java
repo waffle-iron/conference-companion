@@ -56,8 +56,13 @@ public class DbSchema {
 
     public static final String VOTES = "CREATE TABLE Votes (\n" +
             "  _id  TEXT,\n" +
-            "  note INTEGER,\n" +
             "  conferenceId    INTEGER,\n" +
+            "  user TEXT,\n" +
+            "  rate INTEGER,\n" +
+            "  revelent INTEGER,\n" +
+            "  content INTEGER,\n" +
+            "  speakers INTEGER,\n" +
+            "  comment TEXT,\n" +
             "  PRIMARY KEY (_id, conferenceId)\n" +
             ");";
 

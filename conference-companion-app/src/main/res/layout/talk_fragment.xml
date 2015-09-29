@@ -137,7 +137,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="72dp"
-                android:text="@string/vote_for_talk"/>
+                android:text="@string/vote_for_talk"
+                style="?android:attr/borderlessButtonStyle"/>
 
         </LinearLayout>
 
