@@ -46,7 +46,7 @@ public class SynchroIntentService extends IntentService {
     public static final String DEVOXX_PL_CONFERENCE = "{\n" +
             "\"id\": 18,\n" +
             "\"backgroundUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-background.png\",\n" +
-            "\"logoUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-logo.png\",\n" +
+            "\"logoUrl\": \"http://devoxxbelgium.s3-eu-west-1.amazonaws.com/wp-content/uploads/2015/09/24131549/Logo_Devoxx_square.png\",\n" +
             "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\",\n" +
             "\"from\": \"2015-11-09\",\n" +
             "\"name\": \"Devoxx 2015\",\n" +

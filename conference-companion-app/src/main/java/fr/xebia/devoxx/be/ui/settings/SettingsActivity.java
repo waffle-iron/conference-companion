@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar;
 
 import fr.xebia.devoxx.be.R;
 import fr.xebia.devoxx.be.core.activity.BaseActivity;
-import fr.xebia.devoxx.be.ui.navigation.DrawerAdapter;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -29,8 +28,4 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_SETTINGS;
-    }
 }

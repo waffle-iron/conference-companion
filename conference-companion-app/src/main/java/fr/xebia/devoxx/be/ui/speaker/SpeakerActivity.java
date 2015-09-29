@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar;
 
 import fr.xebia.devoxx.be.R;
 import fr.xebia.devoxx.be.core.activity.BaseActivity;
-import fr.xebia.devoxx.be.ui.navigation.DrawerAdapter;
 
 public class SpeakerActivity extends BaseActivity {
 
@@ -28,18 +27,4 @@ public class SpeakerActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_SPEAKERS;
-    }
-
-    @Override
-    public void onNavigationDrawerToggle(boolean opened) {
-        super.onNavigationDrawerToggle(opened);
-        if (!opened) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(R.string.speakers);
-        }
-    }
 }

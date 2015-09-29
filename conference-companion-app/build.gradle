@@ -59,7 +59,7 @@ android {
             debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://ec2-52-18-24-67.eu-west-1.compute.amazonaws.com/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/m8gasnkt/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://dxr-voting-2015.herokuapp.com/dpl15"'
+            buildConfigField 'String', 'VOTE_URL', '"https://evening-mesa-4747.herokuapp.com/dbe15"'
             buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '18'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
@@ -69,7 +69,7 @@ android {
         release {
             buildConfigField 'String', 'BACKEND_URL', '"http://ec2-52-18-24-67.eu-west-1.compute.amazonaws.com/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/m8gasnkt/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://dxr-voting-2015.herokuapp.com/dpl15"'
+            buildConfigField 'String', 'VOTE_URL', '"https://evening-mesa-4747.herokuapp.com/dbe15"'
             buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '18'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
@@ -82,9 +82,11 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v13:22.1.1'
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.android.support:support-v13:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:design:22.2.1'
+
     compile 'com.google.android.gms:play-services-wearable:7.3.0'
     compile 'se.emilsjolander:stickylistheaders:2.3.0'
     compile 'de.greenrobot:eventbus:2.4.0'

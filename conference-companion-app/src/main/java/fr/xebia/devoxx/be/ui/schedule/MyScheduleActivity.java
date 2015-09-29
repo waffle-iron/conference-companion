@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
@@ -19,7 +18,6 @@ import fr.xebia.devoxx.be.core.misc.Preferences;
 import fr.xebia.devoxx.be.model.MySchedule;
 import fr.xebia.devoxx.be.model.Schedule;
 import fr.xebia.devoxx.be.model.Talk;
-import fr.xebia.devoxx.be.ui.navigation.DrawerAdapter;
 import fr.xebia.devoxx.be.ui.widget.DrawShadowFrameLayout;
 import fr.xebia.devoxx.be.ui.widget.UIUtils;
 import icepick.Icepick;
@@ -110,22 +108,6 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
             mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
             setDefaultPage = false;
         }
-    }
-
-    @Override
-    public void onNavigationDrawerToggle(boolean opened) {
-        super.onNavigationDrawerToggle(opened);
-        if (!opened) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayShowCustomEnabled(false);
-            actionBar.setTitle(R.string.my_schedule);
-        }
-    }
-
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return DrawerAdapter.MENU_MY_AGENDA;
     }
 
     @Override

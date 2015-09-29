@@ -14,7 +14,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="app_name">Devoxx 15</string>
-    <string name="action_bar_default_title" translatable="false"><![CDATA[Devox<font color="#f5af33">x</font>]]></string>
+    <string name="action_bar_default_title" translatable="false"><![CDATA[DEVOX<font color="#f5af33">X</font>]]></string>
     <string name="scan_nfc_hint">Scan your NFC tag</string>
     <string name="twitter_account">Twitter</string>
     <string name="initial_synchro">Synchronization running</string>
@@ -96,4 +96,11 @@
         <item quantity="one">%1$d talk available</item>
         <item quantity="other">%1$d talks available</item>
     </plurals>
+
+    <string name="nav_schedule">My Schedule</string>
+    <string name="nav_talks">Talks</string>
+    <string name="nav_speakers">Speakers</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_timeline">Timeline</string>
+    <string name="vote_for_talk">Submit Feedback</string>
 </resources>

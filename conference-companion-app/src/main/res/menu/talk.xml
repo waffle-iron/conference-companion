@@ -15,4 +15,14 @@
         android:icon="@drawable/ic_action_send"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_scan_qr_code"
+        android:title="@string/scan_qr_code"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_input_qr_code"
+        android:title="@string/input_qr_code"
+        app:showAsAction="never" />
+
 </menu>

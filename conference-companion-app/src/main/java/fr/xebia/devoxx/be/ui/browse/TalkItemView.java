@@ -2,6 +2,7 @@ package fr.xebia.devoxx.be.ui.browse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -75,7 +76,7 @@ public class TalkItemView extends FrameLayout {
             mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
         }
 
-        mTalkSnippet.setText(talk.getSummary());
+        mTalkSnippet.setText(Html.fromHtml(talk.getSummary()));
         mInSchedule.setVisibility(talk.isFavorite() ? VISIBLE : GONE);
         mInfoBox.setBackgroundColor(talk.getColor());
 
