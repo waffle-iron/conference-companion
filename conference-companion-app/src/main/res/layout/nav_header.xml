@@ -14,5 +14,6 @@
         android:paddingLeft="20dp"
         android:textSize="20sp"
         android:textColor="@android:color/white"
-        android:text="@string/action_bar_default_title"/>
+        android:text="@string/action_bar_default_title"
+        android:textStyle="bold"/>
 </RelativeLayout>
