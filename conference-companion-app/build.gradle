@@ -63,6 +63,9 @@ android {
             buildConfigField 'int', 'XEBICON_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
+            buildConfigField 'String', 'PARSE_APP_ID', "\"$project.PARSE_APP_ID\""
+            buildConfigField 'String', 'PARSE_CLIENT_KEY', "\"$project.PARSE_CLIENT_KEY\""
+
             signingConfig signingConfigs.debug
         }
 
@@ -73,6 +76,9 @@ android {
             buildConfigField 'int', 'XEBICON_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
+            buildConfigField 'String', 'PARSE_APP_ID', "\"$project.PARSE_APP_ID\""
+            buildConfigField 'String', 'PARSE_CLIENT_KEY', "\"$project.PARSE_CLIENT_KEY\""
+
             minifyEnabled false
             proguardFile getDefaultProguardFile('proguard-android.txt')
 

@@ -35,6 +35,9 @@ import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 import timber.log.Timber;
 
+import static fr.xebia.xebicon.BuildConfig.PARSE_APP_ID;
+import static fr.xebia.xebicon.BuildConfig.PARSE_CLIENT_KEY;
+
 
 public class XebiConApplication extends Application {
 
@@ -87,23 +90,6 @@ public class XebiConApplication extends Application {
             }
         });
 
-        sprinkles.addMigration(new Migration() {
-            @Override
-            protected void doMigration(SQLiteDatabase sqLiteDatabase) {
-                sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_FROM_UTC_TIME);
-                sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_TO_UTC_TIME);
-                sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_FROM_UTC_TIME);
-                sqLiteDatabase.execSQL(DbSchema.CONFERENCES_ADD_TO_UTC_TIME);
-            }
-        });
-
-        sprinkles.addMigration(new Migration() {
-            @Override
-            protected void doMigration(SQLiteDatabase sqLiteDatabase) {
-                sqLiteDatabase.execSQL(DbSchema.TALKS_ADD_POSITION);
-            }
-        });
-
         // TODO temporary hack to send sync event
         new Timer(true).scheduleAtFixedRate(new SendSyncEventTask(), new Date(), 5_000);
 
@@ -114,7 +100,7 @@ public class XebiConApplication extends Application {
 
         Parse.enableLocalDatastore(this);
         Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
-        Parse.initialize(this, "YnJe5DSzkk3HsQwndbBXElz7Qv8LF8V7lJzbegIf", "9ujmZP7SXJtgdYvYv0XHh9owP8ZmdMfuzQl90Qtr");
+        Parse.initialize(this, PARSE_APP_ID, PARSE_CLIENT_KEY);
     }
 
     /**

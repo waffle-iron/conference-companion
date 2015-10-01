@@ -21,7 +21,8 @@ public class DbSchema {
             "  talkDetailsId  TEXT,\n" +
             "  experience     TEXT,\n" +
             "  track          TEXT,\n" +
-            "  fromTime       INTEGER, _id TEXT,\n" +
+            "  fromTime       INTEGER,\n" +
+            "  _id            TEXT,\n" +
             "  language       TEXT,\n" +
             "  toTime         INTEGER,\n" +
             "  room           TEXT,\n" +
@@ -33,19 +34,11 @@ public class DbSchema {
             "  memo           TEXT,\n" +
             "  prettySpeakers TEXT,\n" +
             "  conferenceId   INTEGER,\n" +
+            "  fromUtcTime    INTEGER,\n" +
+            "  toUtcTime      INTEGER,\n" +
+            "  position       INTEGER,\n" +
             "  PRIMARY KEY (_id, conferenceId)\n" +
             ");";
-
-    public static final String TALKS_ADD_FROM_UTC_TIME = "ALTER TABLE Talks ADD fromUtcTime INTEGER;";
-
-    public static final String TALKS_ADD_TO_UTC_TIME = "ALTER TABLE Talks ADD toUtcTime INTEGER;";
-
-    public static final String TALKS_ADD_POSITION = "ALTER TABLE Talks ADD position INTEGER;";
-
-    public static final String CONFERENCES_ADD_FROM_UTC_TIME = "ALTER TABLE Conferences ADD fromUtcTime INTEGER;";
-
-    public static final String CONFERENCES_ADD_TO_UTC_TIME = "ALTER TABLE Conferences ADD toUtcTime INTEGER;";
-
 
     public static final String SPEAKER_TALKS = "CREATE TABLE Speaker_Talk (\n" +
             "  speakerId TEXT,\n" +
@@ -55,14 +48,14 @@ public class DbSchema {
             ");";
 
     public static final String VOTES = "CREATE TABLE Votes (\n" +
-            "  _id  TEXT,\n" +
+            "  _id             TEXT,\n" +
             "  conferenceId    INTEGER,\n" +
-            "  user TEXT,\n" +
-            "  rate INTEGER,\n" +
-            "  revelent INTEGER,\n" +
-            "  content INTEGER,\n" +
-            "  speakers INTEGER,\n" +
-            "  comment TEXT,\n" +
+            "  user            TEXT,\n" +
+            "  rate            INTEGER,\n" +
+            "  revelent        INTEGER,\n" +
+            "  content         INTEGER,\n" +
+            "  speakers        INTEGER,\n" +
+            "  comment         TEXT,\n" +
             "  PRIMARY KEY (_id, conferenceId)\n" +
             ");";
 
@@ -77,6 +70,8 @@ public class DbSchema {
             "  fromDate      INTEGER,\n" +
             "  toDate        INTEGER,\n" +
             "  enabled       INTEGER,\n" +
+            "  fromUtcTime   INTEGER,\n" +
+            "  toUtcTime     INTEGER,\n" +
             "  PRIMARY KEY (_id)\n" +
             ");";
 }
