@@ -80,7 +80,7 @@
     <string name="feedback_notification">Give your feedback</string>
     <string name="action_ask">Ask a question</string>
     <string name="timeline_empty">No timeline</string>
-    <string name="timeline">Timeline</string>
+    <string name="timeline">Social</string>
     <string name="scan_qr_code">Scan QR code</string>
     <string name="input_qr_code">Enter QR code manually</string>
     <string name="input_qr_code_title">Enter QR code</string>
@@ -94,7 +94,7 @@
     <string name="nav_talks">Talks</string>
     <string name="nav_speakers">Speakers</string>
     <string name="nav_settings">Settings</string>
-    <string name="nav_timeline">Timeline</string>
+    <string name="nav_timeline">Social</string>
     <string name="vote_for_talk">Submit Feedback</string>
 
     <plurals name="available_talks">
@@ -119,4 +119,6 @@
     <string name="session_rating_label">Rate this session overall :</string>
     <string name="rating_title">Session Feedback</string>
     <string name="rate_is_mandatory">Rate is mandatory</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_video">Video library</string>
 </resources>
