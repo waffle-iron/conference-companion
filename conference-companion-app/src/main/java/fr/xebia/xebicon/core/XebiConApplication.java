@@ -6,6 +6,14 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.parse.Parse;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
@@ -13,7 +21,14 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
+import org.joda.time.DateTime;
+
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -26,11 +41,11 @@ import fr.xebia.xebicon.api.VoteApi;
 import fr.xebia.xebicon.bus.SyncEvent;
 import fr.xebia.xebicon.core.db.DbSchema;
 import fr.xebia.xebicon.core.misc.Preferences;
-import fr.xebia.xebicon.core.network.JacksonConverter;
 import fr.xebia.xebicon.service.SynchroIntentService;
 import io.fabric.sdk.android.Fabric;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 import timber.log.Timber;
@@ -43,6 +58,7 @@ public class XebiConApplication extends Application {
 
     private static ConferenceApi sConferenceApi;
     private static VoteApi sVoteApi;
+    private static Gson sGson;
 
     public static final EventBus BUS = EventBus.getDefault();
 
@@ -70,12 +86,27 @@ public class XebiConApplication extends Application {
             Preferences.saveGeneratedDeviceId(applicationContext, UUID.randomUUID().toString());
         }
 
+        sGson = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                    @Override
+                    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        try {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.FRANCE);
+                            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+                            return simpleDateFormat.parse(json.getAsJsonPrimitive().getAsString());
+                        } catch (ParseException e) {
+                            return null;
+                        }
+                    }
+                })
+                .create();
+
         OkHttpClient okHttpClient = new OkHttpClient();
-        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setClient(new OkClient(okHttpClient)).setConverter(new JacksonConverter());
+        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setClient(new OkClient(okHttpClient)).setConverter(new GsonConverter(sGson));
 
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
-
         sVoteApi = new ParseVoteApi(this);
+
 
         Sprinkles sprinkles = Sprinkles.init(applicationContext, "xebicon.db", 0);
 
@@ -130,5 +161,7 @@ public class XebiConApplication extends Application {
         return sVoteApi;
     }
 
-
+    public static Gson getGson(){
+        return sGson;
+    }
 }

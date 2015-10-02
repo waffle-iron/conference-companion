@@ -6,13 +6,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.DurationFieldType;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,18 +63,14 @@ public class SynchroIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         Conference conference;
-        try {
-            conference = new ObjectMapper().readValue(DEVOXX_PL_CONFERENCE, Conference.class);
-            DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
-            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
-            DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
-            DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
-            conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
-            conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
-        } catch (IOException e) {
-            BUS.post(new SynchroFinishedEvent(false, null));
-            return;
-        }
+        conference = XebiConApplication.getGson().fromJson(DEVOXX_PL_CONFERENCE, Conference.class);
+        DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
+        DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+        DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
+        DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
+        conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
+        conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
+
         Transaction transaction = null;
         boolean sendSynchroEvent = !intent.hasExtra(EXTRA_FROM_APP_CREATE);
         try {

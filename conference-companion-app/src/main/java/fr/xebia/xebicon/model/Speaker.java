@@ -3,9 +3,6 @@ package fr.xebia.xebicon.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +11,20 @@ import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Table("Speakers")
 public class Speaker extends Model implements Parcelable {
 
-    @JsonProperty @Column("_id") @Key private String id;
-    @JsonProperty @Column("conferenceId") private int conferenceId;
-    @JsonProperty @Column("lang") private String lang;
-    @JsonProperty @Column("blog") private String blog;
-    @JsonProperty @Column("tweetHandle") private String tweetHandle;
-    @JsonProperty @Column("imageURL") private String imageURL;
-    @JsonProperty @Column("company") private String company;
-    @JsonProperty @Column("bio") private String bio;
-    @JsonProperty @Column("lastName") private String lastName;
-    @JsonProperty @Column("firstName") private String firstName;
-    @JsonProperty private List<Talk> talks;
+    @Column("_id") @Key private String id;
+    @Column("conferenceId") private int conferenceId;
+    @Column("lang") private String lang;
+    @Column("blog") private String blog;
+    @Column("tweetHandle") private String tweetHandle;
+    @Column("imageURL") private String imageURL;
+    @Column("company") private String company;
+    @Column("bio") private String bio;
+    @Column("lastName") private String lastName;
+    @Column("firstName") private String firstName;
+    private List<Talk> talks;
 
     public Speaker() {
 

@@ -5,10 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,7 +19,6 @@ import se.emilsjolander.sprinkles.annotations.Table;
 
 
 @Table("Talks")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Talk extends Model implements Parcelable {
 
     public static final String REGISTRATION = "registration";
@@ -33,22 +28,22 @@ public class Talk extends Model implements Parcelable {
     public static final String PRESENTATION = "talk";
 
 
-    @JsonProperty @Column("_id") @Key private String id;
-    @JsonProperty @Column("conferenceId") private int conferenceId;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Europe/Paris") @Column("fromTime") private Date fromTime;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Europe/Paris") @Column("toTime") private Date toTime;
+    @Column("_id") @Key private String id;
+    @Column("conferenceId") private int conferenceId;
+    @Column("fromTime") private Date fromTime;
+    @Column("toTime") private Date toTime;
     @Column("fromUtcTime") private long fromUtcTime;
     @Column("toUtcTime") private long toUtcTime;
-    @JsonProperty private LinkedHashSet<Speaker> speakers;
-    @JsonProperty @Column("room") private String room;
-    @JsonProperty @Column("type") private String type;
-    @JsonProperty @Column("language") private String language;
-    @JsonProperty @Column("experience") private String experience;
-    @JsonProperty @Column("track") private String track;
-    @JsonProperty @Column("kind") private String kind;
-    @JsonProperty @Column("title") private String title;
-    @JsonProperty @Column("summary") private String summary;
-    @JsonProperty @Column("favorite") private boolean favorite;
+    private LinkedHashSet<Speaker> speakers;
+    @Column("room") private String room;
+    @Column("type") private String type;
+    @Column("language") private String language;
+    @Column("experience") private String experience;
+    @Column("track") private String track;
+    @Column("kind") private String kind;
+    @Column("title") private String title;
+    @Column("summary") private String summary;
+    @Column("favorite") private boolean favorite;
 
     @Column("talkDetailsId") private String talkDetailsId;
     @Column("color") private int color;
