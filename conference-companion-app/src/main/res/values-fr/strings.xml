@@ -84,7 +84,7 @@
         <item quantity="other">%1$d présentations disponibles</item>
     </plurals>
     <string name="able_to_rate">Maintenant vous pouvez noter une session quand elle est terminée</string>
-    <string name="timeline">Timeline</string>
+    <string name="timeline">Social</string>
     <string name="timeline_empty">Pas de timeline</string>
     <string name="scan_qr_code">Scanner QR code</string>
     <string name="scan_qr_code_required">Vous devez scanner votre QR code pour noter une session</string>
@@ -117,4 +117,7 @@
     <string name="session_feedback_submitlink">Envoyer l\'avis</string>
     <string name="rating_title">Avis sur la session</string>
     <string name="rate_is_mandatory">La note globale est obligatoire</string>
+    <string name="nav_video">Vidéos</string>
+    <string name="nav_map">Plan</string>
+    <string name="youtube_not_installed">Youtube n\'est pas installé</string>
 </resources>

@@ -25,7 +25,7 @@ public class TimelineActivity extends BaseActivity {
 
         ButterKnife.inject(this);
 
-        setTitle("Timeline");
+        setTitle(R.string.nav_timeline);
 
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
                 .query("#XebiconFr OR @XebiaFr")

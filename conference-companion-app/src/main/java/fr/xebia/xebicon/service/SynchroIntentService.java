@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.bus.SynchroFinishedEvent;
 import fr.xebia.xebicon.core.XebiConApplication;
 import fr.xebia.xebicon.core.misc.Preferences;
@@ -40,21 +41,6 @@ public class SynchroIntentService extends IntentService {
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.xebicon.EXTRA_CONFERENCE_ID";
     public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.xebicon.EXTRA_FROM_APP_CREATE";
 
-    public static final String DEVOXX_PL_CONFERENCE = "{\n" +
-            "\"id\": 19,\n" +
-            "\"backgroundUrl\": \"\",\n" +
-            "\"logoUrl\": \"\",\n" +
-            "\"iconUrl\": \"\",\n" +
-            "\"from\": \"2015-11-04\",\n" +
-            "\"name\": \"DevoxxPL 2015\",\n" +
-            "\"description\": \"XebiCon 2015\",\n" +
-            "\"location\": \"\",\n" +
-            "\"baseUrl\": \"\",\n" +
-            "\"timezone\": \"Europe/Paris\",\n" +
-            "\"enabled\": true,\n" +
-            "\"to\": \"2015-11-04\"\n" +
-            "}";
-
     public SynchroIntentService() {
         super(TAG);
     }
@@ -62,8 +48,19 @@ public class SynchroIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
-        Conference conference;
-        conference = XebiConApplication.getGson().fromJson(DEVOXX_PL_CONFERENCE, Conference.class);
+        Conference conference = null;
+        List<Conference> availableConferences = XebiConApplication.getConferenceApi().getAvailableConferences();
+
+        for (Conference aConference : availableConferences) {
+            if (aConference.getId() == BuildConfig.XEBICON_CONFERENCE_ID) {
+                conference = aConference;
+            }
+        }
+
+        if (conference == null) {
+            return;
+        }
+
         DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
         DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);

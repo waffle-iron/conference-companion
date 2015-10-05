@@ -121,4 +121,5 @@
     <string name="rate_is_mandatory">Rate is mandatory</string>
     <string name="nav_map">Map</string>
     <string name="nav_video">Video library</string>
+    <string name="youtube_not_installed">Youtube is not installed</string>
 </resources>

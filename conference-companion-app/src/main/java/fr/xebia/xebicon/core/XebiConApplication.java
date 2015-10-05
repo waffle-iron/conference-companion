@@ -12,16 +12,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import com.parse.Parse;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
-
-import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -37,7 +33,9 @@ import de.greenrobot.event.EventBus;
 import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.api.ConferenceApi;
 import fr.xebia.xebicon.api.ParseVoteApi;
+import fr.xebia.xebicon.api.VideoApi;
 import fr.xebia.xebicon.api.VoteApi;
+import fr.xebia.xebicon.api.YoutubeApi;
 import fr.xebia.xebicon.bus.SyncEvent;
 import fr.xebia.xebicon.core.db.DbSchema;
 import fr.xebia.xebicon.core.misc.Preferences;
@@ -59,6 +57,7 @@ public class XebiConApplication extends Application {
     private static ConferenceApi sConferenceApi;
     private static VoteApi sVoteApi;
     private static Gson sGson;
+    private static VideoApi sVideoApi;
 
     public static final EventBus BUS = EventBus.getDefault();
 
@@ -106,6 +105,8 @@ public class XebiConApplication extends Application {
 
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
         sVoteApi = new ParseVoteApi(this);
+
+        sVideoApi = new YoutubeApi();
 
 
         Sprinkles sprinkles = Sprinkles.init(applicationContext, "xebicon.db", 0);
@@ -159,6 +160,10 @@ public class XebiConApplication extends Application {
 
     public static VoteApi getVoteApi() {
         return sVoteApi;
+    }
+
+    public static VideoApi getVideoApi() {
+        return sVideoApi;
     }
 
     public static Gson getGson(){

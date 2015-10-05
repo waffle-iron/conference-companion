@@ -27,10 +27,12 @@ import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.core.utils.Compatibility;
 import fr.xebia.xebicon.ui.HomeActivity;
 import fr.xebia.xebicon.ui.conference.ConferenceChooserActivity;
+import fr.xebia.xebicon.ui.map.MapActivity;
 import fr.xebia.xebicon.ui.schedule.MyScheduleActivity;
 import fr.xebia.xebicon.ui.settings.SettingsActivity;
 import fr.xebia.xebicon.ui.speaker.SpeakerActivity;
 import fr.xebia.xebicon.ui.timeline.TimelineActivity;
+import fr.xebia.xebicon.ui.video.VideoActivity;
 import timber.log.Timber;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -265,6 +267,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_timeline:
                 goTo(new Intent(BaseActivity.this, TimelineActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                break;
+
+            case R.id.nav_map:
+                goTo(new Intent(BaseActivity.this, MapActivity.class)
+                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                break;
+
+            case R.id.nav_video:
+                goTo(new Intent(BaseActivity.this, VideoActivity.class)
                         .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
                 break;
 

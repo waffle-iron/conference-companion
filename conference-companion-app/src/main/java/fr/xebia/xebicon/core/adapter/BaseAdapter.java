@@ -28,6 +28,10 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
         return mData;
     }
 
+    public void setData(T data){
+        mData = data;
+    }
+
     public int getViewResId() {
         return mViewResId;
     }
