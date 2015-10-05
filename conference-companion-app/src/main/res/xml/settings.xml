@@ -3,20 +3,33 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-            android:title="@string/general"/>
+        android:title="@string/developers">
+        <Preference
+            android:defaultValue="Not Set"
+            android:key="dev_1"
+            android:selectable="false"
+            android:summary="apiroelle@xebia.fr"
+            android:title="Arnaud Piroelle"/>
+    </PreferenceCategory>
 
-    <Preference
+    <PreferenceCategory
+        android:title="@string/general">
+
+
+        <Preference
             android:key="about_key"
             android:title="@string/about">
-        <intent
+            <intent
                 android:action="android.intent.action.VIEW"
                 android:data="http://www.xebia.fr"/>
-    </Preference>
+        </Preference>
 
-    <Preference
-            android:key="version_key"
+        <Preference
             android:defaultValue="Not Set"
-            android:enabled="false"
+            android:key="version_key"
+            android:selectable="false"
             android:title="@string/version"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
