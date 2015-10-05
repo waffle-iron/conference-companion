@@ -106,8 +106,7 @@ public class XebiConApplication extends Application {
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
         sVoteApi = new ParseVoteApi(this);
 
-        sVideoApi = new YoutubeApi();
-
+        sVideoApi = new YoutubeApi(BuildConfig.GOOGLE_API_KEY, BuildConfig.YOUTUBE_PLAYLIST);
 
         Sprinkles sprinkles = Sprinkles.init(applicationContext, "xebicon.db", 0);
 

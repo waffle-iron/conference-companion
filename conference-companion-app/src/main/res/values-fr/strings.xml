@@ -120,4 +120,6 @@
     <string name="nav_video">Vidéos</string>
     <string name="nav_map">Plan</string>
     <string name="youtube_not_installed">Youtube n\'est pas installé</string>
+    <string name="message_hint">Hey !</string>
+    <string name="message_empty_instance">Retrouve les vidéos de la XebiCon dès la fin de la conférence.</string>
 </resources>

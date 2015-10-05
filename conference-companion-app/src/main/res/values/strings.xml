@@ -122,4 +122,6 @@
     <string name="nav_map">Map</string>
     <string name="nav_video">Video library</string>
     <string name="youtube_not_installed">Youtube is not installed</string>
+    <string name="message_hint">Hey !</string>
+    <string name="message_empty_instance">Retrieve XebiCon\'s videos at the end of the conference.</string>
 </resources>

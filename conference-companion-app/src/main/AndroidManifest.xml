@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="fr.xebia.xebicon"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="fr.xebia.xebicon"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -79,9 +80,10 @@
                 android:value=".ui.talk.TalkActivity"/>
         </activity>
 
-        <activity android:name=".ui.rating.RatingActivity"
-                  android:theme="@style/Theme.Companion.TalkRating"
-                  android:parentActivityName=".ui.browse.BrowseTalksActivity">
+        <activity
+            android:name=".ui.rating.RatingActivity"
+            android:parentActivityName=".ui.browse.BrowseTalksActivity"
+            android:theme="@style/Theme.Companion.TalkRating">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.browse.BrowseTalksActivity"/>
@@ -116,7 +118,9 @@
             android:name="io.fabric.ApiKey"
             android:value="185c4c6c60101aba83215fcbd80cae097ede3e0b"/>
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyASamoWzAeRgsfkL2LsEdBxoBdGIpZAlng"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyASamoWzAeRgsfkL2LsEdBxoBdGIpZAlng"/>
 
     </application>
 

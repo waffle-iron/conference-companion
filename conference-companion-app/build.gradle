@@ -70,6 +70,8 @@ android {
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             buildConfigField 'String', 'PARSE_APP_ID', "\"$project.PARSE_APP_ID\""
             buildConfigField 'String', 'PARSE_CLIENT_KEY', "\"$project.PARSE_CLIENT_KEY\""
+            buildConfigField 'String', 'GOOGLE_API_KEY', "\"$project.GOOGLE_API_KEY\""
+            buildConfigField 'String', 'YOUTUBE_PLAYLIST', "\"PL-Wbj9VN8zDTRHZ0_Y5FX0xYrn1sv9oBF\""
 
             signingConfig signingConfigs.debug
         }
@@ -83,6 +85,8 @@ android {
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             buildConfigField 'String', 'PARSE_APP_ID', "\"$project.PARSE_APP_ID\""
             buildConfigField 'String', 'PARSE_CLIENT_KEY', "\"$project.PARSE_CLIENT_KEY\""
+            buildConfigField 'String', 'GOOGLE_API_KEY', "\"$project.GOOGLE_API_KEY\""
+            buildConfigField 'String', 'YOUTUBE_PLAYLIST', "\"PL-Wbj9VN8zDTRHZ0_Y5FX0xYrn1sv9oBF\""
 
             minifyEnabled false
             proguardFile getDefaultProguardFile('proguard-android.txt')

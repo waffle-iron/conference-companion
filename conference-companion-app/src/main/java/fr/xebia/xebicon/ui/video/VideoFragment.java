@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import rx.schedulers.Schedulers;
 public class VideoFragment extends Fragment implements Observer<PlaylistItemListResponse> {
 
     @InjectView(R.id.video_list) ListView videoListView;
+    @InjectView(R.id.video_empty) LinearLayout emptyView;
 
     private String nextPageToken;
     private NewBaseAdapter<PlaylistItem, VideoItemView> adapter;
@@ -58,6 +60,7 @@ public class VideoFragment extends Fragment implements Observer<PlaylistItemList
         ButterKnife.inject(this, view);
 
         videoListView.setAdapter(adapter);
+        videoListView.setEmptyView(emptyView);
     }
 
     @Override
