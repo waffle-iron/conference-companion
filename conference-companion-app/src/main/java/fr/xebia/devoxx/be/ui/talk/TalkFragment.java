@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.commonsware.cwac.anddown.AndDown;
 
 import java.util.LinkedHashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -149,8 +151,16 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SCAN_QR_CODE_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                Preferences.setUserScanIdForVote(getActivity(), data.getStringExtra("SCAN_RESULT"));
-                Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
+
+                Pattern pattern = Pattern.compile("([^:]*)::([^:]*)::([^:]*)::([^:]*)::([^:]*)");
+                Matcher matcher = pattern.matcher(data.getStringExtra("SCAN_RESULT"));
+
+                if (matcher.find()){
+                    Preferences.setUserScanIdForVote(getActivity(), matcher.group(1));
+                    Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), R.string.not_able_to_rate, Toast.LENGTH_LONG).show();
+                }
             } else {
                 Toast.makeText(getActivity(), R.string.not_able_to_rate, Toast.LENGTH_LONG).show();
             }
@@ -160,7 +170,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @Override
     public void onResume() {
         super.onResume();
-        //refreshRatingBarState();
+        refreshRatingBarState();
     }
 
     @Override
