@@ -42,6 +42,7 @@ import fr.xebia.devoxx.be.model.Speaker;
 import fr.xebia.devoxx.be.model.Talk;
 import fr.xebia.devoxx.be.model.Vote;
 import fr.xebia.devoxx.be.ui.note.MemoActivity;
+import fr.xebia.devoxx.be.ui.question.QuestionsActivity;
 import fr.xebia.devoxx.be.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.devoxx.be.ui.widget.CheckableFrameLayout;
 import fr.xebia.devoxx.be.ui.widget.ObservableScrollView;
@@ -62,6 +63,7 @@ import static android.view.View.VISIBLE;
 import static fr.xebia.devoxx.be.core.KouignAmanApplication.BUS;
 import static fr.xebia.devoxx.be.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
 import static fr.xebia.devoxx.be.service.SendRatingIntentService.buildSendRatingIntent;
+import static fr.xebia.devoxx.be.ui.question.QuestionsActivity.EXTRA_ROOM;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
         ObservableScrollView.ScrollViewListener {
@@ -208,7 +210,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                         Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
                     }
                 }
-            /*
             case R.id.action_ask:
                 Intent intent = new Intent(getActivity(), QuestionsActivity.class);
                 String room = mTalk.getRoom();
@@ -216,7 +217,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 startActivity(intent);
                 return true;
 
-                */
             case R.id.action_scan_qr_code:
                 startScanQrCodeActivity();
                 return true;

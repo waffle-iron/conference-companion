@@ -4,6 +4,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_ask"
+        android:title="@string/action_ask"
+        android:icon="@drawable/ic_action_ask"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_note"
         android:title="@string/action_note"
         android:icon="@drawable/ic_action_edit"
