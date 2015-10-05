@@ -12,6 +12,9 @@ public class SpeakerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speaker_activity);
+
+        currentNavId = R.id.nav_speakers;
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.speakers);

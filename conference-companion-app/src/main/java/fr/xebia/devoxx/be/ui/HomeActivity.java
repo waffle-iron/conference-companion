@@ -13,6 +13,8 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+
+        currentNavId = R.id.nav_talks;
     }
 
     @Override

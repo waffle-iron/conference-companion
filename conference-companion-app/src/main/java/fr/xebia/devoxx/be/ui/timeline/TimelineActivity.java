@@ -22,6 +22,8 @@ public class TimelineActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline_activity);
 
+        currentNavId = R.id.nav_timeline;
+
         ButterKnife.inject(this);
 
         setTitle("Timeline");

@@ -57,7 +57,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private Handler handler = new Handler();
     private boolean mMainContentScrolling;
 
-    private int currentNavId;
+    protected int currentNavId;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -78,8 +78,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onPostCreate(savedInstanceState);
 
         ButterKnife.inject(this);
-
-        currentNavId = getIntent().getIntExtra(NAV_ITEM_ID, R.id.nav_talks);
 
         if (navigationView != null){
             navigationView.getMenu().findItem(currentNavId).setCheckable(true);
@@ -253,28 +251,23 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()){
             case R.id.nav_myschedule:
-                goTo(new Intent(BaseActivity.this, MyScheduleActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, MyScheduleActivity.class));
                 break;
 
             case R.id.nav_talks:
-                goTo(new Intent(BaseActivity.this, HomeActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, HomeActivity.class));
                 break;
 
             case R.id.nav_speakers:
-                goTo(new Intent(BaseActivity.this, SpeakerActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, SpeakerActivity.class));
                 break;
 
             case R.id.nav_timeline:
-                goTo(new Intent(BaseActivity.this, TimelineActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, TimelineActivity.class));
                 break;
 
             case R.id.nav_settings:
-                goTo(new Intent(BaseActivity.this, SettingsActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, SettingsActivity.class));
                 break;
 
         }
