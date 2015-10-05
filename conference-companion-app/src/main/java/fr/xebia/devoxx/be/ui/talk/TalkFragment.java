@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import fr.xebia.devoxx.be.BuildConfig;
 import fr.xebia.devoxx.be.R;
 import fr.xebia.devoxx.be.bus.MemoSavedEvent;
 import fr.xebia.devoxx.be.core.misc.Preferences;
@@ -517,7 +518,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
                 }
                 long now = System.currentTimeMillis();
                 boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
-                if (!(now > mTalk.getToUtcTime() - 20 * 60 * 1000 && !conferenceEnded)) {
+                if (!(now > mTalk.getToUtcTime() - 20 * 60 * 1000 && !conferenceEnded) && !BuildConfig.DEBUG) {
                     Toast.makeText(getActivity(), R.string.too_early_to_vote, Toast.LENGTH_LONG).show();
                     mTalkRatingBar.setRating(0);
                     return;
@@ -556,7 +557,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private int getTalkBackgroundResource(Talk talk) {
-        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getActivity().getPackageName());
+        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 19, "drawable", getActivity().getPackageName());
     }
 
     public void refreshRatingBarState() {

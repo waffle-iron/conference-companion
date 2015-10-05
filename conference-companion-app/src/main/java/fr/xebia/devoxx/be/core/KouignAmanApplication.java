@@ -66,7 +66,9 @@ public class KouignAmanApplication extends Application {
         }
 
         OkHttpClient okHttpClient = new OkHttpClient();
-        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder().setClient(new OkClient(okHttpClient)).setConverter(new JacksonConverter());
+        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder()
+                .setClient(new OkClient(okHttpClient))
+                .setConverter(new JacksonConverter());
 
         sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
 

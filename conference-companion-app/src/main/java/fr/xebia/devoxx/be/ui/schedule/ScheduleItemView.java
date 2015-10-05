@@ -78,7 +78,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     }
 
     private int getItemBackgroundResource(Talk talk) {
-        return getResources().getIdentifier("devoxx_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
+        return getResources().getIdentifier("devoxx_template_" + talk.getPosition() % 19, "drawable", getContext().getPackageName());
     }
 
     @Override
