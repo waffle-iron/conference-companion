@@ -98,7 +98,7 @@
     <string name="nav_settings">Paramètres</string>
     <string name="nav_speakers">Speakers</string>
     <string name="nav_talks">Présentations</string>
-    <string name="nav_timeline">Timeline</string>
+    <string name="nav_timeline">Social</string>
     <string name="vote_for_talk">Donner votre avis</string>
     <string name="session_rating_label">Notez l\'ensemble de cette session</string>
     <string name="session_feedback_notgreat">Rien d\'impressionnant</string>

@@ -81,9 +81,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onPostCreate(savedInstanceState);
         ButterKnife.inject(this);
 
-        currentNavId = getIntent().getIntExtra(NAV_ITEM_ID, R.id.nav_talks);
-
         if (navigationView != null){
+            currentNavId = getNavId();
             navigationView.getMenu().findItem(currentNavId).setCheckable(true);
             navigationView.setCheckedItem(currentNavId);
             navigationView.setNavigationItemSelectedListener(this);
@@ -251,38 +250,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()){
             case R.id.nav_myschedule:
-                goTo(new Intent(BaseActivity.this, MyScheduleActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, MyScheduleActivity.class));
                 break;
 
             case R.id.nav_talks:
-                goTo(new Intent(BaseActivity.this, HomeActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, HomeActivity.class));
                 break;
 
             case R.id.nav_speakers:
-                goTo(new Intent(BaseActivity.this, SpeakerActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, SpeakerActivity.class));
                 break;
 
             case R.id.nav_timeline:
-                goTo(new Intent(BaseActivity.this, TimelineActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, TimelineActivity.class));
                 break;
 
             case R.id.nav_map:
-                goTo(new Intent(BaseActivity.this, MapActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, MapActivity.class));
                 break;
 
             case R.id.nav_video:
-                goTo(new Intent(BaseActivity.this, VideoActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, VideoActivity.class));
                 break;
 
             case R.id.nav_settings:
-                goTo(new Intent(BaseActivity.this, SettingsActivity.class)
-                        .putExtra(NAV_ITEM_ID, menuItem.getItemId()));
+                goTo(new Intent(BaseActivity.this, SettingsActivity.class));
                 break;
 
         }
@@ -343,5 +335,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected int getNavId(){
+        return R.id.nav_talks;
     }
 }

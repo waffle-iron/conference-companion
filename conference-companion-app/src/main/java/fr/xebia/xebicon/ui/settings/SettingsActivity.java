@@ -28,4 +28,9 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int getNavId() {
+        return R.id.nav_settings;
+    }
+
 }

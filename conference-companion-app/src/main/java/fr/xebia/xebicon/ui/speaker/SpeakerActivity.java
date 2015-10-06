@@ -27,4 +27,9 @@ public class SpeakerActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int getNavId() {
+        return R.id.nav_speakers;
+    }
+
 }

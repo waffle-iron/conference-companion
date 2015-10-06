@@ -27,4 +27,9 @@ public class VideoActivity extends BaseActivity {
                     .commit();
         }
     }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_video;
+    }
 }

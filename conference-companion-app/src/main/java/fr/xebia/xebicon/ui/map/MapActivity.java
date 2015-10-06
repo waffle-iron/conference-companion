@@ -29,4 +29,9 @@ public class MapActivity extends BaseActivity {
                     .commit();
         }
     }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_map;
+    }
 }

@@ -26,4 +26,9 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int getNavId() {
+        return R.id.nav_talks;
+    }
+
 }

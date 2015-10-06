@@ -49,6 +49,11 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
         computSelectedPage();
     }
 
+    @Override
+    protected int getNavId() {
+        return R.id.nav_myschedule;
+    }
+
     private void computSelectedPage() {
         long conferenceStartTime = Preferences.getSelectedConferenceStartTime(this);
         long gapFromStart = System.currentTimeMillis() - conferenceStartTime;

@@ -33,4 +33,9 @@ public class TimelineActivity extends BaseActivity {
         listView.setAdapter(new TweetTimelineListAdapter(this, searchTimeline));
         listView.setEmptyView(emptyView);
     }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_timeline;
+    }
 }
