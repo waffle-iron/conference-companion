@@ -5,20 +5,19 @@ import android.support.v7.app.ActionBar;
 
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.activity.NavigationActivity;
 import fr.xebia.xebicon.ui.settings.SettingsFragment;
 
-public class MapActivity extends BaseActivity {
+public class MapActivity extends NavigationActivity {
+
+    public MapActivity() {
+        super(R.layout.activity_map);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_map);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.nav_map);
@@ -32,6 +31,6 @@ public class MapActivity extends BaseActivity {
 
     @Override
     protected int getNavId() {
-        return R.id.nav_map;
+        return -1;
     }
 }

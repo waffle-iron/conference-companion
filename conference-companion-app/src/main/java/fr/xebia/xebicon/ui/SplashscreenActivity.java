@@ -52,7 +52,7 @@ public class SplashscreenActivity extends AppCompatActivity {
     }
 
     private void gotToHome() {
-        Intent homeIntent = new Intent(this, HomeActivity.class);
+        Intent homeIntent = new Intent(this, ExploreActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);
         finish();

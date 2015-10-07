@@ -1,9 +1,11 @@
 package fr.xebia.xebicon.ui.browse;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -15,9 +17,11 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
+import fr.xebia.xebicon.core.adapter.BaseItemView;
 import fr.xebia.xebicon.model.Talk;
+import fr.xebia.xebicon.ui.talk.TalkActivity;
 
-public class TalkItemView extends FrameLayout {
+public class TalkItemView extends FrameLayout implements BaseItemView<Talk>, View.OnClickListener {
 
     @InjectView(R.id.talk_photo) ImageView mTalkPhoto;
     @InjectView(R.id.talk_category) TextView mTalkCategory;
@@ -27,6 +31,7 @@ public class TalkItemView extends FrameLayout {
     @InjectView(R.id.indicator_in_schedule) ImageView mInSchedule;
     @InjectView(R.id.info_box) ViewGroup mInfoBox;
     private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
+    private Talk talk;
 
     public TalkItemView(Context context) {
         super(context);
@@ -44,6 +49,8 @@ public class TalkItemView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.inject(this);
+
+        setOnClickListener(this);
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -57,7 +64,6 @@ public class TalkItemView extends FrameLayout {
             }
         };
     }
-
 
     public void bind(Talk talk, boolean conferenceEnded) {
         setTag(talk);
@@ -85,5 +91,22 @@ public class TalkItemView extends FrameLayout {
 
     private int getItemBackgroundResource(Talk talk) {
         return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
+    }
+
+    @Override
+    public void bindView(Talk el) {
+        this.talk = el;
+        bind(el, false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (!talk.isBreak()) {
+            Intent intent = new Intent(getContext(), TalkActivity.class);
+            intent.putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId());
+            intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, talk.getTitle());
+            intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, talk.getColor());
+            getContext().startActivity(intent);
+        }
     }
 }

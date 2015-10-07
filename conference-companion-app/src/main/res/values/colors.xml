@@ -3,7 +3,7 @@
     <color name="xebia_menu_color">#ff551150</color>
 
     <color name="default_theme_primary">#ff6a205f</color>
-    <color name="default_theme_primary_dark">#ff000000</color>
+    <color name="default_theme_primary_dark">#ff4A1642</color>
     <color name="default_theme_primary_light">#fff69538</color>
 
     <color name="track_agile">#ffafb6bb</color>
@@ -33,4 +33,5 @@
 
     <color name="my_schedule_conflict">#db4437</color>
     <color name="divider_gray">#ffc7c7c7</color>
+    <color name="theme_accent_1">#00b0ff</color>
 </resources>

@@ -18,10 +18,6 @@
             android:icon="@drawable/ic_action_speakers"
             android:title="@string/nav_speakers"/>
 
-        <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_action_map"
-            android:title="@string/nav_map"/>
     </group>
 
     <group

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,19 +24,20 @@ import static fr.xebia.xebicon.core.XebiConApplication.BUS;
 
 public class MemoActivity extends BaseActivity implements OneQuery.ResultHandler<Talk> {
 
+    @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.container) EditText mText;
 
     private Talk mTalk;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.note_activity);
+    public MemoActivity() {
+        super(R.layout.note_activity);
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         String talkId = intent.getStringExtra(TalkActivity.EXTRA_TALK_ID);
@@ -72,13 +74,10 @@ public class MemoActivity extends BaseActivity implements OneQuery.ResultHandler
         if (mText.getText().length() > 0) {
             if (mTalk != null) {
                 mTalk.setMemo(mText.getText().toString());
-                mTalk.saveAsync(new Model.OnSavedCallback() {
-                    @Override
-                    public void onSaved() {
-                        Toast.makeText(getApplicationContext(), R.string.memo_saved, LENGTH_SHORT).show();
-                        BUS.post(MemoSavedEvent.INSTANCE);
-                        finish();
-                    }
+                mTalk.saveAsync(() -> {
+                    Toast.makeText(getApplicationContext(), R.string.memo_saved, LENGTH_SHORT).show();
+                    BUS.post(MemoSavedEvent.INSTANCE);
+                    finish();
                 });
             }
         } else {

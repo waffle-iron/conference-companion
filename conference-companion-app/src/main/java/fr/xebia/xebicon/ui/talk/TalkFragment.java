@@ -3,7 +3,11 @@ package fr.xebia.xebicon.ui.talk;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.graphics.ColorUtils;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -14,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +33,7 @@ import butterknife.OnClick;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.bus.MemoSavedEvent;
 import fr.xebia.xebicon.core.misc.Preferences;
+import fr.xebia.xebicon.core.utils.Compatibility;
 import fr.xebia.xebicon.model.Speaker;
 import fr.xebia.xebicon.model.Talk;
 import fr.xebia.xebicon.model.Vote;
@@ -55,7 +59,7 @@ import static fr.xebia.xebicon.core.XebiConApplication.BUS;
 import static fr.xebia.xebicon.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
-        ObservableScrollView.ScrollViewListener {
+        ObservableScrollView.ScrollViewListener, Toolbar.OnMenuItemClickListener {
 
     private static final String EXTRA_TALK_ID = "fr.xebia.xebicon.EXTRA_TALK_ID";
     private static final String EXTRA_TALK_TITLE = "fr.xebia.xebicon.EXTRA_TALK_TITLE";
@@ -63,6 +67,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     private static final float PHOTO_ASPECT_RATIO = 1.8f;
     private static final float GAP_FILL_DISTANCE_MULTIPLIER = 1.5f;
+
+    @InjectView(R.id.toolbar) Toolbar toolbar;
 
     @InjectView(R.id.scroll_view) ObservableScrollView mScrollView;
 
@@ -84,7 +90,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
-    @InjectView(R.id.talk_header_background) View mTalkHeaderBackground;
     @InjectView(R.id.title) TextView mTitle;
     @InjectView(R.id.add_schedule_button) CheckableFrameLayout mAddScheduleBtn;
     @InjectView(R.id.add_schedule_icon) ImageView mAddScheduleIcon;
@@ -108,8 +113,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     };
     private int mPhotoHeightPixels;
     private int mHeaderHeightPixels;
-    private int mHeaderTopClearance;
-    private boolean mGapFillShown;
+    private int mToolbarHeightPixels;
 
     public static Fragment newInstance(String talkId, String talkTitle, int color) {
         Bundle arguments = new Bundle();
@@ -147,41 +151,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.talk, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_note:
-                if (mTalk != null) {
-                    Intent intent = new Intent(getActivity(), MemoActivity.class);
-                    intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
-                    intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
-                    intent.putExtra(EXTRA_TALK_COLOR, mTalk.getColor());
-                    startActivity(intent);
-                }
-                return true;
-            case R.id.action_send:
-                if (mTalk != null) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("message/rfc822");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, mTalk.getUncotedTitle());
-                    intent.putExtra(Intent.EXTRA_TEXT, mTalk.getBody(getActivity()));
-                    try {
-                        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_memo_via)));
-                    } catch (android.content.ActivityNotFoundException ex) {
-                        Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
@@ -197,16 +166,20 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         setupCustomScrolling();
 
         mTitle.setText(mExtraTalkTitle);
-        mTalkHeaderBackground.setBackgroundColor(mExtraTalkColor);
+        toolbar.setBackgroundColor(mExtraTalkColor);
 
-        mTalkVote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), RatingActivity.class)
-                        .putExtra(EXTRA_TALK_ID, mTalk.getId())
-                        .putExtra(EXTRA_TALK_TITLE, mTalk.getTitle()));
-            }
-        });
+        toolbar.setNavigationIcon(R.drawable.ic_up);
+        toolbar.setNavigationOnClickListener(view1 -> NavUtils.navigateUpFromSameTask(getActivity()));
+        getActivity().getMenuInflater().inflate(R.menu.talk, toolbar.getMenu());
+
+        toolbar.setOnMenuItemClickListener(this);
+
+        mTalkHeaderContents.setBackgroundColor(mExtraTalkColor);
+
+        mTalkVote.setOnClickListener(v -> startActivity(new Intent(getActivity(), RatingActivity.class)
+                .putExtra(EXTRA_TALK_ID, mTalk.getId())
+                .putExtra(EXTRA_TALK_TITLE, mTalk.getTitle())
+                .putExtra(EXTRA_TALK_COLOR, mTalk.getColor())));
 
         getTalk();
 
@@ -250,11 +223,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private void recomputePhotoAndScrollingMetrics() {
-        final int actionBarSize = UIUtils.calculateActionBarSize(getActivity());
-        mHeaderTopClearance = actionBarSize - mTalkHeaderContents.getPaddingTop();
+        mToolbarHeightPixels = toolbar.getHeight();
         mHeaderHeightPixels = mTalkHeaderContents.getHeight();
 
-        mPhotoHeightPixels = mHeaderTopClearance;
         mPhotoHeightPixels = (int) (mTalkPhoto.getWidth() / PHOTO_ASPECT_RATIO);
         mPhotoHeightPixels = Math.min(mPhotoHeightPixels, getView().getHeight() * 2 / 3);
 
@@ -265,16 +236,10 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             mTalkPhotoContainer.setLayoutParams(lp);
         }
 
-        lp = mTalkHeaderBackground.getLayoutParams();
-        if (lp.height != mHeaderHeightPixels) {
-            lp.height = mHeaderHeightPixels;
-            mTalkHeaderBackground.setLayoutParams(lp);
-        }
-
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)
                 mTalkDetailsContainer.getLayoutParams();
-        if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels) {
-            mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels;
+        if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels + mToolbarHeightPixels) {
+            mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels + mToolbarHeightPixels;
             mTalkDetailsContainer.setLayoutParams(mlp);
         }
 
@@ -292,24 +257,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         // but locks to the top of the screen on scroll
         int scrollY = mScrollView.getScrollY();
 
-        float newTop = Math.max(mPhotoHeightPixels, scrollY + mHeaderTopClearance);
+        float newTop = Math.max(mPhotoHeightPixels, scrollY);
         mTalkHeader.setTranslationY(newTop);
-        mAddScheduleBtn.setTranslationY(newTop + mHeaderHeightPixels - mAddScheduleBtnHeightPixels / 2);
-
-        mTalkHeaderBackground.setPivotY(mHeaderHeightPixels);
-        int gapFillDistance = (int) (mHeaderTopClearance * GAP_FILL_DISTANCE_MULTIPLIER);
-        boolean showGapFill = (scrollY > (mPhotoHeightPixels - gapFillDistance));
-        float desiredHeaderScaleY = showGapFill ?
-                ((mHeaderHeightPixels + gapFillDistance + 1) * 1f / mHeaderHeightPixels) : 1f;
-
-        if (mGapFillShown != showGapFill) {
-            mTalkHeaderBackground.animate()
-                    .scaleY(desiredHeaderScaleY)
-                    .setInterpolator(new DecelerateInterpolator(2f))
-                    .setDuration(250)
-                    .start();
-        }
-        mGapFillShown = showGapFill;
+        mAddScheduleBtn.setTranslationY(newTop + mHeaderHeightPixels + mToolbarHeightPixels - mAddScheduleBtnHeightPixels / 2);
 
         // Move background photo (parallax effect)
         mTalkPhotoContainer.setTranslationY(scrollY * 0.6f);
@@ -375,12 +325,12 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             return true;
         }
         mTitle.setText(talk.getTitle());
-        mInformations.setText(String.format("%s | %s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
+        mInformations.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
 
         boolean favorite = mTalk.isFavorite();
         mAddScheduleBtn.setChecked(favorite, false);
         mAddScheduleBtn.setVisibility(talk.isKeynote() ? INVISIBLE : VISIBLE);
-        UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, false);
+        UIUtils.setOrAnimatePlusCheckIcon(getActivity(), mAddScheduleIcon, favorite, true);
 
         if (!TextUtils.isEmpty(talk.getSummary())) {
             try {
@@ -400,42 +350,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         bindMemo();
 
         refreshRatingBarState();
-        /*mTalkRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if ((mVote != null && (int) rating == mVote.getNote()) || !fromUser) {
-                    return;
-                }
-                long now = System.currentTimeMillis();
-                boolean conferenceEnded = now > Preferences.getSelectedConferenceEndTime(getActivity());
-                if (!(now > mTalk.getToUtcTime() - 20 * 60 * 1000 && !conferenceEnded)) {
-                    Toast.makeText(getActivity(), R.string.too_early_to_vote, Toast.LENGTH_LONG).show();
-                    //mTalkRatingBar.setRating(0);
-                    return;
-                }
-                if (rating == 0) {
-                    //mTalkRatingBar.setRating(1);
-                } else {
-                    Vote vote = new Vote((int) rating, mTalk.getId(), mTalk.getConferenceId());
-                    vote.saveAsync(new Model.OnSavedCallback() {
-                        @Override
-                        public void onSaved() {
-                            getActivity().startService(buildSendRatingIntent(getActivity(), mTalk));
-                        }
-                    });
-                }
-            }
-        });
-
-        if (mTalkRatingBar.getProgressDrawable() != null) {
-            try {
-                mTalkRatingBar.getProgressDrawable().mutate().setColorFilter(talk.getColor(), PorterDuff.Mode.SRC_IN);
-            } catch (Exception e) {
-                // TODO Check what happen
-                Timber.e(e, "Error mutating rating bar");
-            }
-        }
-        */
 
         Query.many(Speaker.class, "SELECT * FROM Speakers AS S JOIN Speaker_Talk ST ON S._id=ST.speakerId WHERE ST.talkId=? AND S" +
                         ".conferenceId=?",
@@ -457,13 +371,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             return;
         }
         mTalkRating.setVisibility(VISIBLE);
-        if (Preferences.hasUserScanIdForVote(getActivity())) {
-            //mTalkRatingBar.setVisibility(VISIBLE);
-            //mTalkRatingAlert.setVisibility(GONE);
-        } else {
-            //mTalkRatingBar.setVisibility(GONE);
-            //mTalkRatingAlert.setVisibility(VISIBLE);
-        }
     }
 
     @Override
@@ -519,5 +426,34 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     public void onEventMainThread(MemoSavedEvent event) {
         getTalk();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_note:
+                if (mTalk != null) {
+                    Intent intent = new Intent(getActivity(), MemoActivity.class);
+                    intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
+                    intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
+                    intent.putExtra(EXTRA_TALK_COLOR, mTalk.getColor());
+                    startActivity(intent);
+                }
+                return true;
+            case R.id.action_send:
+                if (mTalk != null) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("message/rfc822");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, mTalk.getUncotedTitle());
+                    intent.putExtra(Intent.EXTRA_TEXT, mTalk.getBody(getActivity()));
+                    try {
+                        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_memo_via)));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            default:
+                return false;
+        }
     }
 }

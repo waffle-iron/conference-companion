@@ -1,21 +1,7 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
-        maven { url "http://dl.bintray.com/populov/maven" }
-        jcenter()
-
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.0'
-        classpath 'io.fabric.tools:gradle:1.+'
-
-        classpath 'com.mutualmobile.gradle.plugins:dexinfo:0.1.2'
-    }
-}
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.mutualmobile.gradle.plugins.dexinfo'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     mavenCentral()
@@ -34,7 +20,7 @@ android {
         applicationId "fr.xebia.xebicon"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
+        versionCode 2
         versionName "1.0.0"
     }
 
@@ -55,8 +41,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -94,6 +80,7 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
 
     compile 'com.parse.bolts:bolts-android:1.2.1'

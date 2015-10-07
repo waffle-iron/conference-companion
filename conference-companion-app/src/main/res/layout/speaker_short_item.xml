@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<fr.xebia.xebicon.ui.speaker.SpeakerItemView xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.xebicon.ui.speaker.SpeakerItemView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_margin="1dp"
     app:foreground="?photoItemForeground">
 
     <ImageView
@@ -18,11 +20,11 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="bottom"
-        android:textSize="12sp"
-        android:ellipsize="end"
         android:background="?colorPrimary"
+        android:ellipsize="end"
+        android:gravity="center"
         android:padding="5dp"
         android:textColor="@android:color/white"
-        android:gravity="center" />
+        android:textSize="12sp"/>
 
 </fr.xebia.xebicon.ui.speaker.SpeakerItemView>

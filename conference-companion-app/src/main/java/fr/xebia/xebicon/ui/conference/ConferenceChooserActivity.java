@@ -2,9 +2,11 @@ package fr.xebia.xebicon.ui.conference;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
 
+import butterknife.InjectView;
 import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
@@ -12,10 +14,18 @@ import fr.xebia.xebicon.ui.synchro.SynchroFragment;
 
 public class ConferenceChooserActivity extends BaseActivity {
 
+    @InjectView(R.id.toolbar) Toolbar toolbar;
+
+    public ConferenceChooserActivity() {
+        super(R.layout.conference_chooser_activity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.conference_chooser_activity);
+
+        setSupportActionBar(toolbar);
+
         mDontCheckConference = true;
         getWindow().setBackgroundDrawableResource(android.R.color.white);
         ActionBar actionBar = getSupportActionBar();

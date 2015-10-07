@@ -5,21 +5,19 @@ import android.support.v7.app.ActionBar;
 
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.activity.NavigationActivity;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends NavigationActivity {
+
+    public SettingsActivity() {
+        super(R.layout.settings_activity);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
-    }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.settings);
+        setTitle(R.string.settings);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()

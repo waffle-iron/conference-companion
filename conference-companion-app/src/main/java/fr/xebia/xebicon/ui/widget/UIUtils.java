@@ -8,16 +8,23 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.AnimatedStateListDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import fr.xebia.xebicon.R;
+import fr.xebia.xebicon.core.utils.Compatibility;
 
 /**
  * https://github.com/google/iosched/blob/master/android/src/main/java/com/google/samples/apps/iosched/util/UIUtils.java
  */
 public class UIUtils {
+
+    private static final int[] STATE_CHECKED = new int[]{android.R.attr.state_checked};
+    private static final int[] STATE_UNCHECKED = new int[]{};
 
     private static final Handler HANDLER = new Handler();
     public static final float SESSION_BG_COLOR_SCALE_FACTOR = 0.65f;
@@ -29,27 +36,32 @@ public class UIUtils {
         return Color.argb(alphaInt, Color.red(color), Color.green(color), Color.blue(color));
     }
 
-    public static int calculateActionBarSize(Context context) {
-        if (context == null) {
-            return 0;
+    public static void setOrAnimatePlusCheckIcon(Context context, final ImageView imageView, boolean isCheck, boolean allowAnimate) {
+        if (!Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
+            compatSetOrAnimatePlusCheckIcon(context, imageView, isCheck, allowAnimate);
+            return;
         }
 
-        Resources.Theme curTheme = context.getTheme();
-        if (curTheme == null) {
-            return 0;
+        Drawable drawable = imageView.getDrawable();
+        if (!(drawable instanceof AnimatedStateListDrawable)) {
+            drawable = context.getResources().getDrawable(R.drawable.add_schedule_fab_icon_anim);
+            imageView.setImageDrawable(drawable);
         }
-
-        TypedArray att = curTheme.obtainStyledAttributes(RES_IDS_ACTION_BAR_SIZE);
-        if (att == null) {
-            return 0;
+        imageView.setColorFilter(isCheck ?
+                context.getResources().getColor(R.color.theme_accent_1) : Color.WHITE);
+        if (allowAnimate) {
+            imageView.setImageState(isCheck ? STATE_UNCHECKED : STATE_CHECKED, false);
+            drawable.jumpToCurrentState();
+            imageView.setImageState(isCheck ? STATE_CHECKED : STATE_UNCHECKED, false);
+        } else {
+            imageView.setImageState(isCheck ? STATE_CHECKED : STATE_UNCHECKED, false);
+            drawable.jumpToCurrentState();
         }
-
-        float size = att.getDimension(0, 0);
-        att.recycle();
-        return (int) size;
     }
 
-    public static void setOrAnimatePlusCheckIcon(Context context, final ImageView imageView, boolean isCheck, boolean allowAnimate) {
+    public static void compatSetOrAnimatePlusCheckIcon(Context context, final ImageView imageView, boolean isCheck,
+                                                boolean allowAnimate) {
+
         final int imageResId = isCheck
                 ? R.drawable.add_schedule_button_icon_checked
                 : R.drawable.add_schedule_button_icon_unchecked;
@@ -94,12 +106,7 @@ public class UIUtils {
             imageView.setTag(set);
             set.start();
         } else {
-            HANDLER.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageView.setImageResource(imageResId);
-                }
-            });
+            new Handler().post(() -> imageView.setImageResource(imageResId));
         }
     }
 

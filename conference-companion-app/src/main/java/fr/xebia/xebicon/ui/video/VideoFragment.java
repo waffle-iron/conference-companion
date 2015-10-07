@@ -3,11 +3,11 @@ package fr.xebia.xebicon.ui.video;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeIntents;
@@ -22,28 +22,26 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.XebiConApplication;
-import fr.xebia.xebicon.core.adapter.NewBaseAdapter;
+import fr.xebia.xebicon.core.adapter.BaseRecyclerAdapter;
 import fr.xebia.xebicon.ui.video.view.VideoItemView;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class VideoFragment extends Fragment implements Observer<List<PlaylistItem>> {
 
-    @InjectView(R.id.video_list) ListView videoListView;
+    @InjectView(R.id.video_list) RecyclerView videoListView;
     @InjectView(R.id.video_empty) LinearLayout emptyView;
 
     private String nextPageToken;
-    private NewBaseAdapter<PlaylistItem, VideoItemView> adapter;
+    private BaseRecyclerAdapter<PlaylistItem, VideoItemView> adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new NewBaseAdapter<>(getActivity(), R.layout.item_view_video);
+        adapter = new BaseRecyclerAdapter<>(getActivity(), R.layout.item_view_video);
     }
 
     @Nullable
@@ -59,41 +57,29 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
         ButterKnife.inject(this, view);
 
         videoListView.setAdapter(adapter);
-        videoListView.setEmptyView(emptyView);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        Observable.create(new Observable.OnSubscribe<PlaylistItemListResponse>() {
-            @Override
-            public void call(Subscriber<? super PlaylistItemListResponse> subscriber) {
-                try {
-                    PlaylistItemListResponse videos = XebiConApplication.getVideoApi().getVideos();
-                    subscriber.onNext(videos);
-                } catch (IOException e) {
-                    subscriber.onError(e);
-                }
-
-                subscriber.onCompleted();
+        Observable.<PlaylistItemListResponse>create(subscriber -> {
+            try {
+                PlaylistItemListResponse videos = XebiConApplication.getVideoApi().getVideos();
+                subscriber.onNext(videos);
+            } catch (IOException e) {
+                subscriber.onError(e);
             }
+
+            subscriber.onCompleted();
         })
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<PlaylistItemListResponse, Observable<PlaylistItem>>() {
-                    @Override
-                    public Observable<PlaylistItem> call(PlaylistItemListResponse playlistItemListResponse) {
-                        nextPageToken = playlistItemListResponse.getNextPageToken();
+                .flatMap(playlistItemListResponse -> {
+                    nextPageToken = playlistItemListResponse.getNextPageToken();
 
-                        return Observable.from(playlistItemListResponse.getItems());
-                    }
+                    return Observable.from(playlistItemListResponse.getItems());
                 })
-                .filter(new Func1<PlaylistItem, Boolean>() {
-                    @Override
-                    public Boolean call(PlaylistItem playlistItem) {
-                        return !playlistItem.getSnippet().getTitle().equals("Private video");
-                    }
-                })
+                .filter(playlistItem -> !playlistItem.getSnippet().getTitle().equals("Private video"))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
@@ -111,19 +97,14 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
 
     @Override
     public void onNext(List<PlaylistItem> playlistItems) {
-        adapter.setData(playlistItems);
-        adapter.notifyDataSetChanged();
-    }
-
-    @OnItemClick(R.id.video_list)
-    public void onVideoClick(int position) {
-        PlaylistItem item = adapter.getItem(position);
-
-        if (YouTubeIntents.isYouTubeInstalled(getContext())) {
-            startActivity(YouTubeIntents.createPlayVideoIntent(getContext(), item.getSnippet().getResourceId().getVideoId()));
+        if (playlistItems.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            videoListView.setVisibility(View.GONE);
         } else {
-            Toast.makeText(getContext(), R.string.youtube_not_installed, Toast.LENGTH_SHORT).show();
+            emptyView.setVisibility(View.GONE);
+            videoListView.setVisibility(View.VISIBLE);
+            adapter.setDatas(playlistItems);
         }
-
     }
+
 }

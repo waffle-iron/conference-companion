@@ -12,18 +12,20 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.activity.NavigationActivity;
 
-public class TimelineActivity extends BaseActivity {
+public class TimelineActivity extends NavigationActivity {
 
     @InjectView(android.R.id.list) ListView listView;
     @InjectView(android.R.id.empty) TextView emptyView;
 
+    public TimelineActivity() {
+        super(R.layout.timeline_activity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.timeline_activity);
-
-        ButterKnife.inject(this);
 
         setTitle(R.string.nav_timeline);
 

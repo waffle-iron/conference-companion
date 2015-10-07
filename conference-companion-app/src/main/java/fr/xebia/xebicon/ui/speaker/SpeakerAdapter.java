@@ -34,7 +34,7 @@ public class SpeakerAdapter extends BaseAdapter<List<Speaker>> implements Sticky
 
     @Override
     protected void bindView(int position, View view) {
-        ((SpeakerItemView) view).bind(getItem(position));
+        ((SpeakerItemView) view).bindView(getItem(position));
     }
 
     @Override

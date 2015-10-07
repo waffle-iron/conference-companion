@@ -5,18 +5,18 @@ import android.support.v7.app.ActionBar;
 
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.activity.NavigationActivity;
 
-public class VideoActivity extends BaseActivity {
+public class VideoActivity extends NavigationActivity {
+
+    public VideoActivity() {
+        super(R.layout.activity_video_library);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_video_library);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.nav_video);

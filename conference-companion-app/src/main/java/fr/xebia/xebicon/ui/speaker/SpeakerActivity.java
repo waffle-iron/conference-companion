@@ -1,25 +1,28 @@
 package fr.xebia.xebicon.ui.speaker;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 
+import butterknife.InjectView;
 import fr.xebia.xebicon.R;
-import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.activity.NavigationActivity;
 
-public class SpeakerActivity extends BaseActivity {
+public class SpeakerActivity extends NavigationActivity {
+
+    @InjectView(R.id.toolbar) Toolbar toolbar;
+
+    public SpeakerActivity() {
+        super(R.layout.speaker_activity);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.speaker_activity);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.speakers);
-    }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+        setSupportActionBar(toolbar);
+
+        setTitle(R.string.speakers);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.main_content, new SpeakerFragment())

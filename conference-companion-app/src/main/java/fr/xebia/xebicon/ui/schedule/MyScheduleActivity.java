@@ -8,17 +8,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.activity.NavigationActivity;
 import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.model.MySchedule;
 import fr.xebia.xebicon.model.Schedule;
 import fr.xebia.xebicon.model.Talk;
-import fr.xebia.xebicon.ui.widget.DrawShadowFrameLayout;
 import fr.xebia.xebicon.ui.widget.UIUtils;
 import icepick.Icepick;
 import icepick.Icicle;
@@ -26,11 +27,10 @@ import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 
-public class MyScheduleActivity extends BaseActivity implements ManyQuery.ResultHandler<Talk> {
+public class MyScheduleActivity extends NavigationActivity implements ManyQuery.ResultHandler<Talk> {
 
     private static final long DAY_MILLIS = 24 * 60 * 60 * 1000;
 
-    @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
     @InjectView(R.id.tab_layout) TabLayout mPagerStrip;
     @InjectView(R.id.view_pager) ViewPager mViewPager;
 
@@ -39,32 +39,18 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     private boolean setDefaultPage = true;
     @Icicle int mSelectedPage;
 
+    public MyScheduleActivity() {
+        super(R.layout.my_schedule_activity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_schedule_activity);
+
         int conferenceId = Preferences.getSelectedConference(this);
         String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC, toTime ASC, _id ASC";
         Query.many(Talk.class, query, conferenceId).getAsync(getLoaderManager(), this);
         computSelectedPage();
-    }
-
-    @Override
-    protected int getNavId() {
-        return R.id.nav_myschedule;
-    }
-
-    private void computSelectedPage() {
-        long conferenceStartTime = Preferences.getSelectedConferenceStartTime(this);
-        long gapFromStart = System.currentTimeMillis() - conferenceStartTime;
-        if (gapFromStart > 0) {
-            mSelectedPage = (int) (gapFromStart / DAY_MILLIS);
-        }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -83,15 +69,21 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
             }
         });
         getSupportActionBar().setTitle(R.string.my_schedule);
-        mDrawShadowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mDrawShadowFrameLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                int shadowTopOffset = UIUtils.calculateActionBarSize(MyScheduleActivity.this) + mPagerStrip.getHeight();
-                mDrawShadowFrameLayout.setShadowTopOffset(shadowTopOffset);
-            }
-        });
     }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_myschedule;
+    }
+
+    private void computSelectedPage() {
+        long conferenceStartTime = Preferences.getSelectedConferenceStartTime(this);
+        long gapFromStart = System.currentTimeMillis() - conferenceStartTime;
+        if (gapFromStart > 0) {
+            mSelectedPage = (int) (gapFromStart / DAY_MILLIS);
+        }
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

@@ -3,6 +3,8 @@ package fr.xebia.xebicon.ui.browse;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.core.activity.BaseActivity;
+import fr.xebia.xebicon.core.adapter.BaseRecyclerAdapter;
 import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.core.utils.SqlUtils;
 import fr.xebia.xebicon.model.Talk;
@@ -36,7 +39,9 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
     public static String ARG_AVAILABLE_TALKS = "fr.xebia.xebicon.ARG_AVAILABLE_TALKS";
 
     @InjectView(R.id.empty_id) TextView mEmptyText;
-    @InjectView(R.id.talks_grid) CollectionView mTalksGrid;
+    @InjectView(R.id.talks_grid) RecyclerView mTalksGrid;
+
+    private BaseRecyclerAdapter<Talk, TalkItemView> adapter;
 
     private List<Talk> mTalks;
     private boolean mLandscapeMode;
@@ -54,6 +59,9 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
         int conferenceId = Preferences.getSelectedConference(getActivity());
         mLandscapeMode = getResources().getBoolean(R.bool.landscape);
         mWideMode = getResources().getBoolean(R.bool.wide_mode);
+
+        adapter = new BaseRecyclerAdapter<>(getActivity(), R.layout.talk_item_view);
+
         List<String> availableTalksIds = getArguments().getStringArrayList(ARG_AVAILABLE_TALKS);
         Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? AND _id IN (" +
                 SqlUtils.toSqlArray(availableTalksIds) + ") ORDER BY fromTime ASC, toTime ASC, _id ASC", conferenceId).getAsync(getLoaderManager(), this);
@@ -69,9 +77,8 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
-        mTalksGrid.setContentTopClearance(UIUtils.calculateActionBarSize(getActivity()) +
-                getResources().getDimensionPixelSize(R.dimen.explore_grid_padding));
-        ((BaseActivity) getActivity()).enableActionBarAutoHide(mTalksGrid);
+
+        mTalksGrid.setLayoutManager(new GridLayoutManager(getActivity(), getNumColumns()));
     }
 
     @Override
@@ -114,41 +121,9 @@ public class BrowseTalksFragment extends Fragment implements ManyQuery.ResultHan
             mTalksGrid.setVisibility(View.VISIBLE);
             mEmptyText.setVisibility(View.GONE);
 
-            mTalksGrid.setCollectionAdapter(new BrowseTalksAdapter(getActivity(), R.layout.talk_item_view, mTalks));
+            adapter.setDatas(mTalks);
+            mTalksGrid.setAdapter(adapter);
 
-            long selectedConferenceEndTime = Preferences.getSelectedConferenceEndTime(getActivity());
-            List<Talk> futureTalks = new ArrayList<>();
-            List<Talk> pastTalks = new ArrayList<>();
-            long currentTime = System.currentTimeMillis();
-            for (Talk talk : mTalks) {
-                if (currentTime > talk.getToUtcTime()&& !(currentTime > selectedConferenceEndTime)) {
-                    pastTalks.add(talk);
-                } else {
-                    futureTalks.add(talk);
-                }
-            }
-
-            int numColumns = getNumColumns();
-            CollectionView.Inventory inventory = new CollectionView.Inventory();
-
-            CollectionView.InventoryGroup futureTalksGroup = new CollectionView.InventoryGroup(DEFAULT_GROUP_ID)
-                    .setDisplayCols(numColumns)
-                    .setShowHeader(false)
-                    .setHeaderLabel("")
-                    .setItemCount(futureTalks.size());
-            inventory.addGroup(futureTalksGroup);
-
-            if (pastTalks.size() > 0) {
-                CollectionView.InventoryGroup pastTalksGroup = new CollectionView.InventoryGroup(PAST_GROUP_ID)
-                        .setDisplayCols(numColumns)
-                        .setShowHeader(true)
-                        .setHeaderLabel(getString(R.string.talks_ended))
-                        .setOffset(futureTalks.size())
-                        .setItemCount(pastTalks.size());
-                inventory.addGroup(pastTalksGroup);
-            }
-
-            mTalksGrid.updateInventory(inventory, mResumed);
         }
         mPopulated = true;
     }

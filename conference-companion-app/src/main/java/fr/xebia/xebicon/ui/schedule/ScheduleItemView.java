@@ -1,6 +1,7 @@
 package fr.xebia.xebicon.ui.schedule;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -14,11 +15,13 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
+import fr.xebia.xebicon.core.adapter.BaseItemView;
 import fr.xebia.xebicon.model.Talk;
+import fr.xebia.xebicon.ui.talk.TalkActivity;
 import fr.xebia.xebicon.ui.widget.ExtendedRelativeLayout;
 import fr.xebia.xebicon.ui.widget.UIUtils;
 
-public class ScheduleItemView extends ExtendedRelativeLayout implements Callback {
+public class ScheduleItemView extends ExtendedRelativeLayout implements Callback, BaseItemView<Talk>, View.OnClickListener {
 
     @InjectView(R.id.schedule_bg_img) ImageView mScheduleBgImg;
     @InjectView(R.id.schedule_title) TextView mScheduleTitle;
@@ -27,6 +30,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @InjectView(R.id.indicator_in_schedule) View mInSchedule;
     private boolean wideMode;
     private boolean landscape;
+    private Talk talk;
 
     public ScheduleItemView(Context context) {
         super(context);
@@ -39,7 +43,11 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+
         ButterKnife.inject(this);
+
+        setOnClickListener(this);
+
         wideMode = getContext().getResources().getBoolean(R.bool.wide_mode);
         landscape = getContext().getResources().getBoolean(R.bool.landscape);
     }
@@ -89,5 +97,22 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @Override
     public void onError() {
 
+    }
+
+    @Override
+    public void bindView(Talk el) {
+        this.talk = el;
+        bind(el, false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (!talk.isBreak()) {
+            Intent intent = new Intent(getContext(), TalkActivity.class);
+            intent.putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId());
+            intent.putExtra(TalkActivity.EXTRA_TALK_TITLE, talk.getTitle());
+            intent.putExtra(TalkActivity.EXTRA_TALK_COLOR, talk.getColor());
+            getContext().startActivity(intent);
+        }
     }
 }

@@ -17,18 +17,19 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/add_schedule_fab_checked_pressed"
-        android:state_checked="true"
-        android:state_pressed="true" />
+          android:state_checked="true"
+          android:state_pressed="true"/>
     <item android:drawable="@drawable/add_schedule_fab_checked_focused"
-        android:state_checked="true"
-        android:state_focused="true" />
+          android:state_checked="true"
+          android:state_focused="true"/>
     <item android:drawable="@drawable/add_schedule_fab_checked_default"
-        android:state_checked="true" />
+          android:state_checked="true"/>
 
     <item android:drawable="@drawable/add_schedule_fab_unchecked_pressed"
-        android:state_pressed="true" />
+          android:state_pressed="true"/>
     <item android:drawable="@drawable/add_schedule_fab_unchecked_focused"
-        android:state_focused="true" />
-    <item android:drawable="@drawable/add_schedule_fab_unchecked_default" />
+          android:state_focused="true"/>
+    <item android:drawable="@drawable/add_schedule_fab_unchecked_default"/>
+
 
 </selector>

@@ -37,8 +37,6 @@ public class RatingFragment extends Fragment {
     @InjectView(R.id.rating_bar_2) NumberRatingBar mQ2FeedbackBar;
     @InjectView(R.id.rating_bar_3) NumberRatingBar mQ3FeedbackBar;
 
-    private Vote mVote;
-
     private String talkId;
     private String talkTitle;
 
@@ -77,7 +75,6 @@ public class RatingFragment extends Fragment {
                 .getAsync(getLoaderManager(), new OneQuery.ResultHandler<Vote>() {
                     @Override
                     public boolean handleResult(final Vote vote) {
-                        mVote = vote;
                         if (vote == null || getView() == null) {
                             return true;
                         }

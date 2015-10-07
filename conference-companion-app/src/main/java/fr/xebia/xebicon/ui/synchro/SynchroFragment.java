@@ -14,7 +14,7 @@ import butterknife.OnClick;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.bus.SynchroFinishedEvent;
 import fr.xebia.xebicon.service.SynchroIntentService;
-import fr.xebia.xebicon.ui.HomeActivity;
+import fr.xebia.xebicon.ui.ExploreActivity;
 
 import static fr.xebia.xebicon.core.XebiConApplication.BUS;
 
@@ -77,7 +77,7 @@ public class SynchroFragment extends Fragment {
 
     public void onEventMainThread(SynchroFinishedEvent synchroFinishedEvent) {
         if (synchroFinishedEvent.success) {
-            Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+            Intent homeIntent = new Intent(getActivity(), ExploreActivity.class);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(homeIntent);
             getActivity().finish();
