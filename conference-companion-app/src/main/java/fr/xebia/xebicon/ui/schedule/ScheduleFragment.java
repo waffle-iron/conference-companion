@@ -376,7 +376,9 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
     @Override
     public boolean handleResult(CursorList<Talk> cursorList) {
-        swipeRefreshLayout.setRefreshing(false);
+        if (swipeRefreshLayout != null){
+            swipeRefreshLayout.setRefreshing(false);
+        }
         mSchedule = new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList(), true);
         mTagMetadata = TagMetadata.fromSchedule(mSchedule);
 
