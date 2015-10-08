@@ -12,6 +12,8 @@ import android.view.View;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.ui.ExploreActivity;
+import fr.xebia.xebicon.ui.about.AboutActivity;
+import fr.xebia.xebicon.ui.expert.ExpertActivity;
 import fr.xebia.xebicon.ui.map.MapActivity;
 import fr.xebia.xebicon.ui.schedule.MyScheduleActivity;
 import fr.xebia.xebicon.ui.settings.SettingsActivity;
@@ -81,12 +83,20 @@ public abstract class NavigationActivity extends BaseActivity implements Navigat
                 goTo(new Intent(this, SpeakerActivity.class));
                 break;
 
+            case R.id.nav_experts:
+                goTo(new Intent(this, ExpertActivity.class));
+                break;
+
             case R.id.nav_timeline:
                 goTo(new Intent(this, TimelineActivity.class));
                 break;
 
             case R.id.nav_video:
                 goTo(new Intent(this, VideoActivity.class));
+                break;
+
+            case R.id.nav_about:
+                goTo(new Intent(this, AboutActivity.class));
                 break;
 
             case R.id.nav_settings:
