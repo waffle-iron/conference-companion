@@ -190,12 +190,16 @@ public class Talk extends Model implements Parcelable {
         buffer.append(")");
         buffer.append("\n");
         buffer.append("\n");
-        buffer.append(context.getResources().getString(R.string.memo).toUpperCase());
-        buffer.append("\n");
-        buffer.append("\n");
-        buffer.append(memo);
-        buffer.append("\n");
-        buffer.append("\n");
+
+        if (!TextUtils.isEmpty(memo)){
+            buffer.append(context.getResources().getString(R.string.memo).toUpperCase());
+            buffer.append("\n");
+            buffer.append("\n");
+            buffer.append(memo);
+            buffer.append("\n");
+            buffer.append("\n");
+        }
+
         buffer.append(context.getResources().getString(R.string.summary).toUpperCase());
         buffer.append("\n");
         buffer.append("\n");
