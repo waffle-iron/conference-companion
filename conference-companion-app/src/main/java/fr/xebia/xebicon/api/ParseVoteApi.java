@@ -8,6 +8,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import fr.xebia.xebicon.model.Vote;
+import rx.Observable;
+import rx.schedulers.Schedulers;
 
 import static android.provider.Settings.Secure.ANDROID_ID;
 
@@ -23,31 +25,38 @@ public class ParseVoteApi implements VoteApi {
     public void sendRating(Vote vote) {
         String userId = Secure.getString(context.getContentResolver(), ANDROID_ID);
 
-        ParseObject parseVote = null;
+        Observable.create(subscriber -> {
+            ParseObject parseVote = null;
 
-        try {
-            parseVote = new ParseQuery("Vote")
-                    .whereMatches("talk", vote.getTalkId())
-                    .whereMatches("user", userId)
-                    .getFirst();
+            try {
+                parseVote = new ParseQuery("Vote")
+                        .whereMatches("talk", vote.getTalkId())
+                        .whereMatches("user", userId)
+                        .getFirst();
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-        if (parseVote == null) {
-            parseVote = new ParseObject("Vote");
-        }
+            if (parseVote == null) {
+                parseVote = new ParseObject("Vote");
+            }
 
-        parseVote.put("user", userId);
-        parseVote.put("talk", vote.getTalkId());
-        parseVote.put("rate", vote.getRate());
-        parseVote.put("revelent", vote.getRevelent());
-        parseVote.put("content", vote.getContent());
-        parseVote.put("speakers", vote.getSpeakers());
-        parseVote.put("comment", vote.getComment());
+            parseVote.put("user", userId);
+            parseVote.put("talk", vote.getTalkId());
+            parseVote.put("rate", vote.getRate());
+            parseVote.put("revelent", vote.getRevelent());
+            parseVote.put("content", vote.getContent());
+            parseVote.put("speakers", vote.getSpeakers());
+            parseVote.put("comment", vote.getComment());
 
-        parseVote.saveEventually();
+            parseVote.saveEventually();
+        })
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        aVoid -> {},
+                        throwable -> {});
+
 
     }
 }
