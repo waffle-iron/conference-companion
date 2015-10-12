@@ -3,6 +3,7 @@ package fr.xebia.xebicon.model;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Html;
 import android.text.TextUtils;
 
 import java.util.Collection;
@@ -198,7 +199,7 @@ public class Talk extends Model implements Parcelable {
         buffer.append(context.getResources().getString(R.string.summary).toUpperCase());
         buffer.append("\n");
         buffer.append("\n");
-        buffer.append(summary);
+        buffer.append(Html.fromHtml(summary));
         if (speakers != null) {
             buffer.append("\n");
             buffer.append("\n");
@@ -209,8 +210,6 @@ public class Talk extends Model implements Parcelable {
                 buffer.append(speaker.getFirstName());
                 buffer.append(" ");
                 buffer.append(speaker.getLastName());
-                buffer.append(" ");
-                buffer.append(speaker.getBlog());
             }
         }
         return buffer.toString();

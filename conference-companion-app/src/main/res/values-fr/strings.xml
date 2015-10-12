@@ -11,7 +11,7 @@
     <string name="action_send">Envoyé</string>
     <string name="cannot_send_email">Aucun client mail trouvé</string>
     <string name="send_memo_via">Send memo by</string>
-    <string name="authors">Authors</string>
+    <string name="authors">Speakers</string>
     <string name="navigation_drawer_open">Ouvrir le navigation drawer</string>
     <string name="navigation_drawer_close">Fermer le navigation drawer</string>
     <string name="scan_nfc_hint">Posez votre tag NFC à l\'arrière de votre appareil</string>
