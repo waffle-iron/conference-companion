@@ -15,15 +15,6 @@
     <PreferenceCategory
         android:title="@string/general">
 
-
-        <Preference
-            android:key="about_key"
-            android:title="@string/about">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="http://www.xebia.fr"/>
-        </Preference>
-
         <Preference
             android:defaultValue="Not Set"
             android:key="version_key"

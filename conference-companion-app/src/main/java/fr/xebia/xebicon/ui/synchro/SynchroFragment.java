@@ -82,7 +82,7 @@ public class SynchroFragment extends Fragment {
             startActivity(homeIntent);
             getActivity().finish();
         } else {
-            Toast.makeText(getActivity(), R.string.synchro_failed, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.synchro_failed, Toast.LENGTH_SHORT).show();
             progressContainer.setVisibility(View.GONE);
             errorContainer.setVisibility(View.VISIBLE);
         }
