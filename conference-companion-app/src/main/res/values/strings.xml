@@ -128,5 +128,8 @@
     <string name="nav_experts">Coffee expert</string>
     <string name="nav_about">About</string>
     <string name="about_content"><![CDATA[<p>This event, organized by Xebia and the Alliance, has been created to share our expertise acquired in our missions and in our monthly XKE (Xebia Knowledge Exchange).</p><p>Xebia is an IT consulting company specialised in Big Data, Web, Java and mobility technologies with agile methodes.<br/>The Alliance is an ecoystem of complementary companies, experts on their domains. These 7 compagnies have many skills to organize efficient and coherent digital strategies equally technological, functionals or methodological.</p><p>Contact us :<br/>Phone : +33 (0)1 53 89 99 99<br/>Email : info@xebia.fr<br/>Address : 156 Boulevard Haussmann, Paris 75008</p>]]></string>
-    <string name="experts_content"><![CDATA[<p>One on One technical chats.<br/>40 experts, 9 themes, 1 dedicated place.</p><p>During 10 minutes, you will have the opportunity to ask your questions on a one on basis with our experts ! <br/>Data, Mobile, Agile, Web, DevOps, Cloud, Front-end, Back-end, IoT !<br/>You just have to take an ""appointment"" with our staff with one of our experts.</p>]]></string>
+    <string name="experts_content"><![CDATA[<p>One to One technical chats.<br/>40 experts, 9 themes, 1 dedicated place.</p><p>During 10 minutes, you will have the opportunity to ask your questions on a one on basis with our experts ! <br/>Data, Mobile, Agile, Web, DevOps, Cloud, Front-end, Back-end, IoT !</p><p><b>You just have to take an ""appointment"" with our staff with one of our experts.</b></p>]]></string>
+    <string name="expert_people">40 experts</string>
+    <string name="expert_theme">9 thématiques</string>
+    <string name="expert_place">1 lieu dédié</string>
 </resources>
