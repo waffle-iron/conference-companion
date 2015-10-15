@@ -60,7 +60,10 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
                 MeasureSpec.makeMeasureSpec((int) (widthSize / 1.7f), widthMode) : widthMeasureSpec);
     }
 
-    public void bind(Talk talk, boolean conferenceEnded) {
+    @Override
+    public void bindView(Talk el) {
+        this.talk = el;
+
         setBackgroundColor(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setColorFilter(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setBackgroundColor(talk.getColor());
@@ -73,7 +76,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
 
         mScheduleTitle.setText(talk.getTitle());
 
-        if (!conferenceEnded && System.currentTimeMillis() > talk.getToUtcTime()) {
+        if (System.currentTimeMillis() > talk.getToUtcTime()) {
             mScheduleRoom.setText(getResources().getString(R.string.ended));
         } else {
             mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
@@ -97,12 +100,6 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @Override
     public void onError() {
 
-    }
-
-    @Override
-    public void bindView(Talk el) {
-        this.talk = el;
-        bind(el, false);
     }
 
     @Override

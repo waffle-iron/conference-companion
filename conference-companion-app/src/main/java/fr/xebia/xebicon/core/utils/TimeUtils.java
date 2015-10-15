@@ -31,13 +31,11 @@ public class TimeUtils {
 
     public static DateFormat buildTimeFormatter() {
         DateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        timeFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         return timeFormatter;
     }
 
     public static DateFormat buildDayFormatter() {
         DateFormat timeFormatter = new SimpleDateFormat("EEEE", Locale.getDefault());
-        timeFormatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         return timeFormatter;
     }
 

@@ -65,7 +65,10 @@ public class TalkItemView extends FrameLayout implements BaseItemView<Talk>, Vie
         };
     }
 
-    public void bind(Talk talk, boolean conferenceEnded) {
+    @Override
+    public void bindView(Talk el) {
+        this.talk = el;
+
         setTag(talk);
         setBackgroundColor(talk.getColor());
         Picasso.with(getContext()).load(getItemBackgroundResource(talk))
@@ -76,7 +79,7 @@ public class TalkItemView extends FrameLayout implements BaseItemView<Talk>, Vie
         mTalkCategory.setText(talk.getType());
         mTalkTitle.setText(talk.getTitle());
 
-        if (!conferenceEnded && System.currentTimeMillis() > talk.getToUtcTime()) {
+        if (System.currentTimeMillis() > talk.getToUtcTime()) {
             mTalkSubTitle.setText(getResources().getString(R.string.ended));
         } else {
             mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
@@ -91,12 +94,6 @@ public class TalkItemView extends FrameLayout implements BaseItemView<Talk>, Vie
 
     private int getItemBackgroundResource(Talk talk) {
         return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
-    }
-
-    @Override
-    public void bindView(Talk el) {
-        this.talk = el;
-        bind(el, false);
     }
 
     @Override

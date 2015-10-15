@@ -86,16 +86,12 @@ public class XebiConApplication extends Application {
         }
 
         sGson = new GsonBuilder()
-                .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                    @Override
-                    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                        try {
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.FRANCE);
-                            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
-                            return simpleDateFormat.parse(json.getAsJsonPrimitive().getAsString());
-                        } catch (ParseException e) {
-                            return null;
-                        }
+                .registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> {
+                    try {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.FRANCE);
+                        return simpleDateFormat.parse(json.getAsJsonPrimitive().getAsString());
+                    } catch (ParseException e) {
+                        return null;
                     }
                 })
                 .create();
