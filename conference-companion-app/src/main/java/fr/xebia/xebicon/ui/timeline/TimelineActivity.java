@@ -1,22 +1,20 @@
 package fr.xebia.xebicon.ui.timeline;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
-import fr.xebia.xebicon.core.activity.BaseActivity;
 import fr.xebia.xebicon.core.activity.NavigationActivity;
+import fr.xebia.xebicon.ui.widget.ObservableListView;
 
 public class TimelineActivity extends NavigationActivity {
 
-    @InjectView(android.R.id.list) ListView listView;
+    @InjectView(android.R.id.list) ObservableListView listView;
     @InjectView(android.R.id.empty) TextView emptyView;
 
     public TimelineActivity() {
