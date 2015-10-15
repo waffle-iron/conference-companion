@@ -175,7 +175,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         int itemLayout = filtering ? R.layout.talk_item_view : R.layout.schedule_item_view;
         layoutManager.setSpanCount(getNumColumns(filtering));
         adapter.setViewResId(itemLayout);
-        mScheduleGrid.setAdapter(adapter);
 
         if (mTagMetadata == null) {
             return;
@@ -216,6 +215,8 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
             adapter.setDatas(mergedTalks);
         }
+
+        mScheduleGrid.setAdapter(adapter);
     }
 
     private int getNumColumns(boolean filtering) {
