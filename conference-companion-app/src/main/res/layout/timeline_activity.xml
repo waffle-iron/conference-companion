@@ -45,13 +45,21 @@
                 android:text="@string/timeline_empty"
                 android:visibility="gone"/>
 
-            <fr.xebia.xebicon.ui.widget.ObservableListView
-                android:id="@id/android:list"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@color/divider_gray"
-                android:dividerHeight="1dp"
-                android:drawSelectorOnTop="false"/>
+                android:layout_height="match_parent">
+
+                <fr.xebia.xebicon.ui.widget.ObservableListView
+                    android:id="@id/android:list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/divider_gray"
+                    android:dividerHeight="1dp"
+                    android:drawSelectorOnTop="false"/>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
         </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>
 
