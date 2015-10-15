@@ -142,6 +142,16 @@
                 android:text="@string/vote_for_talk"
                 style="?android:attr/borderlessButtonStyle"/>
 
+            <TextView
+                android:id="@+id/talk_vote_warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="72dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/too_early_to_vote"/>
+
         </LinearLayout>
 
         <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->

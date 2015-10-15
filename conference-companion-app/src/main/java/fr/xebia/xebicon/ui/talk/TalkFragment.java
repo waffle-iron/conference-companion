@@ -3,17 +3,13 @@ package fr.xebia.xebicon.ui.talk;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +29,6 @@ import butterknife.OnClick;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.bus.MemoSavedEvent;
 import fr.xebia.xebicon.core.misc.Preferences;
-import fr.xebia.xebicon.core.utils.Compatibility;
 import fr.xebia.xebicon.model.Speaker;
 import fr.xebia.xebicon.model.Talk;
 import fr.xebia.xebicon.model.Vote;
@@ -87,6 +82,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
     @InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
     @InjectView(R.id.talk_vote) Button mTalkVote;
+    @InjectView(R.id.talk_vote_warning) TextView mTalkVoteWarning;
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
@@ -186,8 +182,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private void getTalk() {
-        Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
-                (), this, null);
+        Query.one(Talk.class, "SELECT * FROM Talks WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId)
+                .getAsync(getLoaderManager(), this, null);
     }
 
     private void configureHeaders() {
@@ -371,6 +367,14 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             return;
         }
         mTalkRating.setVisibility(VISIBLE);
+
+        if (System.currentTimeMillis() > mTalk.getFromUtcTime()) {
+            mTalkVote.setVisibility(VISIBLE);
+            mTalkVoteWarning.setVisibility(GONE);
+        } else {
+            mTalkVote.setVisibility(GONE);
+            mTalkVoteWarning.setVisibility(VISIBLE);
+        }
     }
 
     @Override
