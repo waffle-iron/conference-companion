@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.concurrent.TimeUnit;
+
 import fr.xebia.xebicon.BuildConfig;
 import fr.xebia.xebicon.R;
 import fr.xebia.xebicon.bus.SynchroFinishedEvent;
 import fr.xebia.xebicon.core.misc.Preferences;
 import fr.xebia.xebicon.service.SynchroIntentService;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static fr.xebia.xebicon.core.XebiConApplication.BUS;
+import static rx.Observable.timer;
 
 public class SplashscreenActivity extends AppCompatActivity {
 
@@ -25,12 +30,15 @@ public class SplashscreenActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if (!Preferences.hasSelectedConference(this)){
+        if (!Preferences.hasSelectedConference(this)) {
             Intent intent = new Intent(this, SynchroIntentService.class);
             intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, BuildConfig.XEBICON_CONFERENCE_ID);
             startService(intent);
         } else {
-            gotToHome();
+            timer(2, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(aLong -> gotToHome());
         }
 
     }
