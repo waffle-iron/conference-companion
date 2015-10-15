@@ -17,17 +17,10 @@
         android:clickable="true"
         android:orientation="horizontal"
         android:paddingLeft="?spinnerBarInsetStart"
-        android:visibility="gone">
+        android:paddingRight="?spinnerBarInsetStart">
 
         <Spinner
             android:id="@+id/secondary_filter_spinner_1"
-            style="@style/Widget.Companion.HeaderBar.Spinner"
-            android:layout_width="@dimen/filter_spinner_width"
-            android:layout_height="match_parent"
-            android:layout_weight="@integer/filter_spinner_weight"/>
-
-        <Spinner
-            android:id="@+id/secondary_filter_spinner_2"
             style="@style/Widget.Companion.HeaderBar.Spinner"
             android:layout_width="@dimen/filter_spinner_width"
             android:layout_height="match_parent"

@@ -23,7 +23,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.xebicon.R;
-import fr.xebia.xebicon.bus.SyncEvent;
 import fr.xebia.xebicon.core.activity.BaseActivity;
 import fr.xebia.xebicon.core.adapter.BaseRecyclerAdapter;
 import fr.xebia.xebicon.core.misc.Preferences;
@@ -38,8 +37,6 @@ import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 import timber.log.Timber;
 
-import static fr.xebia.xebicon.core.XebiConApplication.BUS;
-
 public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandler<Talk>, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "ScheduleFragment";
@@ -51,14 +48,13 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     @InjectView(R.id.schedule_grid) RecyclerView mScheduleGrid;
     @InjectView(R.id.filters_box) ViewGroup mFiltersBox;
     @InjectView(R.id.secondary_filter_spinner_1) Spinner mSecondaryFilterSpinner1;
-    @InjectView(R.id.secondary_filter_spinner_2) Spinner mSecondaryFilterSpinner2;
     @InjectView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
 
     // filter tags that are currently selected
-    @Icicle String[] mFilterTags = {"", "", ""};
+    @Icicle String[] mFilterTags = {"", ""};
     // filter tags that we have to restore (as a result of Activity recreation)
-    @Icicle String[] mFilterTagsToRestore = {null, null, null};
+    @Icicle String[] mFilterTagsToRestore = {null, null};
 
     private Schedule mSchedule;
 
@@ -104,6 +100,8 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
+        configureActionBarSpinner();
+
         retrievedTalks();
     }
 
@@ -112,7 +110,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         Query.many(Talk.class, "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC, toTime ASC, _id ASC", conferenceId)
                 .getAsync(getLoaderManager(), this);
 
-        configureActionBarSpinner();
+        computeActionBarSpinnerAdapter();
     }
 
     @Override
@@ -182,8 +180,7 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
 
         List<Talk> filteredTalks = mSchedule.getFilteredTalks(
                 mTagMetadata.getTag(mFilterTags[0]),
-                mTagMetadata.getTag(mFilterTags[1]),
-                mTagMetadata.getTag(mFilterTags[2]));
+                mTagMetadata.getTag(mFilterTags[1]));
 
         if (filteredTalks.isEmpty()) {
             mEmptyText.setVisibility(View.VISIBLE);
@@ -208,7 +205,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                 }
             }
 
-            int numColumns = getNumColumns(filtering);
             List<Talk> mergedTalks = new ArrayList<Talk>(futureTalks) {{
                 addAll(pastTalks);
             }};
@@ -246,26 +242,22 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
             TagMetadata.Tag topTag = mTagMetadata.getTag(mFilterTags[0]);
             String topCategory = topTag.getCategory();
             if (topCategory.equals(Tags.FILTER_CATEGORIES[0])) {
-                populateSecondLevelFilterSpinner(0, 1);
-                populateSecondLevelFilterSpinner(1, 2);
+                populateSecondLevelFilterSpinner(1);
             } else if (topCategory.equals(Tags.FILTER_CATEGORIES[1])) {
-                populateSecondLevelFilterSpinner(0, 0);
-                populateSecondLevelFilterSpinner(1, 2);
-            } else {
-                populateSecondLevelFilterSpinner(0, 0);
-                populateSecondLevelFilterSpinner(1, 1);
+                populateSecondLevelFilterSpinner(0);
             }
+
             showFilterBox(true);
         } else {
             showFilterBox(false);
         }
     }
 
-    private void populateSecondLevelFilterSpinner(int spinnerIndex, int catIndex) {
-        String tagToRestore = mFilterTagsToRestore[spinnerIndex + 1];
-        Spinner spinner = spinnerIndex == 0 ? mSecondaryFilterSpinner1 : mSecondaryFilterSpinner2;
+    private void populateSecondLevelFilterSpinner(int catIndex) {
+        String tagToRestore = mFilterTagsToRestore[1];
+        Spinner spinner = mSecondaryFilterSpinner1;
         Parcelable spinnerState = spinner.onSaveInstanceState();
-        final int filterIndex = spinnerIndex + 1;
+        final int filterIndex = 1;
         String tagCategory = Tags.FILTER_CATEGORIES[catIndex];
         boolean isTopicCategory = Tags.CATEGORY_TOPIC.equals(tagCategory);
 
@@ -287,13 +279,13 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
                         isTopicCategory ? tag.getColor() : 0);
                 if (!TextUtils.isEmpty(tagToRestore) && tag.getId().equals(tagToRestore)) {
                     itemToSelect = adapter.getCount() - 1;
-                    mFilterTagsToRestore[spinnerIndex + 1] = null;
+                    mFilterTagsToRestore[1] = null;
                 }
             }
         } else {
             Timber.e("Can't populate spinner. Category has no tags: " + tagCategory);
         }
-        mFilterTagsToRestore[spinnerIndex + 1] = null;
+        mFilterTagsToRestore[1] = null;
 
         adapter.notifyDataSetChanged();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -324,6 +316,10 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
     private void showFilterBox(boolean show) {
         if (mFiltersBox != null) {
             mFiltersBox.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
+        if (!show) {
+            mSecondaryFilterSpinner1.setSelection(0);
         }
     }
 
@@ -371,13 +367,12 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         super.onSaveInstanceState(outState);
         mFilterTagsToRestore[0] = mFilterTags[0];
         mFilterTagsToRestore[1] = mFilterTags[1];
-        mFilterTagsToRestore[2] = mFilterTags[2];
         Icepick.saveInstanceState(this, outState);
     }
 
     @Override
     public boolean handleResult(CursorList<Talk> cursorList) {
-        if (swipeRefreshLayout != null){
+        if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
         mSchedule = new Schedule(cursorList == null ? new ArrayList<Talk>() : cursorList.asList(), true);

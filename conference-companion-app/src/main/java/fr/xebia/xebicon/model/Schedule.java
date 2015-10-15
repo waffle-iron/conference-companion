@@ -98,40 +98,28 @@ public class Schedule {
         return availableTypes;
     }
 
-    public List<Talk> getFilteredTalks(TagMetadata.Tag filter1, TagMetadata.Tag filter2, TagMetadata.Tag filter3) {
-        TagMetadata.Tag dayTag = null, topicTag = null, typeTag = null;
+    public List<Talk> getFilteredTalks(TagMetadata.Tag filter1, TagMetadata.Tag filter2) {
+        TagMetadata.Tag topicTag = null, typeTag = null;
 
         if (filter1 != null) {
             switch (filter1.getCategory()) {
-                case Tags.CATEGORY_DAY:
-                    dayTag = filter1;
-                    topicTag = filter2;
-                    typeTag = filter3;
-                    break;
                 case Tags.CATEGORY_TOPIC:
-                    dayTag = filter2;
                     topicTag = filter1;
-                    typeTag = filter3;
+                    typeTag = filter2;
                     break;
                 case Tags.CATEGORY_TYPE:
-                    dayTag = filter2;
-                    topicTag = filter3;
+                    topicTag = filter2;
                     typeTag = filter1;
                     break;
             }
         }
 
-        String dayFilter = dayTag == null ? "" : dayTag.getId();
         String topicFilter = topicTag == null ? "" : topicTag.getId();
         String typeFilter = typeTag == null ? "" : typeTag.getId();
 
         List<Talk> filteredTalks = new ArrayList<>();
-        if (!"".equals(dayFilter)) {
-            filteredTalks.addAll(forDay(dayFilter));
-        } else {
-            for (String day : getFormattedDays()) {
-                filteredTalks.addAll(forDay(day));
-            }
+        for (String day : getFormattedDays()) {
+            filteredTalks.addAll(forDay(day));
         }
 
         Iterator<Talk> filteredTalksIt = filteredTalks.iterator();
