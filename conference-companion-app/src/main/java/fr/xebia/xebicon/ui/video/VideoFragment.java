@@ -3,6 +3,7 @@ package fr.xebia.xebicon.ui.video;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,11 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class VideoFragment extends Fragment implements Observer<List<PlaylistItem>> {
+public class VideoFragment extends Fragment implements Observer<List<PlaylistItem>>, SwipeRefreshLayout.OnRefreshListener {
 
     @InjectView(R.id.video_list) RecyclerView videoListView;
     @InjectView(R.id.video_empty) LinearLayout emptyView;
+    @InjectView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     private String nextPageToken;
     private BaseRecyclerAdapter<PlaylistItem, VideoItemView> adapter;
@@ -57,6 +59,7 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
         ButterKnife.inject(this, view);
 
         videoListView.setAdapter(adapter);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -64,8 +67,12 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
         super.onResume();
 
         emptyView.setVisibility(View.VISIBLE);
-        videoListView.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.GONE);
 
+        refreshListing();
+    }
+
+    private void refreshListing() {
         Observable.<PlaylistItemListResponse>create(subscriber -> {
             try {
                 PlaylistItemListResponse videos = XebiConApplication.getVideoApi().getVideos();
@@ -90,7 +97,7 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
 
     @Override
     public void onCompleted() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -102,12 +109,17 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
     public void onNext(List<PlaylistItem> playlistItems) {
         if (playlistItems.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
-            videoListView.setVisibility(View.GONE);
+            swipeRefreshLayout.setVisibility(View.GONE);
         } else {
             emptyView.setVisibility(View.GONE);
-            videoListView.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
             adapter.setDatas(playlistItems);
         }
     }
 
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        refreshListing();
+    }
 }
