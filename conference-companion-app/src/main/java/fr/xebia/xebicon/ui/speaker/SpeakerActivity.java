@@ -9,8 +9,6 @@ import fr.xebia.xebicon.core.activity.NavigationActivity;
 
 public class SpeakerActivity extends NavigationActivity {
 
-    @InjectView(R.id.toolbar) Toolbar toolbar;
-
     public SpeakerActivity() {
         super(R.layout.speaker_activity);
     }
@@ -18,8 +16,6 @@ public class SpeakerActivity extends NavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setSupportActionBar(toolbar);
 
         setTitle(R.string.speakers);
 
