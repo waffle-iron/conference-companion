@@ -63,6 +63,9 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
     public void onResume() {
         super.onResume();
 
+        emptyView.setVisibility(View.VISIBLE);
+        videoListView.setVisibility(View.GONE);
+
         Observable.<PlaylistItemListResponse>create(subscriber -> {
             try {
                 PlaylistItemListResponse videos = XebiConApplication.getVideoApi().getVideos();
