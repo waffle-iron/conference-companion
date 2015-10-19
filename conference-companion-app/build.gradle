@@ -29,7 +29,7 @@ android {
         applicationId "fr.xebia.devoxx.be"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 2
+        versionCode 3
         versionName "1.0.0"
     }
 
@@ -59,7 +59,7 @@ android {
             debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://ec2-52-18-24-67.eu-west-1.compute.amazonaws.com/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/xfb1afkm/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://evening-mesa-4747.herokuapp.com/dbe15"'
+            buildConfigField 'String', 'VOTE_URL', '"https://api-voting.devoxx.com/DV15"'
             buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '18'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
@@ -69,7 +69,7 @@ android {
         release {
             buildConfigField 'String', 'BACKEND_URL', '"http://ec2-52-18-24-67.eu-west-1.compute.amazonaws.com/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/xfb1afkm/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://evening-mesa-4747.herokuapp.com/dbe15"'
+            buildConfigField 'String', 'VOTE_URL', '"https://api-voting.devoxx.com/DV15"'
             buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '18'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
