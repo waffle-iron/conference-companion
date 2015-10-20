@@ -3,6 +3,7 @@ package fr.xebia.xebicon.core.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,7 @@ public abstract class NavigationActivity extends BaseActivity implements Navigat
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.nav_view) NavigationView navigationView;
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @InjectView(R.id.appbar) AppBarLayout appBarLayout;
 
     private int currentNavId;
     private Handler handler = new Handler();
@@ -51,6 +53,13 @@ public abstract class NavigationActivity extends BaseActivity implements Navigat
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        appBarLayout.setExpanded(true, false);
     }
 
     @Override
