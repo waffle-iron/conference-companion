@@ -128,7 +128,7 @@
     <string name="about_content"><![CDATA[<p>Cet évènement organisé par Xebia, les Xebians et les sociétés de l\'Alliance, est destiné à partager nos expériences acquises sur le terrain et nos journées de partage de la connaissance, les XKE (Xebia Knowledge Exchange) mensuels.</p><p>Xebia est un cabinet de conseil international spécialisé dans les technologies Big Data, Web, les architectures Java et la mobilité dans des environnements agiles.<br/>L\'Alliance est un écosystème de sociétés complémentaires, expertes dans leur domaine. Ces 7 sociétés proposent l\’ensemble des compétences nécessaires à la mise en place d’une stratégie numérique cohérente et efficace, qu\’elles soient technologiques, fonctionnelles ou méthodologiques.</p><p>Contactez-nous :<br/>Par téléphone : +33 (0)1 53 89 99 99<br/>Par mail : info@xebia.fr<br/>156 Boulevard Haussmann, Paris 75008</p>]]></string>
     <string name="experts_content"><![CDATA[<p>L\'expert Café, les Xebians répondent à vos questions.<br/>40 experts, 9 thématiques, 1 lieu dédié.</p><p>Des experts Xebia sont à votre disposition en one to one !</p><p>Dans un endroit dédié, pendant 10 minutes, des experts Xebia sont à votre disposition pour répondre à vos questions sur l\'un de vos centres d\'intérêt quotidiens : Agilité, Mobilité, Front-End, Back-End, IoT, DevOps, Craftsmanship, Big Data ou encore Cloud.</p><p><b>Il vous suffit de prendre \"rendez-vous\" avec l\'un de nos experts auprès de l\'organisation.</b></p>]]></string>
     <string name="expert_people">40 experts</string>
-    <string name="expert_place">1 place</string>
-    <string name="expert_theme">9 themes</string>
+    <string name="expert_place">1 lieu dédié</string>
+    <string name="expert_theme">9 thématiques</string>
 
 </resources>
