@@ -1,6 +1,7 @@
 package fr.xebia.xebicon.ui.about;
 
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.widget.TextView;
 
