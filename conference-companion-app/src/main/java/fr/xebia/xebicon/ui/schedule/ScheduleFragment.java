@@ -113,14 +113,6 @@ public class ScheduleFragment extends Fragment implements ManyQuery.ResultHandle
         computeActionBarSpinnerAdapter();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mSchedule != null) {
-            populateScheduleGrid(true);
-        }
-    }
-
     private void configureActionBarSpinner() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
