@@ -218,7 +218,7 @@ public class SynchroIntentService extends IntentService {
                 availableTracks.add(track);
             }
         }
-        availableTracks.add("");
+        //availableTracks.add("");
         Collections.sort(availableTracks);
         for (String track : availableTracks) {
             colorByTrack.put(track, TrackColors.LIST.get(position));
