@@ -10,9 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.DurationFieldType;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,29 +207,13 @@ public class SynchroIntentService extends IntentService {
     }
 
     private void generateColorByTrack(List<Talk> talks) {
-        HashMap<String, Integer> colorByTrack = new HashMap<>();
-        int position = 0;
-        List<String> availableTracks = new ArrayList<>();
-        for (Talk talk : talks) {
-            String track = talk.getTrack();
-            if (!TextUtils.isEmpty(track) && !availableTracks.contains(track)) {
-                availableTracks.add(track);
-            }
-        }
-        //availableTracks.add("");
-        Collections.sort(availableTracks);
-        for (String track : availableTracks) {
-            colorByTrack.put(track, TrackColors.LIST.get(position));
-            position++;
-            position = position % TrackColors.LIST.size();
-        }
         for (Talk talk : talks) {
             String track = talk.getTrack();
             if (TextUtils.isEmpty(track)) {
                 talk.setColor(TrackColors.NO_TRACK);
                 continue;
             }
-            talk.setColor(colorByTrack.get(track));
+            talk.setColor(TrackColors.MAP.get(track));
         }
     }
 
