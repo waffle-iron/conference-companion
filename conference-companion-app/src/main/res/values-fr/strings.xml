@@ -35,7 +35,7 @@
     <string name="xebia">Xebia</string>
     <string name="talk">Présentation</string>
     <string name="talk_details">Détails présentation</string>
-    <string name="track">Sujet(s)</string>
+    <string name="track">Sujet</string>
     <string name="speaker_details">Détails speaker</string>
     <string name="speaker_bio">Bio</string>
     <string name="error_loading_votes">La mise à jour des votes a échoué</string>
