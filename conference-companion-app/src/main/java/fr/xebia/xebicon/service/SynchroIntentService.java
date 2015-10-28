@@ -171,11 +171,13 @@ public class SynchroIntentService extends IntentService {
                 }
             }
         }
+
+        speakerTalks.saveAll(transaction);
+
         // Delete obsolete speaker talks
         if (speakerTalksToDelete.size() > 0) {
-            new ModelList<>(speakerTalks).deleteAll(transaction);
+            new ModelList<>(speakerTalksToDelete).deleteAll(transaction);
         }
-        speakerTalks.saveAll(transaction);
     }
 
     private void setConferenceUtcTime(Conference conference, Talk talkToSave) {
@@ -230,7 +232,6 @@ public class SynchroIntentService extends IntentService {
         speakersToSave.saveAll(transaction);
 
         if (!speakersToDelete.isEmpty()) {
-            speakersToDelete.addAll(speakersToDelete);
             new ModelList<>(speakersToDelete).deleteAll(transaction);
         }
     }
