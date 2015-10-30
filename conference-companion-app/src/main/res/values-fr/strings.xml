@@ -84,7 +84,7 @@
         <item quantity="other">%1$d présentations disponibles</item>
     </plurals>
     <string name="able_to_rate">Maintenant vous pouvez noter une session quand elle est terminée</string>
-    <string name="timeline">Social</string>
+    <string name="timeline">Actualité Xebia</string>
     <string name="timeline_empty">Pas de timeline</string>
     <string name="scan_qr_code">Scanner QR code</string>
     <string name="scan_qr_code_required">Vous devez scanner votre QR code pour noter une session</string>
@@ -98,7 +98,7 @@
     <string name="nav_settings">Paramètres</string>
     <string name="nav_speakers">Speakers</string>
     <string name="nav_talks">Présentations</string>
-    <string name="nav_timeline">Social</string>
+    <string name="nav_timeline">Actualité Xebia</string>
     <string name="vote_for_talk">Donner votre avis</string>
     <string name="session_rating_label">Notez l\'ensemble de cette session</string>
     <string name="session_feedback_notgreat">Rien d\'impressionnant</string>
@@ -121,12 +121,12 @@
     <string name="nav_map">Plan</string>
     <string name="youtube_not_installed">Youtube n\'est pas installé</string>
     <string name="message_hint">Hey !</string>
-    <string name="message_empty_instance">Retrouvez prochainement les vidéos de la XebiCon</string>
+    <string name="message_empty_instance"><![CDATA[<p>Retrouvez prochainement toutes les vidéos de la XebiCon sur le site xebicon.fr.</p><p>Pour être au courant dès leur publication, rejoignez-nous sur Twitter (@XebiaFr) !</p>]]></string>
     <string name="developers">Développeurs</string>
     <string name="nav_experts">Expert Café</string>
     <string name="nav_about">À propos</string>
-    <string name="about_content"><![CDATA[<p>Cet évènement organisé par Xebia, les Xebians et les sociétés de l\'Alliance, est destiné à partager nos expériences acquises sur le terrain et nos journées de partage de la connaissance, les XKE (Xebia Knowledge Exchange) mensuels.</p><p>Xebia est un cabinet de conseil international spécialisé dans les technologies Big Data, Web, les architectures Java et la mobilité dans des environnements agiles.<br/>L\'Alliance est un écosystème de sociétés complémentaires, expertes dans leur domaine. Ces 7 sociétés proposent l\’ensemble des compétences nécessaires à la mise en place d’une stratégie numérique cohérente et efficace, qu\’elles soient technologiques, fonctionnelles ou méthodologiques.</p><p>Contactez-nous :<br/>Par téléphone : +33 (0)1 53 89 99 99<br/>Par mail : info@xebia.fr<br/>156 Boulevard Haussmann, Paris 75008</p>]]></string>
-    <string name="experts_content"><![CDATA[<p>L\'expert Café, les Xebians répondent à vos questions.<br/>40 experts, 9 thématiques, 1 lieu dédié.</p><p>Des experts Xebia sont à votre disposition en one to one !</p><p>Dans un endroit dédié, pendant 10 minutes, des experts Xebia sont à votre disposition pour répondre à vos questions sur l\'un de vos centres d\'intérêt quotidiens : Agilité, Mobilité, Front-End, Back-End, IoT, DevOps, Craftsmanship, Big Data ou encore Cloud.</p><p><b>Il vous suffit de prendre \"rendez-vous\" avec l\'un de nos experts auprès de l\'organisation.</b></p>]]></string>
+    <string name="about_content"><![CDATA[<p>Cet évènement organisé par Xebia, les Xebians et les sociétés de l\'Alliance, est destiné à partager nos expériences acquises sur le terrain et lors de nos journées de partage de la connaissance, les XKE (Xebia Knowledge Exchange) mensuels.</p><p>Xebia est un cabinet de conseil international spécialisé dans les technologies Big Data, Web, les architectures Java et la mobilité dans des environnements agiles.<br/>L\'Alliance est un écosystème de sociétés complémentaires, expertes dans leur domaine. Ces 7 sociétés proposent l\'ensemble des compétences nécessaires à la mise en place d’une stratégie numérique cohérente et efficace, qu\’elles soient technologique, fonctionnelle ou méthodologique.</p><p>Contactez-nous :<br/>Par téléphone : +33 (0)1 53 89 99 99<br/>Par mail : info@xebia.fr<br/>156 Boulevard Haussmann, Paris 75008</p>]]></string>
+    <string name="experts_content"><![CDATA[<p>Des experts Xebia sont à votre disposition pour répondre à vos questions lors d\'un rendez-vous en one to one.</p><p>Dans un endroit dédié, pendant 10 minutes, les experts Xebia sont à votre disposition pour répondre à vos questions sur l\'un de vos centres d\'intérêt quotidiens : Agilité, Mobilité, Front-End, Back-End, IoT, DevOps, Craftsmanship, Big Data ou encore Cloud.</p><p><b>Il vous suffit de prendre rendez-vous auprès de l\'organisation (avec les polos violets).</b></p>]]></string>
     <string name="expert_people">40 experts</string>
     <string name="expert_place">1 lieu dédié</string>
     <string name="expert_theme">9 thématiques</string>

@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeIntents;
@@ -35,6 +37,7 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
     @InjectView(R.id.video_list) RecyclerView videoListView;
     @InjectView(R.id.video_empty) LinearLayout emptyView;
     @InjectView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.video_empty_text) TextView emptyTextView;
 
     private String nextPageToken;
     private BaseRecyclerAdapter<PlaylistItem, VideoItemView> adapter;
@@ -58,6 +61,7 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
 
         ButterKnife.inject(this, view);
 
+        emptyTextView.setText(Html.fromHtml(getString(R.string.message_empty_instance)));
         videoListView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
