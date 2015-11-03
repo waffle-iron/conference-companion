@@ -20,8 +20,8 @@ android {
         applicationId "fr.xebia.xebicon"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 8
-        versionName "1.0.6"
+        versionCode 9
+        versionName "1.0.7"
     }
 
     signingConfigs {
