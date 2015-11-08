@@ -112,6 +112,8 @@ public class KouignAmanApplication extends Application {
             intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(this));
             intent.putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, true);
             startService(intent);
+        } else {
+            SynchroIntentService.scheduleSync(this, true);
         }
     }
 

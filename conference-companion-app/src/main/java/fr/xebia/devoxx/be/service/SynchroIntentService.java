@@ -3,6 +3,7 @@ package fr.xebia.devoxx.be.service;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
@@ -14,6 +15,7 @@ import org.joda.time.DurationFieldType;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -107,21 +109,34 @@ public class SynchroIntentService extends IntentService {
             if (sendSynchroEvent) {
                 BUS.post(new SynchroFinishedEvent(false, null));
             }
-            // Retry in 1 hour
-            long oneHourLater = System.currentTimeMillis() + 3_600 * 1000;
-            ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC, oneHourLater, buildSynchroPendingIntent());
         } finally {
             if (transaction != null) {
                 transaction.finish();
             }
         }
+
+        scheduleSync(this, true);
     }
 
-    private PendingIntent buildSynchroPendingIntent() {
-        Intent intent = new Intent(this, SynchroIntentService.class);
-        intent.putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(this));
-        intent.putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, true);
-        return PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    public static void scheduleSync(Context context, boolean fromAppCreate) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+
+        Intent service = new Intent(context, SynchroIntentService.class)
+                .putExtra(SynchroIntentService.EXTRA_CONFERENCE_ID, Preferences.getSelectedConference(context))
+                .putExtra(SynchroIntentService.EXTRA_FROM_APP_CREATE, fromAppCreate);
+
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, service, 0);
+
+        PendingIntent existingPendingIntent = PendingIntent.getService(context, 0, service, PendingIntent.FLAG_NO_CREATE);
+        if (existingPendingIntent != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC,
+                Calendar.getInstance().getTimeInMillis() + 5000L,
+                5000L,
+                pendingIntent);
     }
 
     private void synchroniseTalks(Conference conference, List<Talk> scheduledTalks, Transaction transaction) {
