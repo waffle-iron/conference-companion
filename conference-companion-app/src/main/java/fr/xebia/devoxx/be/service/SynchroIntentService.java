@@ -132,10 +132,11 @@ public class SynchroIntentService extends IntentService {
             alarmManager.cancel(pendingIntent);
         }
 
+        long intervalMillis = 3600 * 1000;
         alarmManager.setRepeating(
                 AlarmManager.RTC,
-                Calendar.getInstance().getTimeInMillis() + 5000L,
-                5000L,
+                Calendar.getInstance().getTimeInMillis() + intervalMillis,
+                intervalMillis,
                 pendingIntent);
     }
 
