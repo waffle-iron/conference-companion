@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -63,6 +64,7 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
 
         emptyTextView.setText(Html.fromHtml(getString(R.string.message_empty_instance)));
         videoListView.setAdapter(adapter);
+        videoListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
@@ -93,7 +95,9 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
 
                     return Observable.from(playlistItemListResponse.getItems());
                 })
-                .filter(playlistItem -> !playlistItem.getSnippet().getTitle().equals("Private video"))
+                .filter(playlistItem -> {
+                    return !playlistItem.getSnippet().getTitle().equals("Private video");
+                })
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
@@ -102,11 +106,12 @@ public class VideoFragment extends Fragment implements Observer<List<PlaylistIte
     @Override
     public void onCompleted() {
         swipeRefreshLayout.setRefreshing(false);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onError(Throwable e) {
-
+        System.out.println();
     }
 
     @Override
