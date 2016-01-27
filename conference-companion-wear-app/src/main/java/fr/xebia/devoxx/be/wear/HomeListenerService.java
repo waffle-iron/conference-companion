@@ -1,4 +1,4 @@
-package fr.xebia.devoxx.be.wear;
+package fr.xebia.voxxeddays.zurich.wear;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -21,14 +21,14 @@ import com.google.android.gms.wearable.WearableListenerService;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import fr.xebia.devoxx.be.R;
+import fr.xebia.voxxeddays.zurich.R;
 import timber.log.Timber;
 
 public class HomeListenerService extends WearableListenerService {
 
     private static final String TAG = "HomeListenerService";
 
-    public final static String ACTION_DISMISS = "fr.xebia.devoxx.be.wear.ACTION_DISMISS";
+    public final static String ACTION_DISMISS = "fr.xebia.voxxeddays.zurich.wear.ACTION_DISMISS";
 
     public static final String PATH_FEEDBACK = "/companion/feedback/";
     public static final String PATH_RATING = "/companion/rating/";

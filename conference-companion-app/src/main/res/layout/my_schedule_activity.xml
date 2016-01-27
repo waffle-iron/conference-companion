@@ -10,7 +10,7 @@
     tools:context=".HomeActivity">
 
 
-    <fr.xebia.devoxx.be.ui.widget.DrawShadowFrameLayout
+    <fr.xebia.voxxeddays.zurich.ui.widget.DrawShadowFrameLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,7 +34,7 @@
                 android:paddingTop="6dp"
                 android:textColor="@color/body_text_1_inverse"/>
         </android.support.v4.view.ViewPager>
-    </fr.xebia.devoxx.be.ui.widget.DrawShadowFrameLayout>
+    </fr.xebia.voxxeddays.zurich.ui.widget.DrawShadowFrameLayout>
 
     <include layout="@layout/include_navigation_drawer"/>
 

@@ -62,7 +62,7 @@
         android:layout_height="match_parent">
 
         <!-- Background photo -->
-        <fr.xebia.devoxx.be.ui.widget.BezelImageView
+        <fr.xebia.voxxeddays.zurich.ui.widget.BezelImageView
             app:maskDrawable="@drawable/schedule_background_mask"
             android:id="@+id/background_image"
             android:layout_height="match_parent"
@@ -70,7 +70,7 @@
             android:scaleType="centerCrop" />
 
         <!-- Session photo -->
-        <fr.xebia.devoxx.be.ui.widget.BezelImageView
+        <fr.xebia.voxxeddays.zurich.ui.widget.BezelImageView
             app:maskDrawable="@drawable/schedule_background_mask"
             android:id="@+id/session_image"
             android:layout_height="match_parent"

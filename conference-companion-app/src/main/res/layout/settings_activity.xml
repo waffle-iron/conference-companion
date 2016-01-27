@@ -10,7 +10,7 @@
     tools:context=".HomeActivity">
 
 
-    <fr.xebia.devoxx.be.ui.widget.DrawShadowFrameLayout
+    <fr.xebia.voxxeddays.zurich.ui.widget.DrawShadowFrameLayout
         android:id="@+id/container"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

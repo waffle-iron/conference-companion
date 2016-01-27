@@ -1,4 +1,4 @@
-package fr.xebia.devoxx.be.wear;
+package fr.xebia.voxxeddays.zurich.wear;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,7 +20,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.concurrent.TimeUnit;
 
-import fr.xebia.devoxx.be.R;
+import fr.xebia.voxxeddays.zurich.R;
 import timber.log.Timber;
 
 public class FeedbackActivity extends Activity {

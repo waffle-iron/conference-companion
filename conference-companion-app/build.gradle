@@ -26,7 +26,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "fr.xebia.devoxx.be"
+        applicationId "fr.xebia.voxxeddays.zurich"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 4
@@ -58,9 +58,9 @@ android {
         debug {
             debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://ec2-52-18-24-67.eu-west-1.compute.amazonaws.com/api/v1"'
-            buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/xfb1afkm/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://api-voting.devoxx.com/DV15"'
-            buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '18'
+            buildConfigField 'String', 'SLIDO_URL', '"https://ap.sli.do/event/xfb1afkm/ask"'
+            buildConfigField 'String', 'VOTE_URL', '"https://voting-vdz.exteso.com"'
+            buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             signingConfig signingConfigs.debug
@@ -69,8 +69,8 @@ android {
         release {
             buildConfigField 'String', 'BACKEND_URL', '"http://ec2-52-18-24-67.eu-west-1.compute.amazonaws.com/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/xfb1afkm/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://api-voting.devoxx.com/DV15"'
-            buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '18'
+            buildConfigField 'String', 'VOTE_URL', '"https://voting-vdz.exteso.com"'
+            buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             minifyEnabled false

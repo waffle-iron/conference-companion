@@ -1,4 +1,4 @@
-package fr.xebia.devoxx.be.wear;
+package fr.xebia.voxxeddays.zurich.wear;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import fr.xebia.devoxx.be.R;
+import fr.xebia.voxxeddays.zurich.R;
 
 public class HomeActivity extends Activity {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<fr.xebia.devoxx.be.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.voxxeddays.zurich.ui.widget.DrawShadowFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:gravity="center" />
 
-    <fr.xebia.devoxx.be.ui.widget.HeaderGridView
+    <fr.xebia.voxxeddays.zurich.ui.widget.HeaderGridView
         android:id="@+id/speakers_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,4 +29,4 @@
         android:paddingRight="5dp"
         android:paddingBottom="5dp" />
 
-</fr.xebia.devoxx.be.ui.widget.DrawShadowFrameLayout>
+</fr.xebia.voxxeddays.zurich.ui.widget.DrawShadowFrameLayout>

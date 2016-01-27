@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<fr.xebia.devoxx.be.ui.talk.TalkSpeakerItemView xmlns:android="http://schemas.android.com/apk/res/android"
+<fr.xebia.voxxeddays.zurich.ui.talk.TalkSpeakerItemView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -26,4 +26,4 @@
         android:textSize="16sp"
         android:gravity="center_vertical" />
 
-</fr.xebia.devoxx.be.ui.talk.TalkSpeakerItemView>
+</fr.xebia.voxxeddays.zurich.ui.talk.TalkSpeakerItemView>

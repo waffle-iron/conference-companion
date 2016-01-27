@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package fr.xebia.devoxx.be.wear;
+package fr.xebia.voxxeddays.zurich.wear;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
-import fr.xebia.devoxx.be.R;
+import fr.xebia.voxxeddays.zurich.R;
 
 
 public class FinishActivity extends Activity {
