@@ -13,7 +13,7 @@
     <string name="authors">Authors</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="app_name">Devoxx BE 15</string>
+    <string name="app_name">Voxxed Days Zürich 16</string>
     <string name="action_bar_default_title" translatable="false"><![CDATA[DEVOX<font color="#f5af33">X</font>]]></string>
     <string name="scan_nfc_hint">Scan your NFC tag</string>
     <string name="twitter_account">Twitter</string>
