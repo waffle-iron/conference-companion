@@ -7,13 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonSyntaxException;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.DurationFieldType;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -37,6 +36,7 @@ import se.emilsjolander.sprinkles.Transaction;
 import timber.log.Timber;
 
 import static fr.xebia.voxxeddays.zurich.core.KouignAmanApplication.BUS;
+import static fr.xebia.voxxeddays.zurich.core.KouignAmanApplication.getGson;
 
 public class SynchroIntentService extends IntentService {
 
@@ -47,9 +47,9 @@ public class SynchroIntentService extends IntentService {
 
     public static final String VOXXEDDAYS_ZURICH_CONFERENCE = "{\n" +
             "\"id\": 19,\n" +
-            "\"backgroundUrl\": \"http://devoxxbelgium.s3-eu-west-1.amazonaws.com/wp-content/uploads/2015/06/08154520/Devoxx2015Thema.jpg\",\n" +
-            "\"logoUrl\": \"http://devoxxbelgium.s3-eu-west-1.amazonaws.com/wp-content/uploads/2015/09/24131549/Logo_Devoxx_square.png\",\n" +
-            "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\",\n" +
+            "\"backgroundUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/Zurich-Photo1.jpg\",\n" +
+            "\"logoUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/iTunesArtwork.png\",\n" +
+            "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\"," +
             "\"from\": \"2016-03-03\",\n" +
             "\"name\": \"Voxxed Days Zürich\",\n" +
             "\"description\": \"Voxxed Days Zürich\",\n" +
@@ -69,14 +69,14 @@ public class SynchroIntentService extends IntentService {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         Conference conference;
         try {
-            conference = new ObjectMapper().readValue(VOXXEDDAYS_ZURICH_CONFERENCE, Conference.class);
+            conference = getGson().fromJson(VOXXEDDAYS_ZURICH_CONFERENCE, Conference.class);
             DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
-            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
             DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
             DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
             conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
             conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
-        } catch (IOException e) {
+        } catch (JsonSyntaxException e) {
             BUS.post(new SynchroFinishedEvent(false, null));
             return;
         }
@@ -202,7 +202,7 @@ public class SynchroIntentService extends IntentService {
     }
 
     private void setConferenceUtcTime(Conference conference, Talk talkToSave) {
-        DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+        DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
         DateTime jodaStartTime = new DateTime(talkToSave.getFromTime(), apiTimeZone);
         DateTime jodaEndTime = new DateTime(talkToSave.getToTime(), apiTimeZone);
 

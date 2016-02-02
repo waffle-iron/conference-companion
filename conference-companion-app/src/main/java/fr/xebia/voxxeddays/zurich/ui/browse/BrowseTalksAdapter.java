@@ -27,7 +27,7 @@ public class BrowseTalksAdapter extends BaseAdapter<List<Talk>> implements Colle
 
     @Override
     protected void bindView(final int position, View view) {
-        ((TalkItemView) view).bind(getItem(position), conferenceEnded);
+        ((TalkItemView) view).bindView(getItem(position));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

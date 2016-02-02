@@ -34,7 +34,7 @@ public class ConferencesFetcherIntentService extends IntentService {
             Map<Integer, Conference> conferencesInDbById = retrieveConferencesInDbById();
             ModelList<Conference> conferencesToStore = new ModelList<>();
             DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
-            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+            DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
             for (Conference conference : conferences) {
                 Conference conferenceInDb = conferencesInDbById.remove(conference.getId());
                 if (conferenceInDb != null) {

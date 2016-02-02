@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fr.xebia.voxxeddays.zurich.ui.widget.ObservableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scroll_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:overScrollMode="never"
-    android:fillViewport="true">
+                                                           xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                           android:id="@+id/scroll_view"
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="match_parent"
+                                                           android:overScrollMode="never"
+                                                           android:fillViewport="true">
 
     <FrameLayout
         android:id="@+id/scroll_view_child"
@@ -59,16 +60,14 @@
                 android:numStars="5"
                 android:stepSize="1" />
 
-            <TextView
+            <Button
                 android:id="@+id/talk_rating_alert"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="72dp"
                 android:text="@string/scan_qr_code_required"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
+                style="?android:attr/borderlessButtonStyle"/>
 
             <fr.xebia.voxxeddays.zurich.ui.widget.UnderlinedTextView
                 android:id="@+id/track_memo_title"
@@ -155,18 +154,22 @@
         </LinearLayout>
 
         <!-- Title/subtitle bar (floating; position determined at run time as the content view scrolls) -->
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:id="@+id/talk_header">
+            android:id="@+id/talk_header"
+            android:orientation="vertical"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <!-- height assigned dynamically -->
-            <View
-                android:id="@+id/talk_header_background"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="0dp" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
             <LinearLayout
                 android:id="@+id/talk_header_contents"
@@ -210,7 +213,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="-6dp" />
 
-        </FrameLayout>
+        </LinearLayout>
 
         <!-- FAB -->
         <include layout="@layout/include_add_schedule_fab" />

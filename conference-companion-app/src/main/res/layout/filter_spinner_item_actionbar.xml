@@ -30,6 +30,8 @@
         android:textStyle="@integer/font_textStyle_medium"
         android:fontFamily="@string/font_fontFamily_medium"
         android:drawablePadding="4dp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:drawableRight="@drawable/spinner_triangle" />
 
 </LinearLayout>

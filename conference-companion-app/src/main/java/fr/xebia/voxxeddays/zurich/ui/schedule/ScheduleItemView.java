@@ -1,6 +1,7 @@
 package fr.xebia.voxxeddays.zurich.ui.schedule;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -14,11 +15,13 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.voxxeddays.zurich.R;
+import fr.xebia.voxxeddays.zurich.core.adapter.BaseItemView;
 import fr.xebia.voxxeddays.zurich.model.Talk;
+import fr.xebia.voxxeddays.zurich.ui.talk.TalkActivity;
 import fr.xebia.voxxeddays.zurich.ui.widget.ExtendedRelativeLayout;
 import fr.xebia.voxxeddays.zurich.ui.widget.UIUtils;
 
-public class ScheduleItemView extends ExtendedRelativeLayout implements Callback {
+public class ScheduleItemView extends ExtendedRelativeLayout implements Callback, BaseItemView<Talk>, View.OnClickListener {
 
     @InjectView(R.id.schedule_bg_img) ImageView mScheduleBgImg;
     @InjectView(R.id.schedule_title) TextView mScheduleTitle;
@@ -27,6 +30,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @InjectView(R.id.indicator_in_schedule) View mInSchedule;
     private boolean wideMode;
     private boolean landscape;
+    private Talk talk;
 
     public ScheduleItemView(Context context) {
         super(context);
@@ -39,7 +43,11 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+
         ButterKnife.inject(this);
+
+        setOnClickListener(this);
+
         wideMode = getContext().getResources().getBoolean(R.bool.wide_mode);
         landscape = getContext().getResources().getBoolean(R.bool.landscape);
     }
@@ -52,7 +60,9 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
                 MeasureSpec.makeMeasureSpec((int) (widthSize / 1.7f), widthMode) : widthMeasureSpec);
     }
 
-    public void bind(Talk talk, boolean conferenceEnded) {
+    public void bindView(Talk talk) {
+        this.talk = talk;
+
         setBackgroundColor(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setColorFilter(UIUtils.setColorAlpha(talk.getColor(), 0.65f));
         mScheduleBgImg.setBackgroundColor(talk.getColor());
@@ -65,7 +75,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
 
         mScheduleTitle.setText(talk.getTitle());
 
-        if (!conferenceEnded && System.currentTimeMillis() > talk.getToUtcTime()) {
+        if (System.currentTimeMillis() > talk.getToUtcTime()) {
             mScheduleRoom.setText(getResources().getString(R.string.ended));
         } else {
             mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
@@ -89,5 +99,16 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     @Override
     public void onError() {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (!talk.isBreak()) {
+            Intent intent = new Intent(getContext(), TalkActivity.class)
+                    .putExtra(TalkActivity.EXTRA_TALK_ID, talk.getId())
+                    .putExtra(TalkActivity.EXTRA_TALK_TITLE, talk.getTitle())
+                    .putExtra(TalkActivity.EXTRA_TALK_COLOR, talk.getColor());
+            getContext().startActivity(intent);
+        }
     }
 }

@@ -10,11 +10,17 @@
             android:selectable="false"
             android:summary="apiroelle@xebia.fr"
             android:title="Arnaud Piroelle"/>
+
+        <Preference
+            android:defaultValue="Not Set"
+            android:key="dev_2"
+            android:selectable="false"
+            android:summary="mobile@xebia.fr"
+            android:title="Xebia Mobile"/>
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/general">
-
 
         <Preference
             android:key="about_key"

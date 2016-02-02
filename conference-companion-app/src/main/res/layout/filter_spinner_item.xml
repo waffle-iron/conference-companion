@@ -28,6 +28,8 @@
         android:textColor="@color/body_text_2_inverse"
         android:textSize="16sp"
         android:drawablePadding="6dp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:drawableRight="@drawable/spinner_triangle_sub" />
 
 </LinearLayout>

@@ -1,20 +1,28 @@
 package fr.xebia.voxxeddays.zurich.ui;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import fr.xebia.voxxeddays.zurich.R;
-import fr.xebia.voxxeddays.zurich.core.activity.BaseActivity;
+import fr.xebia.voxxeddays.zurich.core.activity.NavigationActivity;
 import fr.xebia.voxxeddays.zurich.ui.schedule.ScheduleFragment;
 
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends NavigationActivity {
+
+    @InjectView(R.id.toolbar) Toolbar toolbar;
+
+    public HomeActivity() {
+        super(R.layout.home_activity);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_activity);
 
-        currentNavId = R.id.nav_talks;
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -27,4 +35,8 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int getNavId() {
+        return R.id.nav_talks;
+    }
 }

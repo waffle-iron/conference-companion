@@ -3,6 +3,7 @@ package fr.xebia.voxxeddays.zurich.ui.schedule;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 import butterknife.InjectView;
 import fr.xebia.voxxeddays.zurich.R;
-import fr.xebia.voxxeddays.zurich.core.activity.BaseActivity;
+import fr.xebia.voxxeddays.zurich.core.activity.NavigationActivity;
 import fr.xebia.voxxeddays.zurich.core.misc.Preferences;
 import fr.xebia.voxxeddays.zurich.model.MySchedule;
 import fr.xebia.voxxeddays.zurich.model.Schedule;
@@ -26,12 +27,11 @@ import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 
-public class MyScheduleActivity extends BaseActivity implements ManyQuery.ResultHandler<Talk> {
+public class MyScheduleActivity extends NavigationActivity implements ManyQuery.ResultHandler<Talk> {
 
     private static final long DAY_MILLIS = 24 * 60 * 60 * 1000;
 
-    @InjectView(R.id.main_content) DrawShadowFrameLayout mDrawShadowFrameLayout;
-    @InjectView(R.id.pager_strip) PagerTabStrip mPagerStrip;
+    @InjectView(R.id.tab_layout) TabLayout mPagerStrip;
     @InjectView(R.id.view_pager) ViewPager mViewPager;
 
     private MySchedule mMySchedule;
@@ -39,12 +39,13 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     private boolean setDefaultPage = true;
     @Icicle int mSelectedPage;
 
+    public MyScheduleActivity() {
+        super(R.layout.my_schedule_activity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_schedule_activity);
-
-        currentNavId = R.id.nav_myschedule;
 
         int conferenceId = Preferences.getSelectedConference(this);
         String query = "SELECT * FROM Talks WHERE conferenceId=? ORDER BY fromTime ASC, toTime ASC, _id ASC";
@@ -63,7 +64,6 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mPagerStrip.setDrawFullUnderline(true);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -81,14 +81,6 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
             }
         });
         getSupportActionBar().setTitle(R.string.my_schedule);
-        mDrawShadowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mDrawShadowFrameLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                int shadowTopOffset = UIUtils.calculateActionBarSize(MyScheduleActivity.this) + mPagerStrip.getHeight();
-                mDrawShadowFrameLayout.setShadowTopOffset(shadowTopOffset);
-            }
-        });
     }
 
     @Override
@@ -141,6 +133,7 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
     private void setAdapter() {
         mViewPager.setAdapter(new MySchedulePagerAdapter(mMySchedule, getFragmentManager()));
         mViewPager.setCurrentItem(mSelectedPage >= mMySchedule.getConferenceDaysCount() ? 0 : mSelectedPage);
+        mPagerStrip.setupWithViewPager(mViewPager);
     }
 
     public static class MySchedulePagerAdapter extends FragmentPagerAdapter {
@@ -183,5 +176,10 @@ public class MyScheduleActivity extends BaseActivity implements ManyQuery.Result
             this.mySchedule = mySchedule;
             notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected int getNavId() {
+        return R.id.nav_myschedule;
     }
 }

@@ -12,6 +12,7 @@ import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.bus.SyncEvent;
 import fr.xebia.voxxeddays.zurich.model.ConferenceDay;
 import fr.xebia.voxxeddays.zurich.model.MyScheduleItem;
+import fr.xebia.voxxeddays.zurich.ui.widget.ObservableListView;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import static fr.xebia.voxxeddays.zurich.core.KouignAmanApplication.BUS;
 
 public class MyScheduleFragment extends Fragment {
 
-    @InjectView(android.R.id.list) ListView myScheduleListView;
+    @InjectView(android.R.id.list) ObservableListView myScheduleListView;
 
     private MyScheduleAdapter mAdapter;
     private List<MyScheduleItem> myScheduleItems;

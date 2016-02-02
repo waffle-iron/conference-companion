@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:background="@color/default_theme_primary"
-                android:orientation="vertical"
-                android:paddingTop="25dp">
+<fr.xebia.voxxeddays.zurich.ui.widget.NavigationHeaderView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="175dp"
+    android:background="@color/default_theme_primary"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <fr.xebia.voxxeddays.zurich.core.HtmlTextView
+    <ImageView
+        android:id="@+id/image_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:paddingLeft="20dp"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:text="@string/action_bar_default_title"
-        android:textStyle="bold"/>
-</RelativeLayout>
+        android:alpha="0.4"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="25dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/voxxeddays_logo"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Voxxed Days Zürich"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="sans-serif"
+            android:text="3rd of March 2016"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+</fr.xebia.voxxeddays.zurich.ui.widget.NavigationHeaderView>

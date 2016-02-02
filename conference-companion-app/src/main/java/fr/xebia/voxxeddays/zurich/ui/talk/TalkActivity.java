@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import butterknife.ButterKnife;
 import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.core.activity.BaseActivity;
+import fr.xebia.voxxeddays.zurich.core.activity.NavigationActivity;
 import fr.xebia.voxxeddays.zurich.core.utils.Compatibility;
 import fr.xebia.voxxeddays.zurich.model.Talk;
 
@@ -28,6 +29,10 @@ public class TalkActivity extends BaseActivity {
         return intent;
     }
 
+    public TalkActivity() {
+        super(R.layout.talk_activity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (shouldBeFloatingWindow()) {
@@ -36,10 +41,10 @@ public class TalkActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.talk_activity);
-        ButterKnife.inject(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("");
+        if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
+            getWindow().setStatusBarColor(Compatibility.darker(getIntent().getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)));
+        }
+
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             getFragmentManager().beginTransaction()
@@ -48,14 +53,7 @@ public class TalkActivity extends BaseActivity {
                             getIntent().getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)))
                     .commit();
         }
-    }
 
-    @Override
-    protected void selectTheme() {
-        setTheme(R.style.Theme_Companion_TalkDetails);
-        if (Compatibility.isCompatible(Build.VERSION_CODES.LOLLIPOP)) {
-            getWindow().setStatusBarColor(Compatibility.darker(getIntent().getIntExtra(EXTRA_TALK_COLOR, Color.BLACK)));
-        }
     }
 
     @Override

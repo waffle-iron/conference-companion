@@ -1,22 +1,28 @@
 package fr.xebia.voxxeddays.zurich.ui.speaker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.squareup.picasso.Picasso;
 import fr.xebia.voxxeddays.zurich.R;
+import fr.xebia.voxxeddays.zurich.core.adapter.BaseItemView;
 import fr.xebia.voxxeddays.zurich.model.Speaker;
 import fr.xebia.voxxeddays.zurich.ui.widget.ExtendedLinearLayout;
 
-public class SpeakerItemView extends ExtendedLinearLayout {
+public class SpeakerItemView extends ExtendedLinearLayout implements BaseItemView<Speaker>, View.OnClickListener {
 
     @InjectView(R.id.speaker_image) ImageView mSpeakerImage;
     @InjectView(R.id.speaker_name) TextView mSpeakerName;
     private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener;
+    private Speaker speaker;
 
     public SpeakerItemView(Context context) {
         super(context);
@@ -33,7 +39,9 @@ public class SpeakerItemView extends ExtendedLinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.inject(this, this);
+        ButterKnife.inject(this);
+
+        setOnClickListener(this);
     }
 
     @Override
@@ -54,7 +62,10 @@ public class SpeakerItemView extends ExtendedLinearLayout {
         mSpeakerImage.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
     }
 
-    public void bind(final Speaker speaker) {
+    @Override
+    public void bindView(final Speaker speaker) {
+        this.speaker = speaker;
+
         mSpeakerName.setText(String.format("%s %s", speaker.getFirstName(), speaker.getLastName()));
         post(new Runnable() {
             @Override
@@ -78,5 +89,12 @@ public class SpeakerItemView extends ExtendedLinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mSpeakerImage.getViewTreeObserver().removeGlobalOnLayoutListener(globalLayoutListener);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getContext(), SpeakerDetailsActivity.class);
+        intent.putExtra(SpeakerDetailsActivity.EXTRA_SPEAKER_ID, speaker.getId());
+        getContext().startActivity(intent);
     }
 }

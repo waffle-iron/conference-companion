@@ -30,9 +30,9 @@ public class ScheduleAdapter extends BaseAdapter<List<Talk>> implements Collecti
     protected void bindView(final int position, View view) {
         boolean conferenceEnded = System.currentTimeMillis() > conferenceEndTime;
         if (view instanceof ScheduleItemView) {
-            ((ScheduleItemView) view).bind(getItem(position), conferenceEnded);
+            ((ScheduleItemView) view).bindView(getItem(position));
         } else {
-            ((TalkItemView) view).bind(getItem(position), conferenceEnded);
+            ((TalkItemView) view).bindView(getItem(position));
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override

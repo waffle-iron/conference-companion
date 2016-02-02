@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -19,7 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -43,7 +45,6 @@ import fr.xebia.voxxeddays.zurich.model.Speaker;
 import fr.xebia.voxxeddays.zurich.model.Talk;
 import fr.xebia.voxxeddays.zurich.model.Vote;
 import fr.xebia.voxxeddays.zurich.ui.note.MemoActivity;
-import fr.xebia.voxxeddays.zurich.ui.question.QuestionsActivity;
 import fr.xebia.voxxeddays.zurich.ui.speaker.SpeakerDetailsActivity;
 import fr.xebia.voxxeddays.zurich.ui.widget.CheckableFrameLayout;
 import fr.xebia.voxxeddays.zurich.ui.widget.ObservableScrollView;
@@ -64,10 +65,10 @@ import static android.view.View.VISIBLE;
 import static fr.xebia.voxxeddays.zurich.core.KouignAmanApplication.BUS;
 import static fr.xebia.voxxeddays.zurich.service.NotificationSchedulerIntentService.buildScheduleNotificationIntentFromTalk;
 import static fr.xebia.voxxeddays.zurich.service.SendRatingIntentService.buildSendRatingIntent;
-import static fr.xebia.voxxeddays.zurich.ui.question.QuestionsActivity.EXTRA_ROOM;
+
 
 public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Talk>, ManyQuery.ResultHandler<Speaker>,
-        ObservableScrollView.ScrollViewListener {
+        ObservableScrollView.ScrollViewListener, Toolbar.OnMenuItemClickListener {
 
     private static final String EXTRA_TALK_ID = "fr.xebia.voxxeddays.zurich.EXTRA_TALK_ID";
     private static final String EXTRA_TALK_TITLE = "fr.xebia.voxxeddays.zurich.EXTRA_TALK_TITLE";
@@ -76,6 +77,8 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     private static final float PHOTO_ASPECT_RATIO = 1.8f;
     private static final float GAP_FILL_DISTANCE_MULTIPLIER = 1.5f;
     private static final int SCAN_QR_CODE_REQUEST = 1000;
+
+    @InjectView(R.id.toolbar) Toolbar toolbar;
 
     @InjectView(R.id.scroll_view) ObservableScrollView mScrollView;
 
@@ -94,11 +97,10 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     @InjectView(R.id.speakers_container) ViewGroup mSpeakersContainer;
     @InjectView(R.id.talk_rating) UnderlinedTextView mTalkRating;
     @InjectView(R.id.talk_rating_bar) RatingBar mTalkRatingBar;
-    @InjectView(R.id.talk_rating_alert) TextView mTalkRatingAlert;
+    @InjectView(R.id.talk_rating_alert) Button mTalkRatingAlert;
 
     @InjectView(R.id.talk_header) ViewGroup mTalkHeader;
     @InjectView(R.id.talk_header_contents) ViewGroup mTalkHeaderContents;
-    @InjectView(R.id.talk_header_background) View mTalkHeaderBackground;
     @InjectView(R.id.title) TextView mTitle;
     @InjectView(R.id.add_schedule_button) CheckableFrameLayout mAddScheduleBtn;
     @InjectView(R.id.add_schedule_icon) ImageView mAddScheduleIcon;
@@ -122,8 +124,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     };
     private int mPhotoHeightPixels;
     private int mHeaderHeightPixels;
-    private int mHeaderTopClearance;
-    private boolean mGapFillShown;
+    private int mToolbarHeightPixels;
 
     public static Fragment newInstance(String talkId, String talkTitle, int color) {
         Bundle arguments = new Bundle();
@@ -155,10 +156,10 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         if (requestCode == SCAN_QR_CODE_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
 
-                Pattern pattern = Pattern.compile("([^:]*)::([^:]*)::([^:]*)::([^:]*)::([^:]*)");
+                Pattern pattern = Pattern.compile("([^/]*)/([^/]*)");
                 Matcher matcher = pattern.matcher(data.getStringExtra("SCAN_RESULT"));
 
-                if (matcher.find()){
+                if (matcher.find()) {
                     Preferences.setUserScanIdForVote(getActivity(), matcher.group(1));
                     Toast.makeText(getActivity(), R.string.able_to_rate, Toast.LENGTH_LONG).show();
                 } else {
@@ -186,51 +187,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.talk, menu);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_note:
-                if (mTalk != null) {
-                    Intent intent = new Intent(getActivity(), MemoActivity.class);
-                    intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
-                    intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
-                    intent.putExtra(EXTRA_TALK_COLOR, mTalk.getColor());
-                    startActivity(intent);
-                }
-                return true;
-            case R.id.action_send:
-                if (mTalk != null) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("message/rfc822");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, mTalk.getUncotedTitle());
-                    intent.putExtra(Intent.EXTRA_TEXT, mTalk.getBody(getActivity()));
-                    try {
-                        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_memo_via)));
-                    } catch (android.content.ActivityNotFoundException ex) {
-                        Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            case R.id.action_ask:
-                Intent intent = new Intent(getActivity(), QuestionsActivity.class);
-                String room = mTalk.getRoom();
-                intent.putExtra(EXTRA_ROOM, room == null ? "" : room);
-                startActivity(intent);
-                return true;
-
-            case R.id.action_scan_qr_code:
-                startScanQrCodeActivity();
-                return true;
-
-            case R.id.action_input_qr_code:
-                inputQrCode();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 
     private void inputQrCode() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -288,7 +244,21 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         setupCustomScrolling();
 
         mTitle.setText(mExtraTalkTitle);
-        mTalkHeaderBackground.setBackgroundColor(mExtraTalkColor);
+        toolbar.setBackgroundColor(mExtraTalkColor);
+
+        toolbar.setNavigationIcon(R.drawable.ic_up);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.navigateUpFromSameTask(getActivity());
+            }
+        });
+        getActivity().getMenuInflater().inflate(R.menu.talk, toolbar.getMenu());
+
+        toolbar.setOnMenuItemClickListener(this);
+
+        mTalkHeaderContents.setBackgroundColor(mExtraTalkColor);
+
         getTalk();
         if (Preferences.hasUserScanIdForVote(getActivity())) {
             Query.one(Vote.class, "SELECT * FROM Votes WHERE _id=? AND conferenceId=?", mExtraTalkId, mConferenceId).getAsync(getLoaderManager
@@ -358,11 +328,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private void recomputePhotoAndScrollingMetrics() {
-        final int actionBarSize = UIUtils.calculateActionBarSize(getActivity());
-        mHeaderTopClearance = actionBarSize - mTalkHeaderContents.getPaddingTop();
+        mToolbarHeightPixels = toolbar.getHeight();
         mHeaderHeightPixels = mTalkHeaderContents.getHeight();
 
-        mPhotoHeightPixels = mHeaderTopClearance;
         mPhotoHeightPixels = (int) (mTalkPhoto.getWidth() / PHOTO_ASPECT_RATIO);
         mPhotoHeightPixels = Math.min(mPhotoHeightPixels, getView().getHeight() * 2 / 3);
 
@@ -373,16 +341,10 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             mTalkPhotoContainer.setLayoutParams(lp);
         }
 
-        lp = mTalkHeaderBackground.getLayoutParams();
-        if (lp.height != mHeaderHeightPixels) {
-            lp.height = mHeaderHeightPixels;
-            mTalkHeaderBackground.setLayoutParams(lp);
-        }
-
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)
                 mTalkDetailsContainer.getLayoutParams();
-        if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels) {
-            mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels;
+        if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels + mToolbarHeightPixels) {
+            mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels + mToolbarHeightPixels;
             mTalkDetailsContainer.setLayoutParams(mlp);
         }
 
@@ -400,24 +362,9 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         // but locks to the top of the screen on scroll
         int scrollY = mScrollView.getScrollY();
 
-        float newTop = Math.max(mPhotoHeightPixels, scrollY + mHeaderTopClearance);
+        float newTop = Math.max(mPhotoHeightPixels, scrollY);
         mTalkHeader.setTranslationY(newTop);
-        mAddScheduleBtn.setTranslationY(newTop + mHeaderHeightPixels - mAddScheduleBtnHeightPixels / 2);
-
-        mTalkHeaderBackground.setPivotY(mHeaderHeightPixels);
-        int gapFillDistance = (int) (mHeaderTopClearance * GAP_FILL_DISTANCE_MULTIPLIER);
-        boolean showGapFill = (scrollY > (mPhotoHeightPixels - gapFillDistance));
-        float desiredHeaderScaleY = showGapFill ?
-                ((mHeaderHeightPixels + gapFillDistance + 1) * 1f / mHeaderHeightPixels) : 1f;
-
-        if (mGapFillShown != showGapFill) {
-            mTalkHeaderBackground.animate()
-                    .scaleY(desiredHeaderScaleY)
-                    .setInterpolator(new DecelerateInterpolator(2f))
-                    .setDuration(250)
-                    .start();
-        }
-        mGapFillShown = showGapFill;
+        mAddScheduleBtn.setTranslationY(newTop + mHeaderHeightPixels + mToolbarHeightPixels - mAddScheduleBtnHeightPixels / 2);
 
         // Move background photo (parallax effect)
         mTalkPhotoContainer.setTranslationY(scrollY * 0.6f);
@@ -483,7 +430,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             return true;
         }
         mTitle.setText(talk.getTitle());
-        mInformations.setText(String.format("%s | %s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
+        mInformations.setText(String.format("%s | %s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
 
         boolean favorite = mTalk.isFavorite();
         mAddScheduleBtn.setChecked(favorite, false);
@@ -627,5 +574,52 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
 
     public void onEventMainThread(MemoSavedEvent event) {
         getTalk();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_note:
+                if (mTalk != null) {
+                    Intent intent = new Intent(getActivity(), MemoActivity.class);
+                    intent.putExtra(EXTRA_TALK_ID, mTalk.getId());
+                    intent.putExtra(EXTRA_TALK_TITLE, mTalk.getTitle());
+                    intent.putExtra(EXTRA_TALK_COLOR, mTalk.getColor());
+                    startActivity(intent);
+                }
+                return true;
+
+            case R.id.action_send:
+                if (mTalk != null) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("message/rfc822");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, mTalk.getUncotedTitle());
+                    intent.putExtra(Intent.EXTRA_TEXT, mTalk.getBody(getActivity()));
+                    try {
+                        startActivity(Intent.createChooser(intent, getResources().getString(R.string.send_memo_via)));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(getActivity(), R.string.cannot_send_email, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return true;
+
+            /*case R.id.action_ask:
+                Intent intent = new Intent(getActivity(), QuestionsActivity.class);
+                String room = mTalk.getRoom();
+                intent.putExtra(EXTRA_ROOM, room == null ? "" : room);
+                startActivity(intent);
+                return true;*/
+
+            case R.id.action_scan_qr_code:
+                startScanQrCodeActivity();
+                return true;
+
+            case R.id.action_input_qr_code:
+                inputQrCode();
+                return true;
+
+            default:
+                return false;
+        }
     }
 }

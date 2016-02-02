@@ -4,24 +4,17 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 
 import fr.xebia.voxxeddays.zurich.R;
-import fr.xebia.voxxeddays.zurich.core.activity.BaseActivity;
+import fr.xebia.voxxeddays.zurich.core.activity.NavigationActivity;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends NavigationActivity {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
-
-        currentNavId = R.id.nav_settings;
+    public SettingsActivity() {
+        super(R.layout.settings_activity);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.settings);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -30,4 +23,8 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int getNavId() {
+        return R.id.nav_settings;
+    }
 }

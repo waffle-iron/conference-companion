@@ -1,9 +1,5 @@
 package fr.xebia.voxxeddays.zurich.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 
 import se.emilsjolander.sprinkles.Model;
@@ -11,21 +7,20 @@ import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Table("Conferences")
 public class Conference extends Model {
 
-    @JsonProperty @Column("_id") @Key private int id;
-    @JsonProperty @Column("name") private String name;
-    @JsonProperty @Column("description") private String description;
-    @JsonProperty @Column("location") private String location;
-    @JsonProperty @Column("backgroundUrl") private String backgroundUrl;
-    @JsonProperty @Column("logoUrl") private String logoUrl;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/Paris") @Column("fromDate") private Date from;
-    @JsonProperty @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/Paris") @Column("toDate") private Date to;
+    @Column("_id") @Key private int id;
+    @Column("name") private String name;
+    @Column("description") private String description;
+    @Column("location") private String location;
+    @Column("backgroundUrl") private String backgroundUrl;
+    @Column("logoUrl") private String logoUrl;
+    @Column("fromDate") private Date from;
+    @Column("toDate") private Date to;
     @Column("fromUtcTime") private long fromUtcTime;
     @Column("toUtcTime") private long toUtcTime;
-    @JsonProperty @Column("enabled") private boolean enabled;
+    @Column("enabled") private boolean enabled;
     @Column("nfcTag") private String nfcTag;
 
     public int getId() {

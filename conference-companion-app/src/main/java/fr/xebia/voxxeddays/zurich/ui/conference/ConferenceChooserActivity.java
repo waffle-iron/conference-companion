@@ -8,20 +8,21 @@ import android.view.MenuItem;
 import fr.xebia.voxxeddays.zurich.BuildConfig;
 import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.core.activity.BaseActivity;
+import fr.xebia.voxxeddays.zurich.core.activity.NavigationActivity;
 import fr.xebia.voxxeddays.zurich.ui.synchro.SynchroFragment;
 
 public class ConferenceChooserActivity extends BaseActivity {
 
+    public ConferenceChooserActivity() {
+        super(R.layout.conference_chooser_activity);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.conference_chooser_activity);
+
         mDontCheckConference = true;
         getWindow().setBackgroundDrawableResource(android.R.color.white);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(Html.fromHtml(getString(R.string.action_bar_default_title)));
-        actionBar.setDisplayHomeAsUpEnabled(false);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()

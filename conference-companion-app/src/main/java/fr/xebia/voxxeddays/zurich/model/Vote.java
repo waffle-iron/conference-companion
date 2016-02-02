@@ -1,20 +1,16 @@
 package fr.xebia.voxxeddays.zurich.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Key;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Votes")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Vote extends Model {
 
-    @JsonProperty @Column("note") private int note;
-    @JsonProperty @Column("_id") @Key private String talkId;
-    @JsonProperty @Column("conferenceId") @Key private int conferenceId;
+    @Column("note") private int note;
+    @Column("_id") @Key private String talkId;
+    @Column("conferenceId") @Key private int conferenceId;
 
     public Vote(){
 
