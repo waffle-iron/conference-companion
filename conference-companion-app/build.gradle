@@ -9,11 +9,8 @@ android {
         applicationId "fr.xebia.voxxeddays.zurich"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.0"
-
-        renderscriptTargetApi 18
-        renderscriptSupportModeEnabled true
+        versionCode 2
+        versionName "1.0.1"
     }
 
     signingConfigs {
