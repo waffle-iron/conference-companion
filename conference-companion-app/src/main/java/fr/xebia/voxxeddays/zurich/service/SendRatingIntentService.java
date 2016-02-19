@@ -69,6 +69,6 @@ public class SendRatingIntentService extends IntentService {
     }
 
     private Rating buildRating(Vote vote) {
-        return new Rating(Long.valueOf(getUserScanIdForVote(this)), vote.getNote(), vote.getTalkId());
+        return new Rating(getUserScanIdForVote(this), vote.getNote(), vote.getTalkId());
     }
 }
