@@ -17,8 +17,10 @@ public class Compatibility {
     }
 
     private static String translateTitle(String title) {
-        if (title.startsWith("Accueil")) {
-            return "Registration, Welcome and Breakfast";
+        if (title.contains("Accueil")) {
+            return "Registration and Breakfast";
+        } else if (title.contains("Accueil et petit-déjeuner")) {
+            return "Breakfast";
         } else if (title.startsWith("Pause déjeuner")) {
             return "Lunch";
         } else if (title.startsWith("Pause café")) {
@@ -35,7 +37,7 @@ public class Compatibility {
         return Build.VERSION.SDK_INT >= versionCode;
     }
 
-    public static int darker(int color){
+    public static int darker(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] *= 0.7f;
