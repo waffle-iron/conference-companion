@@ -41,6 +41,7 @@ import fr.xebia.voxxeddays.zurich.BuildConfig;
 import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.bus.MemoSavedEvent;
 import fr.xebia.voxxeddays.zurich.core.misc.Preferences;
+import fr.xebia.voxxeddays.zurich.core.utils.Languages;
 import fr.xebia.voxxeddays.zurich.model.Speaker;
 import fr.xebia.voxxeddays.zurich.model.Talk;
 import fr.xebia.voxxeddays.zurich.model.Vote;
@@ -156,7 +157,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         if (requestCode == SCAN_QR_CODE_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
 
-                Pattern pattern = Pattern.compile("([^/]*)/([^/]*)");
+                Pattern pattern = Pattern.compile("([^/]*)");
                 Matcher matcher = pattern.matcher(data.getStringExtra("SCAN_RESULT"));
 
                 if (matcher.find()) {
@@ -193,7 +194,6 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
         builder.setTitle(R.string.input_qr_code_title);
 
         final EditText input = new EditText(getActivity());
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -430,7 +430,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
             return true;
         }
         mTitle.setText(talk.getTitle());
-        mInformations.setText(String.format("%s | %s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), talk.getType()));
+        mInformations.setText(String.format("%s | %s | %s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), Languages.from(getActivity(), talk.getLanguage()), talk.getType()));
 
         boolean favorite = mTalk.isFavorite();
         mAddScheduleBtn.setChecked(favorite, false);
@@ -504,7 +504,7 @@ public class TalkFragment extends Fragment implements OneQuery.ResultHandler<Tal
     }
 
     private int getTalkBackgroundResource(Talk talk) {
-        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 19, "drawable", getActivity().getPackageName());
+        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 11, "drawable", getActivity().getPackageName());
     }
 
     public void refreshRatingBarState() {

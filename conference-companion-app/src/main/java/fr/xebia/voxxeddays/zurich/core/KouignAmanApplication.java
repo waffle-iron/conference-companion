@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Parcel;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
@@ -60,11 +59,11 @@ public class KouignAmanApplication extends Application {
 
         LeakCanary.install(this);
 
-        if(Preferences.getSelectedConference(this) != BuildConfig.DEVOXX_BE_CONFERENCE_ID) {
+        if (Preferences.getSelectedConference(this) != BuildConfig.DEVOXX_BE_CONFERENCE_ID) {
             Preferences.removeSelectedConference(this);
         }
 
-        TwitterAuthConfig authConfig =  new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
         Fabric.with(this, new Crashlytics(), new TwitterCore(authConfig), new TweetUi());
 
         if (BuildConfig.DEBUG) {
@@ -106,9 +105,17 @@ public class KouignAmanApplication extends Application {
                 .setClient(new OkClient(okHttpClient))
                 .setConverter(new GsonConverter(sGson));
 
-        sConferenceApi = restAdapterBuilder.setEndpoint(BuildConfig.BACKEND_URL).build().create(ConferenceApi.class);
+        sConferenceApi = restAdapterBuilder
+                .setEndpoint(BuildConfig.BACKEND_URL)
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
+                .build()
+                .create(ConferenceApi.class);
 
-        sVoteApi = restAdapterBuilder.setEndpoint(BuildConfig.VOTE_URL).build().create(VoteApi.class);
+        sVoteApi = restAdapterBuilder
+                .setEndpoint(BuildConfig.VOTE_URL)
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
+                .build()
+                .create(VoteApi.class);
 
         Sprinkles sprinkles = Sprinkles.init(applicationContext, "conferences.db", 0);
 

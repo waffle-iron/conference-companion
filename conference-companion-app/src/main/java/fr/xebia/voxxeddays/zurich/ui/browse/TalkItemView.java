@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.core.adapter.BaseItemView;
+import fr.xebia.voxxeddays.zurich.core.utils.Languages;
 import fr.xebia.voxxeddays.zurich.model.Talk;
 import fr.xebia.voxxeddays.zurich.ui.talk.TalkActivity;
 
@@ -82,7 +83,7 @@ public class TalkItemView extends FrameLayout implements BaseItemView<Talk>, Vie
         if (System.currentTimeMillis() > talk.getToUtcTime()) {
             mTalkSubTitle.setText(getResources().getString(R.string.ended));
         } else {
-            mTalkSubTitle.setText(String.format("%s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
+            mTalkSubTitle.setText(String.format("%s | %s | %s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), Languages.from(getContext(), talk.getLanguage())));
         }
 
         mTalkSnippet.setText(Html.fromHtml(talk.getSummary()));
@@ -93,7 +94,7 @@ public class TalkItemView extends FrameLayout implements BaseItemView<Talk>, Vie
     }
 
     private int getItemBackgroundResource(Talk talk) {
-        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 14, "drawable", getContext().getPackageName());
+        return getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 11, "drawable", getContext().getPackageName());
     }
 
     @Override

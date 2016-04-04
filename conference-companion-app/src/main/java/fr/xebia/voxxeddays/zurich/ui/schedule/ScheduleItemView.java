@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.core.adapter.BaseItemView;
+import fr.xebia.voxxeddays.zurich.core.utils.Languages;
 import fr.xebia.voxxeddays.zurich.model.Talk;
 import fr.xebia.voxxeddays.zurich.ui.talk.TalkActivity;
 import fr.xebia.voxxeddays.zurich.ui.widget.ExtendedRelativeLayout;
@@ -78,7 +79,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
         if (System.currentTimeMillis() > talk.getToUtcTime()) {
             mScheduleRoom.setText(getResources().getString(R.string.ended));
         } else {
-            mScheduleRoom.setText(String.format("%s | %s\n%s", talk.getDay(), talk.getPeriod(), talk.getRoom()));
+            mScheduleRoom.setText(String.format("%s | %s\n%s | %s", talk.getDay(), talk.getPeriod(), talk.getRoom(), Languages.from(getContext(), talk.getLanguage())));
         }
 
         mScheduleSpeakers.setText(talk.getPrettySpeakers());
@@ -88,7 +89,7 @@ public class ScheduleItemView extends ExtendedRelativeLayout implements Callback
     }
 
     private int getItemBackgroundResource(Talk talk) {
-        return getResources().getIdentifier("devoxx_template_" + talk.getPosition() % 19, "drawable", getContext().getPackageName());
+        return getResources().getIdentifier("devoxx_template_" + talk.getPosition() % 11, "drawable", getContext().getPackageName());
     }
 
     @Override

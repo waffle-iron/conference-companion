@@ -6,11 +6,11 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "fr.xebia.voxxeddays.zurich"
+        applicationId "fr.xebia.voxxeddays"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 6
+        versionName "1.0.5"
     }
 
     signingConfigs {
@@ -38,29 +38,43 @@ android {
         incremental false
     }
 
+    productFlavors{
+        zurich {
+            applicationIdSuffix ".zurich"
 
-    buildTypes {
-        debug {
-            debuggable true
             buildConfigField 'String', 'BACKEND_URL', '"http://confcompanion.xebia.fr/api/v1"'
             buildConfigField 'String', 'SLIDO_URL', '"https://ap.sli.do/event/xfb1afkm/ask"'
             buildConfigField 'String', 'VOTE_URL', '"https://voting-vdz.exteso.com/VDZ16"'
             buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '19'
             buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
             buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
+            buildConfigField 'String', 'TWITTER_QUERY', '"@VoxxedZurich"'
+        }
+
+        ticino {
+            applicationIdSuffix ".ticino"
+
+            buildConfigField 'String', 'BACKEND_URL', '"http://confcompanion.xebia.fr/api/v1"'
+            buildConfigField 'String', 'SLIDO_URL', '"https://ap.sli.do/event/xfb1afkm/ask"'
+            buildConfigField 'String', 'VOTE_URL', '"https://voting-vdt.exteso.com/VDT16"'
+            buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '20'
+            buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
+            buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
+            buildConfigField 'String', 'TWITTER_QUERY', '"@VoxxedTicino"'
+
+
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
             signingConfig signingConfigs.debug
         }
 
         release {
-            buildConfigField 'String', 'BACKEND_URL', '"http://confcompanion.xebia.fr/api/v1"'
-            buildConfigField 'String', 'SLIDO_URL', '"https://app.sli.do/event/xfb1afkm/ask"'
-            buildConfigField 'String', 'VOTE_URL', '"https://voting-vdz.exteso.com/VDZ16"'
-            buildConfigField 'int', 'DEVOXX_BE_CONFERENCE_ID', '19'
-            buildConfigField 'String', 'TWITTER_KEY', "\"$project.DEVOXX_TWITTER_KEY\""
-            buildConfigField 'String', 'TWITTER_SECRET', "\"$project.DEVOXX_TWITTER_SECRET\""
             minifyEnabled false
             proguardFile getDefaultProguardFile('proguard-android.txt')
-
             signingConfig signingConfigs.release
         }
     }

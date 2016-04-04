@@ -10,6 +10,7 @@ import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import fr.xebia.voxxeddays.zurich.BuildConfig;
 import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.core.activity.NavigationActivity;
 import fr.xebia.voxxeddays.zurich.ui.widget.ObservableListView;
@@ -37,7 +38,7 @@ public class TimelineActivity extends NavigationActivity implements SwipeRefresh
 
     private void refreshListing() {
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
-                .query("@voxxedzurich")
+                .query(BuildConfig.TWITTER_QUERY)
                 .build();
         listView.setAdapter(new TweetTimelineListAdapter(this, searchTimeline));
         listView.setEmptyView(emptyView);

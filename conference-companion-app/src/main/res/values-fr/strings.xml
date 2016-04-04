@@ -102,4 +102,6 @@
     <string name="nav_timeline">Timeline</string>
     <string name="vote_for_talk">Donner votre avis</string>
     <string name="developers">Développeurs</string>
+    <string name="language_en">Anglais</string>
+    <string name="language_it">Italien</string>
 </resources>

@@ -361,7 +361,7 @@ public class MyScheduleAdapter implements ListAdapter, AbsListView.RecyclerListe
     }
 
     private int getTalkBackgroundResource(Talk talk) {
-        return mContext.getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 19, "drawable", mContext.getPackageName());
+        return mContext.getResources().getIdentifier("devoxx_talk_template_" + talk.getPosition() % 11, "drawable", mContext.getPackageName());
     }
 
     @Override

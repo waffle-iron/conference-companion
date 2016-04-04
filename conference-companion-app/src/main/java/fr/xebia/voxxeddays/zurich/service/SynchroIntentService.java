@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import fr.xebia.voxxeddays.zurich.R;
 import fr.xebia.voxxeddays.zurich.bus.SynchroFinishedEvent;
 import fr.xebia.voxxeddays.zurich.core.KouignAmanApplication;
 import fr.xebia.voxxeddays.zurich.core.misc.Preferences;
@@ -45,20 +46,56 @@ public class SynchroIntentService extends IntentService {
     public static final String EXTRA_CONFERENCE_ID = "fr.xebia.voxxeddays.zurich.EXTRA_CONFERENCE_ID";
     public static final String EXTRA_FROM_APP_CREATE = "fr.xebia.voxxeddays.zurich.EXTRA_FROM_APP_CREATE";
 
-    public static final String VOXXEDDAYS_ZURICH_CONFERENCE = "{\n" +
-            "\"id\": 19,\n" +
-            "\"backgroundUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/Zurich-Photo1.jpg\",\n" +
-            "\"logoUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/iTunesArtwork.png\",\n" +
-            "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\"," +
-            "\"from\": \"2016-03-03\",\n" +
-            "\"name\": \"Voxxed Days Zürich\",\n" +
-            "\"description\": \"Voxxed Days Zürich\",\n" +
-            "\"location\": \"Sihlcity Cinema\",\n" +
-            "\"baseUrl\": \"https://cfp-vdz.exteso.com/api/conferences/VDZ16\",\n" +
-            "\"timezone\": \"Europe/Zurich\",\n" +
-            "\"enabled\": true,\n" +
-            "\"to\": \"2016-03-03\"\n" +
-            "}";
+    public enum Conferences {
+        ZURICH(R.drawable.voxxeddays_zurich, "{\n" +
+                "\"id\": 19,\n" +
+                "\"backgroundUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/Zurich-Photo1.jpg\",\n" +
+                "\"logoUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/iTunesArtwork.png\",\n" +
+                "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\"," +
+                "\"from\": \"2016-03-03 11:00\",\n" +
+                "\"name\": \"Voxxed Days Zürich\",\n" +
+                "\"description\": \"Voxxed Days Zürich\",\n" +
+                "\"location\": \"Sihlcity Cinema\",\n" +
+                "\"baseUrl\": \"https://cfp-vdz.exteso.com/api/conferences/VDZ16\",\n" +
+                "\"timezone\": \"Europe/Zurich\",\n" +
+                "\"enabled\": true,\n" +
+                "\"to\": \"2016-03-03 11:00\"\n" +
+                "}"),
+        TICINO(R.drawable.voxxeddays_ticino, "{\n" +
+                "\"id\": 20,\n" +
+                "\"backgroundUrl\": \"https://voxxeddays.com/ticino16/wp-content/uploads/sites/14/2015/11/lago.jpg\",\n" +
+                "\"logoUrl\": \"https://s3.amazonaws.com/civetta-works/works/xebia/conf-companion/doxxed-days-zurich-2016/iTunesArtwork.png\",\n" +
+                "\"iconUrl\": \"http://blog.xebia.fr/images/devoxxuk-2015-icon.png\",\n" +
+                "\"from\": \"2016-04-30 11:00\",\n" +
+                "\"name\": \"Voxxed Days Ticino\",\n" +
+                "\"description\": \"Voxxed Days Ticino\",\n" +
+                "\"location\": \"Palazzo dei Congressi, Lugano\",\n" +
+                "\"baseUrl\": \"https://cfp-vdt.exteso.com/api/conferences/VDT16\",\n" +
+                "\"timezone\": \"Europe/Zurich\",\n" +
+                "\"enabled\": true,\n" +
+                "\"to\": \"2016-04-30 11:00\"\n" +
+                "}");
+
+        public final String infos;
+        public int logoId;
+
+        Conferences(int logoId, String infos) {
+            this.logoId = logoId;
+            this.infos = infos;
+        }
+
+        public static Conferences from(int id) {
+            switch (id) {
+                case 19:
+                    return ZURICH;
+                case 20:
+                    return TICINO;
+
+                default:
+                    return null;
+            }
+        }
+    }
 
     public SynchroIntentService() {
         super(TAG);
@@ -69,14 +106,14 @@ public class SynchroIntentService extends IntentService {
         int conferenceId = intent.getIntExtra(EXTRA_CONFERENCE_ID, -1);
         Conference conference;
         try {
-            conference = getGson().fromJson(VOXXEDDAYS_ZURICH_CONFERENCE, Conference.class);
+            conference = getGson().fromJson(Conferences.from(conferenceId).infos, Conference.class);
             DateTimeZone utcTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("UTC"));
             DateTimeZone apiTimeZone = DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
             DateTime jodaStartTime = new DateTime(conference.getFrom(), apiTimeZone);
             DateTime jodaEndTime = new DateTime(conference.getTo(), apiTimeZone);
             conference.setFromUtcTime(jodaStartTime.withZone(utcTimeZone).getMillis());
             conference.setToUtcTime(jodaEndTime.withFieldAdded(DurationFieldType.days(), 1).withZone(utcTimeZone).getMillis());
-        } catch (JsonSyntaxException e) {
+        } catch (Exception e) {
             BUS.post(new SynchroFinishedEvent(false, null));
             return;
         }

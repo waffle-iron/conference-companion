@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +39,7 @@ public class Talk extends Model implements Parcelable {
     private LinkedHashSet<Speaker> speakers;
     @Column("room") private String room;
     @Column("type") private String type;
-    @Column("language") private String language;
+    @SerializedName("lang") @Column("language") private String language;
     @Column("experience") private String experience;
     @Column("track") private String track;
     @Column("kind") private String kind;
